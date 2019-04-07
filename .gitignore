@@ -1,0 +1,23 @@
+# A * ensures that everything will be ignored
+*
+
+# Whitelist the filetypes we care about
+!*/
+!*.yaml
+!*.md
+!*.xml
+!*.el
+!*.http
+!/packages/**/*.yaml
+!.gitignore
+
+# Ignore folders
+notebooks
+.storage
+.cloud
+.google.token
+.ios.config
+
+ip_bans.yaml
+secrets.yaml
+known_devices.yaml
