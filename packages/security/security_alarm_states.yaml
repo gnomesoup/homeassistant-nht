@@ -53,7 +53,7 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - input_boolean.minimote_front_door_2
+         - input_boolean.minimote_front_door_2
     condition:
       - condition: template
         value_template: >-
@@ -65,7 +65,9 @@ automation:
   - alias: Alarm Disarm Buttons
     trigger:
       - platform: state
-        entity_id: input_boolean.minimote_master_bedroom_8
+        entity_id:
+          - input_boolean.minimote_master_bedroom_8
+          - input_boolean.minimote_front_door_8
     condition:
       - condition: template
         value_template: >-
