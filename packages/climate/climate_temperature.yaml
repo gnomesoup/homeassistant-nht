@@ -1,0 +1,12 @@
+sensor:
+  platform: template
+  sensors:
+    temperature_whole_house:
+      friendly_name: Whole House Temperature
+      unit_of_measurement: '°F'
+      value_template: >-
+        {{ ((states("sensor.aeotec_dsb05_multisensor_temperature_2")|float +
+            states("sensor.aeotec_zw100_multisensor_6_temperature_3")|float +
+            states("sensor.linear_wapirz_1_motion_sensor_temperature")|float +
+            states("sensor.linear_wapirz_1_motion_sensor_temperature_2")|float +
+            states("sensor.linear_wapirz_1_motion_sensor_temperature_3")|float) / 5)|round(2) }}

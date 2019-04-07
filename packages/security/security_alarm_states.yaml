@@ -1,0 +1,75 @@
+automation:
+  # Opening front door or patio door will trigger alarm
+  - alias: Alarm Control Panel Trigger All
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.alarm_control_panel_trigger
+          - binary_sensor.door_sensor_2
+          - binary_sensor.door_sensor_3
+        to: "on"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.home_alarm") != "disarmed" }}
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.home_alarm
+
+  # Motion in the house will trigger alarm when set to away
+  - alias: Alarm Control Panel Trigger Away
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.door_sensor_1
+          - binary_sensor.motion_camille_bedroom
+          - binary_sensor.motion_hallway
+          - binary_sensor.motion_living_room
+          - binary_sensor.motion_mary_bedroom
+          - binary_sensor.motion_master_bedroom
+        to: 'on'
+    condition:
+      - condition: template
+        value_template: >-
+         {{ states("alarm_control_panel.home_alarm") == "armed_away" }}
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.home_alarm
+
+  - alias: Alarm Arm Night Buttons
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.minimote_master_bedroom_2
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.home_alarm") == "disarmed" }}
+    action:
+      - service: alarm_control_panel.alarm_arm_night
+        entity_id: alarm_control_panel.home_alarm
+
+  - alias: Alarm Arm Away Buttons
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.minimote_front_door_2
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.home_alarm") == "disarmed" }}
+    action:
+      - service: alarm_control_panel.alarm_arm_away
+        entity_id: alarm_control_panel.home_alarm
+
+  - alias: Alarm Disarm Buttons
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_8
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.home_alarm") != "disarmed" }}
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.home_alarm

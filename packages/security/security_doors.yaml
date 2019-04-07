@@ -1,0 +1,29 @@
+binary_sensor:
+  platform: template
+  sensors:
+      door_sensor_1:
+        device_class: opening
+        friendly_name: "Mary's Door"
+        value_template: >-
+          {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_3.state|float > 0 }}
+      door_sensor_2:
+        device_class: opening
+        friendly_name: "Front Door"
+        value_template: >-
+          {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_2.state|float > 0 }}
+      door_sensor_3:
+        device_class: opening
+        friendly_name: "Patio Door"
+        value_template: >-
+          {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level.state|float > 0 }}
+      door_sensor_4:
+        device_class: opening
+        friendly_name: "Bathroom Door"
+        value_template: >-
+          {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_4.state|float > 0 }}
+
+input_boolean:
+  door_alert_delay:
+    name: Door Alert Delay
+    icon: mdi:bell-off
+    initial: off

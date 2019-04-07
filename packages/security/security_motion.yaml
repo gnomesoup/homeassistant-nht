@@ -1,0 +1,28 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      motion_mary_bedroom:
+        device_class: motion
+        friendly_name: "Mary's Bedroom Motion"
+        value_template: >-
+          {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level")|float > 0 }}
+      motion_hallway:
+        device_class: motion
+        friendly_name: "Hallway Motion"
+        value_template: >-
+          {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level_2")|float > 0 }}
+      motion_camille_bedroom:
+        device_class: motion
+        friendly_name: "Camille's Bedroom Motion"
+        value_template: >-
+          {{ states("binary_sensor.aeotec_dsb05_multisensor_sensor_2") == "on" }}
+      motion_living_room:
+        device_class: motion
+        friendly_name: "Living Room Motion"
+        value_template: >-
+          {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level_3")|float > 0 }}
+      motion_master_bedroom:
+        device_class: motion
+        friendly_name: "Master Bedroom Motion"
+        value_template: >-
+          {{ states("binary_sensor.aeotec_zw100_multisensor_6_sensor_3") == "on" }}

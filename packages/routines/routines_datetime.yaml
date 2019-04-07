@@ -1,0 +1,21 @@
+sensor:
+  - platform: time_date
+    display_options:
+      - "time"
+      - "date"
+
+  - platform: template
+    sensors:
+      weekday:
+        friendly_name: Weekday
+        value_template: >-
+          {% set currentTime = strptime(states.sensor.date.state, "%Y-%m-%d") %}
+          {{ currentTime.strftime("%A") }}
+        icon_template: "mdi:calendar"
+
+  - platform: season
+    type: astronomical
+
+binary_sensor:
+  - platform: workday
+    country: US

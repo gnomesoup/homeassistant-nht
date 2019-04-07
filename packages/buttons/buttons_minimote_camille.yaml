@@ -1,0 +1,49 @@
+# Node 38
+input_boolean:
+  minimote_camille_1:
+    name: Minimote Camille Button 1 Pushed
+    icon: mdi:radio_button_checked
+  minimote_camille_2:
+    name: Minimote Camille Button 1 Held
+    icon: mdi:radio_button_checked
+  minimote_camille_3:
+    name: Minimote Camille Button 2 Pushed
+    icon: mdi:radio_button_checked
+  minimote_camille_4:
+    name: Minimote Camille Button 2 Held
+    icon: mdi:radio_button_checked
+  minimote_camille_5:
+    name: Minimote Camille Button 3 Pushed
+    icon: mdi:radio_button_checked
+  minimote_camille_6:
+    name: Minimote Camille Button 3 Held
+    icon: mdi:radio_button_checked
+  minimote_camille_7:
+    name: Minimote Camille Button 4 Pushed
+    icon: mdi:radio_button_checked
+  minimote_camille_8:
+    name: Minimote Camille Button 4 Held
+    icon: mdi:radio_button_checked
+
+automation:
+  - id: minimote_camille
+    alias: Camille's Minimote Control
+    trigger:
+      - platform: event
+        event_type: zwave.scene_activated
+        event_data:
+          entity_id:
+            zwave.aeotec_dsa03202_minimote_3
+    action:
+      - service: homeassistant.toggle
+        data_template:
+          entity_id: >
+            {% set map = {1: "input_boolean.minimote_camille_1",
+                          2: "input_boolean.minimote_camille_2",
+                          3: "input_boolean.minimote_camille_3",
+                          4: "input_boolean.minimote_camille_4",
+                          5: "input_boolean.minimote_camille_5",
+                          6: "input_boolean.minimote_camille_6",
+                          7: "input_boolean.minimote_camille_7",
+                          8: "input_boolean.minimote_camille_8"} %}
+            {{ map[trigger.event.data.scene_id|int] }}

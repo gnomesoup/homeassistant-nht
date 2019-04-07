@@ -1,0 +1,9 @@
+sensor:
+  platform: template
+  sensors:
+    humidity_whole_house:
+      friendly_name: Whole House Humidity
+      unit_of_measurement: '%'
+      value_template: >-
+        {{ ((states("sensor.aeotec_dsb05_multisensor_relative_humidity_2")|float +
+           states("sensor.aeotec_zw100_multisensor_6_relative_humidity_3")|float)/2)|round(1) }}
