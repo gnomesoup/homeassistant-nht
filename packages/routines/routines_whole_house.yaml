@@ -1,0 +1,56 @@
+group:
+  lights_whole_house:
+    name: All lights in the house
+    view: false
+    entities:
+      - light.metal_lamp
+      - light.entry_light
+      - light.bedroom_lamp
+      - light.accordion_lamp
+      - light.grandma_s_lamp
+      - light.living_room_lamp
+      - light.aeotec_zw111_nano_dimmer_level
+      - light.aeotec_zw111_nano_dimmer_level_2
+      - light.aeotec_zw111_nano_dimmer_level_3
+  switches_whole_house:
+    name: All switches in the house
+    view: false
+    entities:
+      - switch.zooz_zen06_switch
+      - switch.bedroom_canopy
+      - switch.aeotec_dsc06106_smart_energy_switch_switch_2
+  media_whole_house:
+    name: All media in the house
+    view: false
+    entities:
+      - media_player.bedroom_speaker
+      - media_player.camille_s_speaker
+      - media_player.living_room_display
+      - media_player.living_room_tv
+      - media_player.mary_s_speaker
+
+automation:
+  - alias: "Alarm night turn off everything"
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        to: "armed_night"
+    action:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - script.turn_everything_off
+
+script:
+  turn_everything_off:
+    alias: "Turn everything off"
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - group.lights_whole_house
+            - group.switches_whole_house
+      - service: media_player.media_pause
+        data:
+          entity_id:
+            - group.media_whole_house
