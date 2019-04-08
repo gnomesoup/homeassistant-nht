@@ -15,7 +15,7 @@ binary_sensor:
         device_class: motion
         friendly_name: "Camille's Bedroom Motion"
         value_template: >-
-          {{ states("binary_sensor.aeotec_dsb05_multisensor_sensor_2") == "on" }}
+          {{ states("binary_sensor.aeotec_dsb05_multisensor_sensor") == "on" }}
       motion_living_room:
         device_class: motion
         friendly_name: "Living Room Motion"
@@ -25,4 +25,4 @@ binary_sensor:
         device_class: motion
         friendly_name: "Master Bedroom Motion"
         value_template: >-
-          {{ states("binary_sensor.aeotec_zw100_multisensor_6_sensor_3") == "on" }}
+          {{ states("binary_sensor.aeotec_zw100_multisensor_6_sensor") == "on" }}
