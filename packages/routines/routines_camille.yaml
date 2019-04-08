@@ -1,0 +1,144 @@
+input_select:
+  camille_status:
+    name: "Camille's Status"
+    options:
+      - Home
+      - Away
+      - Asleep
+
+input_datetime:
+  alarm_time_camille:
+    name: "Set Camille's Alarm Time"
+    has_date: false
+    has_time: true
+
+input_boolean:
+  alarm_disable_camille:
+    name: "Disable Camille's Alarm"
+
+group:
+  lights_bedroom_camille:
+    name: Lights in Camille's Room
+    view: false
+    entities:
+      - light.bedroom_canopy
+      - light.grandma_s_lamp
+      - switch.aeotec_dsc06106_smart_energy_switch_switch_2
+
+automation:
+  - alias: Wakeup Camille
+    trigger:
+      - platform: template
+        value_template: >-
+          {{ states.sensor.time.state == states.input_datetime.alarm_time_camille.state[0:5] }}
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("input_select.camille_status") != "Away" }}
+      - condition: state
+        entity_id: input_boolean.alarm_disable_camille
+        state: "off"
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+    action:
+      - service: homeassistant.turn_on
+        entity_id: script.goodmorning_camille
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.camille_s_speaker
+          media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
+          media_content_type: "music"
+
+  - alias: "Minimote Camille Push 1"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_camille_1
+    action:
+      - service: homeassistant.toggle
+        data:
+          entity_id: light.bedroom_canopy
+
+  - alias: "Minimote Camille Hold"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.minimote_camille_2
+          - input_boolean.minimote_camille_4
+          - input_boolean.minimote_camille_6
+          - input_boolean.minimote_camille_8
+    action:
+      - service: homeassistant.toggle
+        data_template:
+          entity_id: >-
+            {% if is_state("input_select.camille_status", "Asleep") %}
+              {% set runScript = "script.goodmorning_camille" %}
+            {% elif is_state("input_select.camille_status", "Home") %}
+              {% set runScript = "script.goodnight_camille" %}
+            {% else %}
+              {% set runScript = "automation.lights_camille_on" %}
+            {% endif %}
+            {{ runScript }}
+
+  - alias: "Minimote Camille Push 2"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_camille_3
+    action:
+      - service: homeassistant.toggle
+        data:
+          entity_id: light.grandma_s_lamp
+
+  - alias: "Minimote Camille Push 3"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_camille_5
+    action:
+      - service: homeassistant.toggle
+        data:
+          entity_id: switch.aeotec_dsc06106_smart_energy_switch_switch_2
+
+script:
+  goodmorning_camille:
+    alias: Goodmorning Camille
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id:
+            - group.light_camille_bedroom
+            - switch.aeotec_dsc06106_smart_energy_switch_switch_2
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.camille_status
+          option: "Home"
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.camille_s_speaker
+          volume_level: 0.8
+
+  goodnight_camille:
+    alias: Good Night Camille
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - group.lights_bedroom_camille
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.camille_status
+          option: "Asleep"
+      - service: homeassistant.turn_on
+        data:
+          entity_id: automation.wakeup_camille
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.camille_s_speaker
+          volume_level: 0.5
+      - service: notify.notify
+        data:
+          title: "Camille"
+          message: "Bedtime"
