@@ -1,0 +1,18 @@
+zone:
+  - name: Work Michael
+    latitude: !secret latitude_mjp_work
+    longitude: !secret longitude_mjp_work
+    radius: 100
+    icon: mdi:office-building
+
+  - name: Work Angela
+    latitude: !secret latitude_afp_work
+    longitude: !secret longitude_afp_work
+    radius: 100
+    icon: mdi:test-tube
+
+  - name: School
+    latitude: !secret latitude_cbp_school
+    longitude: !secret longitude_cbp_school
+    radius: 175
+    icon: mdi:school
