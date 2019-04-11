@@ -1,0 +1,29 @@
+aarlo:
+  username: !secret arloUsername
+  password: !secret arloPassword
+
+camera:
+  - platform: aarlo
+    ffmpeg_arguments: '-pred 1 -q:v 2'
+
+alarm_control_panel:
+  - platform: aarlo
+    home_mode_name: Home
+    away_mode_name: armed
+    night_mode_name: armed
+
+binary_sensor:
+  - platform: aarlo
+    monitored_conditions:
+    - motion
+    - sound
+    # - ding
+
+sensor:
+  - platform: aarlo
+    monitored_conditions:
+    - last_capture
+    - total_cameras
+    - battery_level
+    - captured_today
+    - signal_strength
