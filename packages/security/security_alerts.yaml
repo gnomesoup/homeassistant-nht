@@ -1,5 +1,6 @@
 automation:
   - alias: "Door Alert Mary Asleep"
+    # Have google home get noisy if Mary opens in her door in the middle of the night
     trigger:
       platform: state
       entity_id: binary_sensor.door_sensor_1
@@ -17,6 +18,7 @@ automation:
         message: "Alert, Mary's door is open. Alert, Mary's Door is open"
 
   - alias: "Notify Door"
+    # Constantly send door status. Like all the time
     trigger:
       - platform: state
         entity_id:
@@ -40,14 +42,16 @@ automation:
             if is_state(trigger.entity_id, "on") %} open {% else %} closed {% endif %}
 
   - alias: "Notify Alarm Triggered"
+    # If the alarm is triggered, here is what happens. Set of the loud alarm as well has
+    # have google get noisy
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
         to: "triggered"
     action:
-      # - service: switch.turn_on
-      #   data:
-      #     entity_id: switch.linear_unknown_type_2005_id_0503_switch
+      - service: switch.turn_on
+        data:
+          entity_id: switch.linear_unknown_type_2005_id_0503_switch
       - service: tts.google_say
         entity_id:
           - media_player.living_room_display
@@ -60,6 +64,7 @@ automation:
           message: "Triggered"
 
   - alias: "Turn On Door Delay"
+    # In case you want to sneak out without alerts going off
     trigger:
       - platform: state
         entity_id:
@@ -70,6 +75,7 @@ automation:
         entity_id: input_boolean.door_alert_delay
 
   - alias: "Reset Door Delay"
+    # If the door alert delay is turned on, turn it off again
     trigger:
       - platform: state
         entity_id: input_boolean.door_alert_delay
@@ -79,6 +85,7 @@ automation:
         entity_id: script.reset_door_delay
 
   - alias: Notify Motion Mary
+    # If Mary is in bed, let us know when she is getting up
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_mary_bedroom
@@ -94,6 +101,7 @@ automation:
           message: "Mary's Bedroom"
 
   - alias: Notify All Motion
+    # If the alarm is set, let michael know about motion
     trigger:
       - platform: state
         entity_id:
@@ -115,6 +123,7 @@ automation:
             {{ state_attr(trigger.entity_id, "friendly_name") }}
 
   - alias: Notify Alarm State
+    # Notify Michael as the alarm states change
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
@@ -131,8 +140,25 @@ automation:
                           "triggered": "Triggered"} %}
             Set to {{ map[states("alarm_control_panel.home_alarm")] }}
 
+  - alias: Notify Motion In Bedroom
+    # Notify motion in bedroom when caregivers are the only ones here
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_master_bedroom
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("person.angela") != "Home" and
+             states("person.michael") != "Home" }}
+    action:
+      - service: notify.notify
+        data:
+          title: "Alarm"
+          message: "Motion in Master Bedroom"
+
 script:
   reset_door_delay:
+    # Wait 15 seconds then turn off the door notification delay
     alias: Reset the door delay
     sequence:
       - delay:
@@ -143,6 +169,8 @@ script:
             - input_boolean.door_alert_delay
 
   door_alert_delay:
+    # Turn on the door alert delay
+    # TODO is this used?
     alias: Delay front door alert
     sequence:
       - service: input_boolean.turn_on
