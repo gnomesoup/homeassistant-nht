@@ -21,7 +21,7 @@ group:
     name: Lights in Camille's Room
     view: false
     entities:
-      - light.bedroom_canopy
+      - switch.bedroom_canopy
       - light.grandma_s_lamp
       - switch.aeotec_dsc06106_smart_energy_switch_switch_2
 
@@ -46,8 +46,7 @@ automation:
           - thu
           - fri
     action:
-      - service: homeassistant.turn_on
-        entity_id: script.goodmorning_camille
+      - service: script.goodmorning_camille
       - service: media_player.play_media
         data:
           entity_id: media_player.camille_s_speaker
@@ -61,7 +60,7 @@ automation:
     action:
       - service: homeassistant.toggle
         data:
-          entity_id: light.bedroom_canopy
+          entity_id: switch.bedroom_canopy
 
   - alias: "Minimote Camille Hold"
     trigger:
@@ -110,7 +109,6 @@ script:
         data:
           entity_id:
             - group.light_camille_bedroom
-            - switch.aeotec_dsc06106_smart_energy_switch_switch_2
       - service: input_select.select_option
         data:
           entity_id: input_select.camille_status
