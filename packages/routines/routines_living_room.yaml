@@ -29,7 +29,7 @@ script:
     sequence:
       - service: switch.turn_on
         data:
-          entity_id: switch.zooz_zen06_switch_2
+          entity_id: switch.zooz_zen06_switch
       - service: media_player.volume_set
         data:
           entity_id: media_player.living_room_tv
@@ -50,7 +50,7 @@ script:
     sequence:
       - service: switch.turn_on
         data:
-          entity_id: switch.zooz_zen06_switch_2
+          entity_id: switch.zooz_zen06_switch
       - service: media_player.volume_set
         data:
           entity_id: media_player.living_room_tv
@@ -88,7 +88,7 @@ script:
       - service: switch.turn_on
         data:
           entity_id:
-            - switch.zooz_zen06_switch_2
+            - switch.zooz_zen06_switch
       - service: homeassistant.turn_off
         data:
           entity_id:
