@@ -1,0 +1,37 @@
+input_select:
+  angela_status:
+    name: "Angela"
+    options:
+      - Home
+      - Work
+      - Away
+      - Asleep
+    icon: mdi:account
+    # icon: >-
+    #   {% if states("input_select.angela_status") == "Home" %}
+    #   mdi:home
+    #   {% elif states("input_select.angela_status") == "Work" %}
+    #   mdi:account-badge-horizontal
+    #   {% elif states("input_select.angela_status") == "Asleep" %}
+    #   mdi:hotel
+    #   {% else %}
+    #   mdi:logout
+    #   {% endif %}
+
+automation:
+  - alias: Set status for Angela
+    trigger:
+      - platform: state
+        entity_id: person.angela
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.angela_status
+          option: >-
+              {% if states("person.angela") == "home" %}
+              Home
+              {% elif states("person.angela") == "Work Angela" %}
+              Work
+              {% else %}
+              Away
+              {% endif %}

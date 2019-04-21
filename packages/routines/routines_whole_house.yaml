@@ -36,6 +36,24 @@ automation:
         entity_id: alarm_control_panel.home_alarm
         to: "armed_night"
     action:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - group.lights_whole_house
+            - group.switches_whole_house
+      - service: media_player.media_pause
+        data:
+          entity_id:
+            - media_player.bedroom_speaker
+            - media_player.living_room_tv
+            - media_player.living_room_display
+
+  - alias: "Alarm away turn off everything"
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        to: "armed_away"
+    action:
       - service: script.turn_everything_off
 
 script:
@@ -47,6 +65,14 @@ script:
           entity_id:
             - group.lights_whole_house
             - group.switches_whole_house
+      - service: media_player.media_pause
+        data:
+          entity_id:
+            - group.media_whole_house
+
+  turn_off_media:
+    alias: "Turn off all media"
+    sequence:
       - service: media_player.media_pause
         data:
           entity_id:

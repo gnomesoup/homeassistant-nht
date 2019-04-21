@@ -1,0 +1,38 @@
+input_select:
+  michael_status:
+    name: "Michael"
+    options:
+      - Home
+      - Work
+      - Away
+      - Asleep
+    icon: mdi:account
+    # icon: >-
+    #   {% if states("input_select.michael_status") == "Home" %}
+    #   mdi:home
+    #   {% elif states("input_select.michael_status") == "Work" %}
+    #   mdi:account-badge-horizontal
+    #   {% elif states("input_select.michael_status") == "Asleep" %}
+    #   mdi:hotel
+    #   {% else %}
+    #   mdi:logout
+    #   {% endif %}
+
+
+automation:
+  - alias: Set status for Michael
+    trigger:
+      - platform: state
+        entity_id: person.michael
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.michael_status
+          option: >-
+              {% if states("person.michael") == "home" %}
+              Home
+              {% elif states("person.michael") == "Work Michael" %}
+              Work
+              {% else %}
+              Away
+              {% endif %}

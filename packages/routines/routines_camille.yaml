@@ -3,6 +3,7 @@ input_select:
     name: "Camille's Status"
     options:
       - Home
+      - School
       - Away
       - Asleep
 
@@ -52,6 +53,10 @@ automation:
           entity_id: media_player.camille_s_speaker
           media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
           media_content_type: "music"
+      - service: notify.ios_ergisch
+        data:
+          title: "Wakeup Ran"
+          message: "Camille"
 
   - alias: "Minimote Camille Push 1"
     trigger:
