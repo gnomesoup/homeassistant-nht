@@ -145,11 +145,12 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_master_bedroom
+        to: "on"
     condition:
       - condition: template
         value_template: >-
-          {{ states("person.angela") != "Home" and
-             states("person.michael") != "Home" }}
+          {{ states("person.angela") != "home" and
+             states("person.michael") != "home" }}
     action:
       - service: notify.notify
         data:

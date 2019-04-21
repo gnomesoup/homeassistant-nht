@@ -41,6 +41,7 @@ automation:
       - platform: state
         entity_id:
           - input_boolean.minimote_master_bedroom_2
+          - input_boolean.flic_button_hold
     condition:
       - condition: template
         value_template: >-
@@ -68,6 +69,7 @@ automation:
         entity_id:
           - input_boolean.minimote_master_bedroom_8
           - input_boolean.minimote_front_door_8
+          - input_boolean.flic_button_single_click
     condition:
       - condition: template
         value_template: >-
