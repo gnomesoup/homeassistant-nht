@@ -78,6 +78,31 @@ automation:
       - service: alarm_control_panel.alarm_disarm
         entity_id: alarm_control_panel.home_alarm
 
+  - alias: Alarm Disarm When Triggered
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.minimote_master_bedroom_1
+          - input_boolean.minimote_master_bedroom_2
+          - input_boolean.minimote_master_bedroom_3
+          - input_boolean.minimote_master_bedroom_4
+          - input_boolean.minimote_master_bedroom_5
+          - input_boolean.minimote_master_bedroom_6
+          - input_boolean.minimote_master_bedroom_7
+          - input_boolean.minimote_master_bedroom_8
+          - input_boolean.minimote_front_door_8
+          - input_boolean.flic_button_single_click
+          - input_boolean.flic_button_hold
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("alarm_control_panel.home_alarm") == "triggered"}}
+    action:
+      - service: alarm_control_panel.alarm_disarm
+        entity_id: alarm_control_panel.home_alarm
+      - service: switch.turnoff
+        entity_id: switch.linear_unknown_type_2005_id_0503_switch
+
   # Keep arlo alarm states in sync with manual alarm panel
   - alias: Aarlo alarm set from main alarm
     trigger:
