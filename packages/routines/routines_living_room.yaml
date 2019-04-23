@@ -83,7 +83,8 @@ script:
           entity_id:
             - light.aeotec_zw111_nano_dimmer_level
             - light.aeotec_zw111_nano_dimmer_level_3
-            - group.lights_living_room
+            - light.accordion_lamp
+            - light.living_room_lamp
           brightness: 255
       - service: switch.turn_on
         data:
