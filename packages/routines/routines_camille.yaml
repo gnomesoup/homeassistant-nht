@@ -55,8 +55,8 @@ automation:
           media_content_type: "music"
       - service: notify.ios_ergisch
         data:
-          title: "Wakeup Ran"
-          message: "Camille"
+          title: "Routines"
+          message: "Wakeup Camille Ran"
 
   - alias: "Minimote Camille Push 1"
     trigger:
@@ -113,7 +113,7 @@ script:
       - service: homeassistant.turn_on
         data:
           entity_id:
-            - group.light_camille_bedroom
+            - group.lights_bedroom_camille
       - service: input_select.select_option
         data:
           entity_id: input_select.camille_status
@@ -121,7 +121,7 @@ script:
       - service: media_player.volume_set
         data:
           entity_id: media_player.camille_s_speaker
-          volume_level: 0.8
+          volume_level: 0.7
 
   goodnight_camille:
     alias: Good Night Camille

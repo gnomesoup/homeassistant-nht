@@ -152,6 +152,11 @@ automation:
           {{ states("person.angela") != "home" and
              states("person.michael") != "home" }}
     action:
+      - service: tts.google_say
+        entity_id:
+          - media_player.bedroom_speaker
+        data:
+          message: "Stop. Do not enter. Go Back now."
       - service: notify.notify
         data:
           title: "Alarm"

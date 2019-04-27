@@ -1,5 +1,8 @@
 # This is yaml copied from the "Edit Config" from the UI
 # These settings are not live and need to be pasted back into the UI to take effect
+resources:
+  - type: module
+    url: /local/aarlo-glance.js
 title: Home
 views:
   - badges: []
@@ -112,6 +115,36 @@ views:
           - arm_home
           - arm_away
         type: alarm-panel
+      - type: 'custom:aarlo-glance'
+        camera: front_door
+        name: Front Door
+        show:
+          - motion
+          - sound
+          - snapshot
+          - battery
+          - signal_strength
+          - captured
+      - type: 'custom:aarlo-glance'
+        camera: mary
+        name: Mary
+        show:
+          - motion
+          - sound
+          - snapshot
+          - battery
+          - signal_strength
+          - captured
+      - type: 'custom:aarlo-glance'
+        camera: living_room
+        name: Living Room
+        show:
+          - motion
+          - sound
+          - snapshot
+          - battery
+          - signal_strength
+          - captured
     title: Security
   - badges: []
     cards:
