@@ -1,0 +1,55 @@
+# variables
+:hass-url := (mjp/match-file-contents "hass-url = \\(.*\\)" "hass-token.txt")
+:hass-token := (mjp/match-file-contents "hass-token = \\(.*\\)" "hass-token.txt")
+
+# services
+GET :hass-url/api/services
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# history all device_trackers
+GET :hass-url/api/history/period/2019-01-25T06:30:00+03:00
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# events
+GET :hass-url/api/events
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# state entities only
+POST :hass-url/api/template
+Authorization: Bearer :hass-token
+Content-Type: application/json
+{"template":" {{ states('input_select.michael_status') == 'Home' or states('input_select.camille_status') == 'Home' }}"}
+
+# restart git_pull
+POST :hass-url/api/services/hassio/addon_restart
+Authorization: Bearer :hass-token
+Content-Type: application/json
+{"addon":"core_git_pull"}
+
+# check config
+POST :hass-url/api/services/homeassistant/check_config
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# download config as json
+GET :hass-url/api/config
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# history
+GET :hass-url/api/history/period/2019-03-18T6:29:00+05:00
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# humidity power sensor state
+GET :hass-url/api/dev-info
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# entity state
+GET :hass-url/api/states/switch.linear_unknown_type_2005_id_0503_switch
+Authorization: Bearer :hass-token
+Content-Type: application/json
