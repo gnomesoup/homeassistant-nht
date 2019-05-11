@@ -1,0 +1,30 @@
+input_boolean:
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:ferry
+
+group:
+  guest_lights:
+    view: false
+    entities:
+      - light.living_room_lamp
+      - light.accordion_lamp
+      - light.aeotec_zw111_nano_dimmer_level_3
+      - light.aeotec_zw111_nano_dimmer_level
+      - switch.zooz_zen06_switch
+
+script:
+  guest_lights_on:
+    alias: Guest Lights On
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.guest_lights
+          brightness: 100
+  guest_lights_off:
+    alias: Guest Lights Off
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id: group.guest_lights
+          brightness: 30

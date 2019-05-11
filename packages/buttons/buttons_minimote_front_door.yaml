@@ -33,6 +33,10 @@ automation:
         event_data:
           entity_id:
             zwave.aeotec_dsa03202_minimote
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     action:
       - service: homeassistant.toggle
         data_template:
@@ -45,4 +49,29 @@ automation:
                           6: "input_boolean.minimote_front_door_6",
                           7: "input_boolean.minimote_front_door_7",
                           8: "input_boolean.minimote_front_door_8"} %}
+            {{ map[trigger.event.data.scene_id|int] }}
+
+  - alias: Minimote Front Door Guest Mode
+    trigger:
+      - platform: event
+        event_type: zwave.scene_activated
+        event_data:
+          entity_id:
+            zwave.aeotec_dsa03202_minimote
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "on"
+    action:
+      - service: homeassistant.toggle
+        data_template:
+          entity_id: >
+            {% set map = {1: "light.accordion_lamp",
+                          2: "script.guest_lights_off",
+                          3: "light.living_room_lamp",
+                          4: "script.guest_lights_off",
+                          5: "light.aeotec_zw111_nano_dimmer_level_3",
+                          6: "script.guest_lights_off",
+                          7: "switch.zooz_zen06_switch",
+                          8: "script.guest_lights_on"} %}
             {{ map[trigger.event.data.scene_id|int] }}
