@@ -1,0 +1,108 @@
+* dnsmasq
+DNS running on docker container on the chewbacca pi
+
+#+BEGIN_SRC sh
+docker run \
+-p 53:53/tcp -p 53:53/udp \
+--cap-add=NET_ADMIN \
+--name dnsmasq \
+--restart always \
+-v /volume1/docker/dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf \
+jansepke/rpi-dnsmasq
+#+END_SRC
+
+* influxdb
+#+NAME: init-block
+#+BEGIN_SRC R
+  library(dplyr)
+  library(influxdbr)
+  library(lubridate)
+  ## library(xts)
+
+  hass_query <- function(query, tz = "America/Chicago")
+  {
+    qDB <- influx_connection(host=hostname)
+    outData <- influx_query(con = qDB, db = "home_assistant", query = query, simplifyList = TRUE, return_xts = FALSE)
+    outXTS <- outData
+    outXTS <- outXTS[[1]] %>% mutate(time = with_tz(time, tz=tz))
+    outXTS
+  }
+#+END_SRC
+
+#+BEGIN_SRC R :var hostname=secrets.org:homeurl :noweb yes :colnames yes :rownames no :session
+  <<init-block>>
+  outData <- hass_query('select * from "input_select.michael_status"')
+  outData %>% select(time, state) %>% arrange(desc(time))
+#+END_SRC
+
+#+RESULTS:
+| time                | state |
+|---------------------+-------|
+| 2019-04-28 07:45:46 | Home  |
+| 2019-04-27 22:57:37 | Away  |
+| 2019-04-27 21:13:17 | Away  |
+| 2019-04-27 21:09:22 | Away  |
+| 2019-04-27 13:59:43 | Away  |
+| 2019-04-26 19:42:54 | Home  |
+| 2019-04-26 19:40:56 | Away  |
+| 2019-04-26 19:40:43 | Home  |
+| 2019-04-26 18:37:41 | Away  |
+| 2019-04-26 18:37:12 | Home  |
+| 2019-04-26 18:37:09 | Away  |
+| 2019-04-26 17:31:34 | Home  |
+| 2019-04-26 17:31:33 | Away  |
+| 2019-04-26 17:29:47 | Home  |
+| 2019-04-26 17:16:02 | Away  |
+| 2019-04-26 16:41:46 | Work  |
+| 2019-04-26 16:41:46 | Away  |
+| 2019-04-26 12:36:13 | Work  |
+| 2019-04-26 12:16:20 | Away  |
+| 2019-04-26 12:14:16 | Work  |
+| 2019-04-26 12:13:28 | Away  |
+| 2019-04-26 12:12:15 | Work  |
+| 2019-04-26 12:10:33 | Away  |
+| 2019-04-26 12:09:51 | Work  |
+| 2019-04-26 12:09:49 | Away  |
+| 2019-04-26 07:56:20 | Work  |
+| 2019-04-26 07:49:05 | Away  |
+| 2019-04-26 07:47:20 | Home  |
+| 2019-04-26 07:47:20 | Away  |
+| 2019-04-26 07:47:20 | Home  |
+| 2019-04-26 07:47:20 | Away  |
+| 2019-04-25 17:17:04 | Home  |
+| 2019-04-25 17:14:37 | Away  |
+| 2019-04-25 08:33:33 | Work  |
+| 2019-04-25 08:23:28 | Away  |
+| 2019-04-24 17:11:48 | Home  |
+| 2019-04-24 17:05:03 | Away  |
+| 2019-04-24 08:11:57 | Work  |
+| 2019-04-24 08:09:53 | Away  |
+| 2019-04-24 08:03:21 | Home  |
+| 2019-04-24 08:03:13 | Away  |
+| 2019-04-23 17:21:32 | Home  |
+| 2019-04-23 17:15:24 | Away  |
+| 2019-04-23 09:00:49 | Work  |
+| 2019-04-23 08:47:29 | Away  |
+| 2019-04-23 08:42:58 | Home  |
+| 2019-04-23 08:42:56 | Away  |
+| 2019-04-22 18:20:25 | Home  |
+| 2019-04-22 18:19:24 | Away  |
+| 2019-04-22 18:19:23 | Home  |
+| 2019-04-22 18:18:45 | Away  |
+| 2019-04-22 18:16:41 | Home  |
+| 2019-04-22 18:14:39 | Away  |
+| 2019-04-22 18:13:04 | Home  |
+| 2019-04-22 18:11:12 | Away  |
+| 2019-04-22 18:07:20 | Home  |
+| 2019-04-22 18:06:19 | Away  |
+| 2019-04-22 18:04:20 | Home  |
+| 2019-04-22 18:04:16 | Away  |
+| 2019-04-22 15:58:56 | Home  |
+| 2019-04-22 15:58:04 | Away  |
+| 2019-04-22 15:57:46 | Home  |
+| 2019-04-22 15:52:44 | Away  |
+| 2019-04-22 15:51:04 | Work  |
+| 2019-04-22 15:50:58 | Away  |
+| 2019-04-22 09:26:08 | Work  |
+| 2019-04-22 09:10:39 | Away  |
+| 2019-04-21 23:05:28 | Home  |
