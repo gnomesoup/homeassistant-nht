@@ -1,0 +1,26 @@
+* General function for query
+#+NAME: init-block
+#+BEGIN_SRC R
+  library(dplyr)
+  library(influxdbr)
+  library(lubridate)
+  ## library(xts)
+
+  hass_query <- function(query, tz = "America/Chicago")
+  {
+    qDB <- influx_connection(host=hostname)
+    outData <- influx_query(con = qDB, db = "home_assistant", query = query, simplifyList = TRUE, return_xts = FALSE)
+    outXTS <- outData
+    outXTS <- outXTS[[1]] %>% mutate(time = with_tz(time, tz=tz))
+    outXTS
+  }
+#+END_SRC
+
+#+BEGIN_SRC R :var hostname="gnomesoup.duckdns.org" :noweb yes :colnames yes :rownames no :session
+  <<init-block>>
+  outData <- hass_query('select * from "input_select.michael_status"')
+  outData %>% select(time, state) %>% arrange(desc(time))
+#+END_SRC
+
+#+RESULTS:
+|   |
