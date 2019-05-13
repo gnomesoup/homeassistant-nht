@@ -71,7 +71,7 @@ automation:
                           3: "light.living_room_lamp",
                           4: "script.guest_lights_off",
                           5: "light.aeotec_zw111_nano_dimmer_level_3",
-                          6: "script.guest_lights_off",
+                          6: "script.guest_lights_dim",
                           7: "switch.zooz_zen06_switch",
                           8: "script.guest_lights_on"} %}
             {{ map[trigger.event.data.scene_id|int] }}

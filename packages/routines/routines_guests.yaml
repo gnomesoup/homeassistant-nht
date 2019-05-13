@@ -11,7 +11,6 @@ group:
       - light.accordion_lamp
       - light.aeotec_zw111_nano_dimmer_level_3
       - light.aeotec_zw111_nano_dimmer_level
-      - switch.zooz_zen06_switch
 
 script:
   guest_lights_on:
@@ -20,11 +19,27 @@ script:
       - service: homeassistant.turn_on
         data:
           entity_id: group.guest_lights
-          brightness: 100
+          brightness: 255
+      - service: homeassistant.turn_on
+        data:
+          entity_id: switch.zooz_zen06_switch
   guest_lights_off:
     alias: Guest Lights Off
     sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.guest_lights
+          brightness: 64
       - service: homeassistant.turn_off
         data:
           entity_id: group.guest_lights
-          brightness: 30
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.zooz_zen06_switch
+  guest_lights_dim:
+    alias: Dim The Guest Lights
+    sequence:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.guest_lights
+          brightness: 64
