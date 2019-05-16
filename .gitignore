@@ -8,6 +8,7 @@
 !*.xml
 !*.el
 !*.http
+!*.org
 !/packages/**/*.yaml
 !.gitignore
 
