@@ -1,0 +1,34 @@
+notify:
+  - name: Security_Verbose
+    platform: group
+    services:
+      - service: ios_ergisch
+      - service: firebase_hassio
+        platform: html5
+        vapid_pub_key: !secret firebaseHtml5Public
+        vapid_prv_key: !secret firebaseHtml5Private
+        vapid_email: !secret firebaseHtml5Email
+
+
+  - name: firebase_hassio
+    platform: html5
+    vapid_pub_key: !secret firebaseHtml5Public
+    vapid_prv_key: !secret firebaseHtml5Private
+    vapid_email: !secret firebaseHtml5Email
+
+input_select:
+  notify_level_michael:
+    name: Notify Level Michael
+    options:
+      - All
+      - Major
+      - None
+    icon: mdi:bell-ring
+
+  notify_level_angela:
+    name: Notify Level Angela
+    options:
+      - All
+      - Major
+      - None
+    icon: mdi:bell-ring
