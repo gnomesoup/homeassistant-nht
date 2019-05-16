@@ -9,6 +9,9 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home_alarm
         state: "armed_night"
+      - condition: template
+        value_template: >-
+          {{ states("input_select.mary_status") != "Away" }}
     action:
       service: tts.google_translate_say
       entity_id:
@@ -33,6 +36,27 @@ automation:
       - condition: state
         entity_id: input_boolean.door_alert_delay
         state: "off"
+    action:
+      - service: notify.notify
+        data_template:
+          title: "Door Alert"
+          message: >-
+            {{ state_attr(trigger.entity_id, "friendly_name") }} is{%
+            if is_state(trigger.entity_id, "on") %} open {% else %} closed {% endif %}
+
+  - alias: "Notify Door Mary"
+    # Constantly send door status. Like all the time
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.door_sensor_1
+    condition:
+      - condition: state
+        entity_id: input_boolean.door_alert_delay
+        state: "off"
+      - condition: template
+        value_template: >-
+          {{ states("input_select.mary_status") != "Away" }}
     action:
       - service: notify.notify
         data_template:
