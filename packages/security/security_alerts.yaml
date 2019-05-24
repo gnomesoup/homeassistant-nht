@@ -1,25 +1,4 @@
 automation:
-  - alias: "Door Alert Mary Asleep"
-    # Have google home get noisy if Mary opens in her door in the middle of the night
-    trigger:
-      platform: state
-      entity_id: binary_sensor.door_sensor_1
-      to: "on"
-    condition:
-      - condition: state
-        entity_id: alarm_control_panel.home_alarm
-        state: "armed_night"
-      - condition: template
-        value_template: >-
-          {{ states("input_select.mary_status") != "Away" }}
-    action:
-      service: tts.google_translate_say
-      entity_id:
-        - media_player.living_room_display
-        - media_player.bedroom_speaker
-      data:
-        message: "Alert, Mary's door is open. Alert, Mary's Door is open"
-
   - alias: "Notify Door"
     # Constantly send door status. Like all the time
     trigger:
@@ -36,27 +15,9 @@ automation:
       - condition: state
         entity_id: input_boolean.door_alert_delay
         state: "off"
-    action:
-      - service: notify.notify
-        data_template:
-          title: "Door Alert"
-          message: >-
-            {{ state_attr(trigger.entity_id, "friendly_name") }} is{%
-            if is_state(trigger.entity_id, "on") %} open {% else %} closed {% endif %}
-
-  - alias: "Notify Door Mary"
-    # Constantly send door status. Like all the time
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.door_sensor_1
-    condition:
-      - condition: state
-        entity_id: input_boolean.door_alert_delay
-        state: "off"
       - condition: template
         value_template: >-
-          {{ states("input_select.mary_status") != "Away" }}
+          {{ not is_state("alarm_control_panel.home_alarm", "disarmed") }}
     action:
       - service: notify.notify
         data_template:
@@ -108,22 +69,6 @@ automation:
       - service: script.turn_on
         entity_id: script.reset_door_delay
 
-  - alias: Notify Motion Mary
-    # If Mary is in bed, let us know when she is getting up
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.motion_mary_bedroom
-        to: "on"
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("input_select.mary_status") == "Asleep" }}
-    action:
-      - service: notify.notify
-        data:
-          title: "Motion Alert"
-          message: "Mary's Bedroom"
-
   - alias: Notify All Motion
     # If the alarm is set, let michael know about motion
     trigger:
@@ -132,7 +77,7 @@ automation:
           - binary_sensor.motion_camille_bedroom
           - binary_sensor.motion_hallway
           - binary_sensor.motion_living_room
-          - binary_sensor.motion_mary_bedroom
+          - binary_sensor.motion_office
           - binary_sensor.motion_master_bedroom
         to: "on"
     condition:

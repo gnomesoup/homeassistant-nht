@@ -28,7 +28,6 @@ views:
               - entity: input_select.michael_status
               - entity: input_select.angela_status
               - entity: input_select.camille_status
-              - entity: input_select.mary_status
           - type: history-graph
             entities:
               - entity: person.michael
@@ -90,16 +89,13 @@ views:
           - arm_night
         type: alarm-panel
       - entities:
-          - entity: input_select.mary_status
-        type: entities
-      - entities:
           - entity: binary_sensor.door_sensor_1
           - entity: binary_sensor.door_sensor_2
           - entity: binary_sensor.door_sensor_3
           - entity: binary_sensor.door_sensor_4
         type: glance
       - entities:
-          - entity: binary_sensor.motion_mary_bedroom
+          - entity: binary_sensor.motion_office
           - entity: binary_sensor.motion_hallway
           - entity: binary_sensor.motion_living_room
           - entity: binary_sensor.motion_camille_bedroom
@@ -192,7 +188,7 @@ views:
         type: entities
       - entities:
           - entity: light.aeotec_zw111_nano_dimmer_level_2
-        title: Mary's Room
+        title: "Office"
         type: entities
       - entities:
           - entity: light.grandma_s_lamp
@@ -224,7 +220,7 @@ views:
       - entities:
           - entity: sensor.linear_wapirz_1_motion_sensor_temperature
         show_name: false
-        title: Mary's Room
+        title: Office
         type: glance
       - entities:
           - entity: sensor.aeotec_zw100_multisensor_6_temperature
@@ -236,6 +232,6 @@ views:
           - entity: sensor.aeotec_dsb05_multisensor_temperature
           - entity: sensor.aeotec_dsb05_multisensor_relative_humidity
         show_name: false
-        title: Camille's Bedroom
+        title: "Camille's Bedroom"
         type: glance
-    title: Climate
+        title: Climate

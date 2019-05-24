@@ -1,9 +1,9 @@
 binary_sensor:
   - platform: template
     sensors:
-      motion_mary_bedroom:
+      motion_office:
         device_class: motion
-        friendly_name: "Mary's Bedroom Motion"
+        friendly_name: "Office Motion"
         value_template: >-
           {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level")|float > 0 }}
       motion_hallway:

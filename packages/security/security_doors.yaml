@@ -3,7 +3,7 @@ binary_sensor:
   sensors:
       door_sensor_1:
         device_class: opening
-        friendly_name: "Mary's Door"
+        friendly_name: "Office Door"
         value_template: >-
           {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_3.state|float > 0 }}
       door_sensor_2:
