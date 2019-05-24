@@ -177,7 +177,8 @@ views:
       - entity: media_player.all_rooms
         type: media-control
     title: Media
-  - badges: []
+  - title: Lights
+    badges: []
     cards:
       - entities:
           - entity: light.accordion_lamp
@@ -201,7 +202,6 @@ views:
           - entity: light.metal_lamp
         title: Master Bedroom
         type: entities
-    title: Lights
   - cards:
       - detail: 6
         entity: sensor.temperature_whole_house
@@ -220,7 +220,7 @@ views:
       - entities:
           - entity: sensor.linear_wapirz_1_motion_sensor_temperature
         show_name: false
-        title: Office
+        title: Mary's Room
         type: glance
       - entities:
           - entity: sensor.aeotec_zw100_multisensor_6_temperature
@@ -232,6 +232,6 @@ views:
           - entity: sensor.aeotec_dsb05_multisensor_temperature
           - entity: sensor.aeotec_dsb05_multisensor_relative_humidity
         show_name: false
-        title: "Camille's Bedroom"
+        title: Camille's Bedroom
         type: glance
-        title: Climate
+    title: Climate
