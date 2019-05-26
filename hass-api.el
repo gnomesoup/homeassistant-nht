@@ -14,9 +14,9 @@
 (defun hass-api/get-all-entities-as-list()
   "Use curl to grab a list of all entities from home assistant"
   (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "hass-token.txt"))
+                                              "~/hassio-config-euler/hass-token.txt"))
          (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "hass-token.txt"))
+                                            "~/hassio-config-euler/hass-token.txt"))
          (entity_ids (shell-command-to-string (concat "curl -s -H \"Content-Type: application/json\" "
                               "-H \"Authorization: Bearer "
                               hass-token
@@ -38,9 +38,9 @@
 (defun hass-api/get-all-entities-and-names-as-list()
   "Use curl to grab a list of all entities and their friendly names from home assistant"
   (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "hass-token.txt"))
+                                              "~/hassio-config-euler/hass-token.txt"))
          (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "hass-token.txt"))
+                                            "~/hassio-config-euler/hass-token.txt"))
          (entity_ids (shell-command-to-string
                       (concat "curl -s -H \"Content-Type: application/json\" "
                               "-H \"Authorization: Bearer "
@@ -66,9 +66,9 @@
   "Restart the hassio Git Pull addon"
   (interactive)
   (save-excursion
-    (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)" "hass-token.txt"))
+    (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)" "~/hassio-config-euler/hass-token.txt"))
           (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                           "hass-token.txt"))
+                                           "~/hassio-config-euler/hass-token.txt"))
           (curl-command (concat "curl \"-i\" \"-H\" \"Content-Type: application/json\" \"-H\" \"Authorization: Bearer "
                                 hass-token
                                 "\" \"-XPOST\" \""
@@ -85,9 +85,9 @@
   (interactive)
   (save-excursion
     (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                                "hass-token.txt"))
+                                                "~/hassio-config-euler/hass-token.txt"))
            (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                              "hass-token.txt"))
+                                              "~/hassio-config-euler/hass-token.txt"))
            (curl-command (concat "curl -H \"Content-Type: application/json\" "
                                  " -H \"Authorization: Bearer "
                                  hass-token
@@ -103,9 +103,9 @@
   (save-excursion
     (let* ((entity_id (or entity_id (hass-api/get-entity-from-list)))
            (hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                                "hass-token.txt"))
+                                                "~/hassio-config-euler/hass-token.txt"))
            (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                              "hass-token.txt"))
+                                              "~/hassio-config-euler/hass-token.txt"))
            (curl-command (concat "curl -H \"Content-Type: application/json\" "
                                  "-H \"Authorization: Bearer "
                                  hass-token
@@ -144,9 +144,9 @@
   (interactive)
   (let* ((entity_id (hass-api/get-entity-from-list))
          (hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "hass-token.txt"))
+                                              "~/hassio-config-euler/hass-token.txt"))
          (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "hass-token.txt"))
+                                            "~/hassio-config-euler/hass-token.txt"))
          (template_statement
           (concat "\"{\\\"template\\\":\\\""
                   "{{ states." entity_id
@@ -168,9 +168,9 @@
   "Run supplied template as `arg' on Home Assistant instance"
   (interactive "sTemplate: ")
   (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "hass-token.txt"))
+                                              "~/hassio-config-euler/hass-token.txt"))
          (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "hass-token.txt"))
+                                            "~/hassio-config-euler/hass-token.txt"))
          (arg (concat "{\\\"template\\\":\\\"" arg "\\\"}"))
          )
     (unless arg
@@ -191,7 +191,7 @@
   "Browse to the hassio url specified in hass-token.txt"
   (interactive)
   (let ((hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                           "hass-token.txt")))
+                                           "~/hassio-config-euler/hass-token.txt")))
     (browse-url hass-url)
     (message "%s" hass-url)))
 (spacemacs/set-leader-keys "ahh" 'mjp/browse-url-hassio)

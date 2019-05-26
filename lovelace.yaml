@@ -71,11 +71,11 @@ views:
           entity: media_player.camille_s_speaker
       - type: conditional
         conditions:
-          - entity: media_player.mary_s_speaker
+          - entity: media_player.office_speaker
             state_not: 'off'
         card:
           type: media-control
-          entity: media_player.mary_s_speaker
+          entity: media_player.office_speaker
       - entity: weather.dark_sky
         type: weather-forecast
     icon: ''
@@ -172,7 +172,7 @@ views:
         type: media-control
       - entity: media_player.camille_s_speaker
         type: media-control
-      - entity: media_player.mary_s_speaker
+      - entity: media_player.office_speaker
         type: media-control
       - entity: media_player.all_rooms
         type: media-control
