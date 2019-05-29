@@ -139,11 +139,12 @@ automation:
         to: "pending"
     action:
       - service: media_player.play_media
-        entity_id:
-          - media_player.bedroom_speaker
-          - media_player.living_room_display
-        media_content_id: "https://dl.dropbox.com/s/mwc2xralppy0cva/Ship_Brass_Bell-Mike_Koenig-1458750630.wav"
-        media_content_type: "music"
+        data:
+          entity_id:
+            - media_player.bedroom_speaker
+            - media_player.living_room_display
+          media_content_id: "https://dl.dropbox.com/s/mwc2xralppy0cva/Ship_Brass_Bell-Mike_Koenig-1458750630.wav"
+          media_content_type: "music"
       - service: notify.notify
         data:
           title: "Alarm"
