@@ -96,11 +96,11 @@ automation:
     condition:
       - condition: template
         value_template: >-
-          {{ states("alarm_control_panel.home_alarm") == "triggered"}}
+          {{ states("alarm_control_panel.home_alarm") == "triggered" }}
     action:
       - service: alarm_control_panel.alarm_disarm
         entity_id: alarm_control_panel.home_alarm
-      - service: switch.turnoff
+      - service: switch.turn_off
         entity_id: switch.linear_unknown_type_2005_id_0503_switch
 
   # Keep arlo alarm states in sync with manual alarm panel

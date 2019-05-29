@@ -85,7 +85,7 @@ automation:
         entity_id: alarm_control_panel.home_alarm
         state: "armed_night"
     action:
-      - service: notify.ios_ergisch
+      - service: notify.security_verbose
         data_template:
           title: "Motion Alert"
           message: >-
@@ -97,7 +97,7 @@ automation:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
     action:
-      - service: notify.ios_ergisch
+      - service: notify.security_verbose
         data:
           title: "Alarm"
           message: >-
@@ -130,6 +130,24 @@ automation:
         data:
           title: "Alarm"
           message: "Motion in Master Bedroom"
+
+  - alias: Notify Pending Trigger
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        from: "armed_away"
+        to: "pending"
+    action:
+      - service: media_player.play_media
+        entity_id:
+          - media_player.bedroom_speaker
+          - media_player.living_room_display
+        media_content_id: "https://dl.dropbox.com/s/mwc2xralppy0cva/Ship_Brass_Bell-Mike_Koenig-1458750630.wav"
+        media_content_type: "music"
+      - service: notify.notify
+        data:
+          title: "Alarm"
+          message: "Alarm will sound in 15 seconds"
 
 script:
   reset_door_delay:
