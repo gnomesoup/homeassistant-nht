@@ -17,7 +17,8 @@ automation:
         state: "off"
       - condition: template
         value_template: >-
-          {{ not is_state("alarm_control_panel.home_alarm", "disarmed") }}
+          {{ not is_state("alarm_control_panel.home_alarm", "disarmed") or
+             is_state("input_boolean.in_home_services", "on") }}
     action:
       - service: notify.notify
         data_template:
@@ -33,6 +34,10 @@ automation:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
         to: "triggered"
+    condition:
+      - condition: state
+        entity_id: input_boolean.in_home_services
+        state: "off"
     action:
       - service: switch.turn_on
         data:
@@ -47,6 +52,22 @@ automation:
         data:
           title: "Alarm"
           message: "Triggered"
+
+  - alias: "Notify Alarm Triggered Services Expected"
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        from: "armed_away"
+        to: "disarmed"
+    condition:
+      - condition: state
+        entity_id: input_boolean.in_home_services
+        state: "on"
+    action:
+      - service: notify.notify
+        data:
+          title: "Alarm"
+          message: "In-Home Services Arrived. Alarm Disabled"
 
   - alias: "Turn On Door Delay"
     # In case you want to sneak out without alerts going off
@@ -119,7 +140,8 @@ automation:
       - condition: template
         value_template: >-
           {{ states("person.angela") != "home" and
-             states("person.michael") != "home" }}
+             states("person.michael") != "home" and
+             is_state("input_boolean.in_home_services", "off")}}
     action:
       - service: tts.google_say
         entity_id:

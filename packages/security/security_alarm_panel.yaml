@@ -13,3 +13,8 @@ alarm_control_panel:
     armed_night:
       pending_time: 0
       delay_time: 0
+
+input_boolean:
+  in_home_services:
+    name: "In-Home Services Expected"
+    icon: mdi:broom
