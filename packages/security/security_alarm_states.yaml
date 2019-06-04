@@ -99,16 +99,13 @@ automation:
     action:
       - service: alarm_control_panel.alarm_disarm
         entity_id: alarm_control_panel.home_alarm
-<<<<<<< HEAD
       - service: input_boolean.turn_off
         entity_id: input_boolean.in_home_services
-=======
       - service: media_player.media_pause
         data:
           entity_id:
             - media_player.bedroom_speaker
             - media_player.living_room_display
->>>>>>> 1e9bcd0cf979eef5869b782f1ba35efafc0c1e59
 
   - alias: Alarm Disarm When Triggered
     trigger:
@@ -134,16 +131,13 @@ automation:
         entity_id: alarm_control_panel.home_alarm
       - service: switch.turn_off
         entity_id: switch.linear_unknown_type_2005_id_0503_switch
-<<<<<<< HEAD
       - service: input_boolean.turn_off
         entity_id: input_boolean.in_home_services
-=======
       - service: media_player.media_pause
         data:
           entity_id:
             - media_player.bedroom_speaker
             - media_player.living_room_display
->>>>>>> 1e9bcd0cf979eef5869b782f1ba35efafc0c1e59
 
   # Keep arlo alarm states in sync with manual alarm panel
   - alias: Aarlo alarm set from main alarm
