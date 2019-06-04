@@ -27,7 +27,7 @@ group:
       - media_player.camille_s_speaker
       - media_player.living_room_display
       - media_player.living_room_tv
-      - media_player.mary_s_speaker
+      - media_player.office_speaker
 
 automation:
   - alias: "Alarm night turn off everything"
