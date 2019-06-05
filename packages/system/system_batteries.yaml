@@ -1,0 +1,103 @@
+sensor:
+ - platform: template
+   sensors:
+     aeotec_dsb05_multisensor_battery_level:
+       friendly_name: "Camille's Room Multisensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.aeotec_dsb05_multisensor", "battery_level") }}
+     aeotec_zw100_multisensor_6_battery_level:
+       friendly_name: "Master Bedroom Multisensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.aeotec_zw100_multisensor_6", "battery_level") }}
+    linear_wapirz_1_motion_sensor_battery_level:
+       friendly_name: "Office Motion Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wapirz_1_motion_sensor", "battery_level") }}
+    linear_wapirz_1_motion_sensor_2_battery_level:
+       friendly_name: "Office Motion Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wapirz_1_motion_sensor_2", "battery_level") }}
+    linear_wapirz_1_motion_sensor_3_battery_level:
+       friendly_name: "Living Room Motion Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wapirz_1_motion_sensor_3", "battery_level") }}
+    linear_wadwaz_1_door_window_sensor_battery_level:
+       friendly_name: "Patio Door Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor", "battery_level") }}
+    linear_wadwaz_1_door_window_sensor_2_battery_level:
+       friendly_name: "Front Door Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_2", "battery_level") }}
+    linear_wadwaz_1_door_window_sensor_3_battery_level:
+       friendly_name: "Office Door Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_3", "battery_level") }}
+    linear_wadwaz_1_door_window_sensor_4_battery_level:
+       friendly_name: "Bathroom Door Sensor Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_4", "battery_level") }}
+    linear_unknown_type_2005_id_0503_battery_level:
+       friendly_name: "Siren Battery Level"
+       unit_of_measurement: "%"
+       value_template: >-
+         {{ state_attr("zwave.linear_unknown_type_2005_id_0503", "battery_level") }}
+
+group:
+  battery_levels:
+    view: false
+    icon: mdi:battery
+    entities:
+      - sensor.aeotec_dsb05_multisensor_battery_level
+      - sensor.aeotec_zw100_multisensor_6_battery_level
+      - sensor.linear_wapirz_1_motion_sensor_battery_level
+      - sensor.linear_wapirz_1_motion_sensor_2_battery_level
+      - sensor.linear_wapirz_1_motion_sensor_3_battery_level
+      - sensor.linear_wadwaz_1_door_window_sensor_battery_level
+      - sensor.linear_wadwaz_1_door_window_sensor_2_battery_level
+      - sensor.linear_wadwaz_1_door_window_sensor_3_battery_level
+      - sensor.linear_wadwaz_1_door_window_sensor_4_battery_level
+      - sensor.linear_unknown_type_2005_id_0503_battery_level
+      - sensor.aarlo_battery_level_mary
+      - sensor.aarlo_battery_level_aquarium
+      - sensor.aarlo_battery_level_front_door
+      - sensor.aarlo_battery_level_living_room
+
+automation:
+  - alias: "Battery Level Warning"
+    trigger:
+      - platform: numeric_state
+        entity_id:
+          - sensor.aeotec_dsb05_multisensor_battery_level
+          - sensor.aeotec_zw100_multisensor_6_battery_level
+          - sensor.linear_wapirz_1_motion_sensor_battery_level
+          - sensor.linear_wapirz_1_motion_sensor_2_battery_level
+          - sensor.linear_wapirz_1_motion_sensor_3_battery_level
+          - sensor.linear_wadwaz_1_door_window_sensor_battery_level
+          - sensor.linear_wadwaz_1_door_window_sensor_2_battery_level
+          - sensor.linear_wadwaz_1_door_window_sensor_3_battery_level
+          - sensor.linear_wadwaz_1_door_window_sensor_4_battery_level
+          - sensor.linear_unknown_type_2005_id_0503_battery_level
+          - sensor.aarlo_battery_level_mary
+          - sensor.aarlo_battery_level_aquarium
+          - sensor.aarlo_battery_level_front_door
+          - sensor.aarlo_battery_level_living_room
+        below: 25
+        for:
+          hours: 4
+    action:
+      service: presistant_notification.create
+      data_template:
+        title: "Low Battery Warning"
+        message: >-
+            {{ state_attr(trigger.entity_id, "friendly_name") }} is at {{ trigger.to_state.state }}%
+        notification_id: low_battery_warning
