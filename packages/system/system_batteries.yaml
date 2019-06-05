@@ -45,10 +45,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_wapirz_1_motion_sensor_2_battery_level:
-         friendly_name: "Office Motion Sensor Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_wapirz_1_motion_sensor_2", "battery_level") }}
+        friendly_name: "Office Motion Sensor Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_wapirz_1_motion_sensor_2", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_wapirz_1_motion_sensor_2", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
@@ -59,10 +59,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_wapirz_1_motion_sensor_3_battery_level:
-         friendly_name: "Living Room Motion Sensor Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_wapirz_1_motion_sensor_3", "battery_level") }}
+        friendly_name: "Living Room Motion Sensor Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_wapirz_1_motion_sensor_3", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_wapirz_1_motion_sensor_3", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
@@ -73,10 +73,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_wadwaz_1_door_window_sensor_battery_level:
-         friendly_name: "Patio Door Sensor Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor", "battery_level") }}
+        friendly_name: "Patio Door Sensor Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_wadwaz_1_door_window_sensor", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
@@ -87,10 +87,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_wadwaz_1_door_window_sensor_2_battery_level:
-         friendly_name: "Front Door Sensor Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_2", "battery_level") }}
+        friendly_name: "Front Door Sensor Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_2", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_wadwaz_1_door_window_sensor_2", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
@@ -101,10 +101,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_wadwaz_1_door_window_sensor_3_battery_level:
-         friendly_name: "Office Door Sensor Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_3", "battery_level") }}
+        friendly_name: "Office Door Sensor Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_3", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_wadwaz_1_door_window_sensor_3", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
@@ -115,10 +115,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_wadwaz_1_door_window_sensor_4_battery_level:
-         friendly_name: "Bathroom Door Sensor Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_4", "battery_level") }}
+        friendly_name: "Bathroom Door Sensor Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_wadwaz_1_door_window_sensor_4", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_wadwaz_1_door_window_sensor_4", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
@@ -129,10 +129,10 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
       linear_unknown_type_2005_id_0503_battery_level:
-         friendly_name: "Siren Battery Level"
-         unit_of_measurement: "%"
-         value_template: >-
-             {{ state_attr("zwave.linear_unknown_type_2005_id_0503", "battery_level") }}
+        friendly_name: "Siren Battery Level"
+        unit_of_measurement: "%"
+        value_template: >-
+          {{ state_attr("zwave.linear_unknown_type_2005_id_0503", "battery_level") }}
         icon_template: >-
           {% set batteryLevel = (state_attr("zwave.linear_unknown_type_2005_id_0503", "battery_level")|round(-1)|int) %}
           {% if batteryLevel == 100 %}
