@@ -143,26 +143,6 @@ sensor:
           mdi:battery-{{ batteryLevel }}
           {% endif %}
 
-group:
-  battery_levels:
-    view: false
-    icon: mdi:battery
-    entities:
-      - sensor.aeotec_dsb05_multisensor_battery_level
-      - sensor.aeotec_zw100_multisensor_6_battery_level
-      - sensor.linear_wapirz_1_motion_sensor_battery_level
-      - sensor.linear_wapirz_1_motion_sensor_2_battery_level
-      - sensor.linear_wapirz_1_motion_sensor_3_battery_level
-      - sensor.linear_wadwaz_1_door_window_sensor_battery_level
-      - sensor.linear_wadwaz_1_door_window_sensor_2_battery_level
-      - sensor.linear_wadwaz_1_door_window_sensor_3_battery_level
-      - sensor.linear_wadwaz_1_door_window_sensor_4_battery_level
-      - sensor.linear_unknown_type_2005_id_0503_battery_level
-      - sensor.aarlo_battery_level_mary
-      - sensor.aarlo_battery_level_aquarium
-      - sensor.aarlo_battery_level_front_door
-      - sensor.aarlo_battery_level_living_room
-
 automation:
   - alias: "Battery Level Warning"
     trigger:

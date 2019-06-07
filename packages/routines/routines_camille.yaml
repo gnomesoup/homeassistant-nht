@@ -58,6 +58,22 @@ automation:
           title: "Routines"
           message: "Wakeup Camille Ran"
 
+  - alias: "Lights on Motion Camille's Room"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_camille_bedroom
+        to: "on"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states("input_select.camille_status") != "Asleep" and
+             states("group.lights_bedroom_camille") == "off" and
+             states("alarm_control_panel.home_alarm") == "disarmed" }}
+    action:
+      - service: homeassistant.turn_on
+        data:
+          entity_id: group.lights_bedroom_camille
+
   - alias: "Minimote Camille Push 1"
     trigger:
       - platform: state
