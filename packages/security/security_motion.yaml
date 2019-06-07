@@ -26,3 +26,18 @@ binary_sensor:
         friendly_name: "Master Bedroom Motion"
         value_template: >-
           {{ states("binary_sensor.aeotec_zw100_multisensor_6_sensor") == "on" }}
+
+group:
+  motion_sensors:
+    name: All Motion Sensors
+    view: false
+    entities:
+      - binary_sensor.motion_office
+      - binary_sensor.motion_hallway
+      - binary_sensor.motion_camille_bedroom
+      - binary_sensor.motion_living_room
+      - binary_sensor.motion_master_bedroom
+      - binary_sensor.aarlo_motion_mary
+      - binary_sensor.aarlo_motion_aquarium
+      - binary_sensor.aarlo_motion_front_door
+      - binary_sensor.aarlo_motion_living_room

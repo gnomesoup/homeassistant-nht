@@ -163,3 +163,39 @@ automation:
           {% else %}
           alarm_control_panel.alarm_disarm
           {% endif %}
+
+  - alias: In Home Service Over
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.door_sensor_2
+        from: "on"
+        to: "off"
+        for:
+          minutes: 45
+    condition:
+      - condition: state
+        entity_id: input_boolean.in_home_services
+        state: "on"
+      - condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "disarmed"
+      - condition: state
+        entity_id: group.motion_sensors
+        state: "off"
+        for:
+          minutes: 40
+      - condition: template
+        template_value: >-
+          {{ states("input_select.michael_status") != "Home" and
+             states("input_select.angela_status") != "Home" }}
+    action:
+      - service: homeassistant.turn_off
+        data:
+          entity_id: input_boolean.in_home_services
+      - service: alarm_control_panel.alarm_arm_away
+        entity_id: alarm_control_panel.home_alarm
+      - service: notify.notify
+        data:
+          title: Alarm
+          message: "There has been no motion for 45 minutes. The alarm is set to Armed Away"

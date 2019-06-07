@@ -27,3 +27,13 @@ input_boolean:
     name: Door Alert Delay
     icon: mdi:bell-off
     initial: off
+
+group:
+  door_sensors:
+    title: "All Door Sensors"
+    view: false
+    entities:
+      - binary_sensor.door_sensor_1
+      - binary_sensor.door_sensor_2
+      - binary_sensor.door_sensor_3
+      - binary_sensor.door_sensor_4
