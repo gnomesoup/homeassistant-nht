@@ -30,7 +30,7 @@ input_boolean:
 
 group:
   door_sensors:
-    title: "All Door Sensors"
+    name: "All Door Sensors"
     view: false
     entities:
       - binary_sensor.door_sensor_1
