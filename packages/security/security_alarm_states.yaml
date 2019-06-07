@@ -186,7 +186,7 @@ automation:
         for:
           minutes: 40
       - condition: template
-        template_value: >-
+        value_template: >-
           {{ states("input_select.michael_status") != "Home" and
              states("input_select.angela_status") != "Home" }}
     action:
