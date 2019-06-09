@@ -137,6 +137,10 @@ automation:
         entity_id: binary_sensor.motion_camille_bedroom
         from: "off"
         to: "on"
+      - platform: state
+        entity_id: input_boolean.alarm_set_camille
+        from: "on"
+        to: "off"
     condition:
       - condition: state
         entity_id: automation.wakeup_alarm_repeat_camille
@@ -153,6 +157,9 @@ script:
         data:
           entity_id:
             - group.lights_bedroom_camille
+      - service: homeassistant.turn_off
+        data:
+          entity_id: automation.wakeup_alarm_repeat_camille
       - service: input_select.select_option
         data:
           entity_id: input_select.camille_status
