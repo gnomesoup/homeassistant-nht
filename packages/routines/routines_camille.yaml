@@ -160,6 +160,7 @@ script:
           {% else %}
           homeassistant.turn_on
           {% endif %}
+        entity_id: input_boolean.alarm_set_camille
       - service: notify.notify
         data_template:
           title: "Camille"
