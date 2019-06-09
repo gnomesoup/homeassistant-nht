@@ -172,6 +172,18 @@ automation:
           title: "Alarm"
           message: "Alarm will sound in 15 seconds"
 
+  - alias: Door Open Too Long
+    trigger:
+      - platform: state
+        entity_id: camera.aarlo_front_door
+        to: "on"
+        for:
+          minutes: 10
+      - service: notify.notify
+        data:
+          title: "Alert"
+          message: "The front door has been open for 10 minutes"
+
 script:
   reset_door_delay:
     # Wait 15 seconds then turn off the door notification delay

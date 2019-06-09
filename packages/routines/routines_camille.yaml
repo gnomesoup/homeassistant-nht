@@ -16,6 +16,9 @@ input_datetime:
 input_boolean:
   alarm_disable_camille:
     name: "Disable Camille's Alarm"
+  alarm_set_camille:
+    name: "Camille's Alarm"
+    icon: mdi:alarm
 
 group:
   lights_bedroom_camille:
@@ -37,15 +40,7 @@ automation:
         value_template: >-
           {{ states("input_select.camille_status") != "Away" }}
       - condition: state
-        entity_id: input_boolean.alarm_disable_camille
-        state: "off"
-      - condition: time
-        weekday:
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
+        entity_id: input_boolean.alarm_set_camille
     action:
       - service: script.goodmorning_camille
       - service: media_player.play_media
@@ -158,7 +153,19 @@ script:
         data:
           entity_id: media_player.camille_s_speaker
           volume_level: 0.5
+      - service_template: >-
+          {% if states("sensor.weekday") == "Friday" or
+             states("sensor.weekday") == "Saturday" %}
+          homeassistant.turn_off
+          {% else %}
+          homeassistant.turn_on
+          {% endif %}
       - service: notify.notify
-        data:
+        data_template:
           title: "Camille"
-          message: "Bedtime"
+          message: >-
+            Bedtime!
+            Morning alarm is {{ states("input_boolean.alarm_set_camille") }}
+            {%- if is_state("input_boolean.alarm_set_camille", "on") %} for
+            {{- states("input_datetime.alarm_time_camille") }}
+            {%- endif %}.
