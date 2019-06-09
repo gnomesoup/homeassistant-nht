@@ -41,6 +41,7 @@ automation:
           {{ states("input_select.camille_status") != "Away" }}
       - condition: state
         entity_id: input_boolean.alarm_set_camille
+        state: "on"
     action:
       - service: script.goodmorning_camille
       - service: media_player.play_media
