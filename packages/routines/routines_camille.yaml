@@ -121,7 +121,7 @@ automation:
 
   - alias: "Wakeup Alarm Repeat Camille"
     trigger:
-      - platform: time
+      - platform: time_pattern
         minutes: 2
     action:
       - service: media_player.play_media
