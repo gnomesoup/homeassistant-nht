@@ -119,6 +119,32 @@ automation:
         data:
           entity_id: switch.aeotec_dsc06106_smart_energy_switch_switch_2
 
+  - alias: "Wakeup Alarm Repeat Camille"
+    trigger:
+      - platform: time
+        minutes: 2
+    action:
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.camille_s_speaker
+          media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
+          media_content_type: "music"
+
+  - alias: "Wakeup Alarm Stop Camille"
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_camille_bedroom
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: automation.wakeup_alarm_repeat_camille
+        state: "on"
+    action:
+      - service: homeassistant.turn_off
+        entity_id: automation.wakeup_alarm_repeat_camille
+
 script:
   goodmorning_camille:
     alias: Goodmorning Camille
@@ -168,6 +194,6 @@ script:
           message: >-
             Bedtime!
             Morning alarm is {{ states("input_boolean.alarm_set_camille") }}
-            {%- if is_state("input_boolean.alarm_set_camille", "on") %} for
-            {{- states("input_datetime.alarm_time_camille") }}
+            {%- if is_state("input_boolean.alarm_set_camille", "on") %} for{{ " " }}
+            {{- states("input_datetime.alarm_time_camille")[0:5] }}
             {%- endif %}.
