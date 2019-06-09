@@ -179,6 +179,7 @@ automation:
         to: "on"
         for:
           minutes: 10
+    action:
       - service: notify.notify
         data:
           title: "Alert"
