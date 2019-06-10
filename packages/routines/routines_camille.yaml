@@ -150,7 +150,8 @@ automation:
         state: "on"
     action:
       - service: homeassistant.turn_off
-        entity_id: automation.wakeup_alarm_repeat_camille
+        data:
+          entity_id: automation.wakeup_alarm_repeat_camille
 
 script:
   goodmorning_camille:
