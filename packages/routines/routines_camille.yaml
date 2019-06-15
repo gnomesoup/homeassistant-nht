@@ -47,11 +47,11 @@ automation:
       - service: homeassistant.turn_on
         data:
           entity_id: automation.wakeup_alarm_repeat_camille
-      # - service: media_player.play_media
-      #   data:
-      #     entity_id: media_player.camille_s_speaker
-      #     media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
-      #     media_content_type: "music"
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.camille_s_speaker
+          media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
+          media_content_type: "music"
       - service: notify.ios_ergisch
         data:
           title: "Routines"
@@ -152,6 +152,7 @@ automation:
       - service: homeassistant.turn_off
         data:
           entity_id: automation.wakeup_alarm_repeat_camille
+          entity_id: input_boolean.alarm_set_camille
 
 script:
   goodmorning_camille:
@@ -191,14 +192,14 @@ script:
         data:
           entity_id: media_player.camille_s_speaker
           volume_level: 0.5
-      - service_template: >-
+      - entity_id: input_boolean.alarm_set_camille
+        service_template: >-
           {% if states("sensor.weekday") == "Friday" or
              states("sensor.weekday") == "Saturday" %}
           homeassistant.turn_off
           {% else %}
           homeassistant.turn_on
           {% endif %}
-        entity_id: input_boolean.alarm_set_camille
       - service: notify.notify
         data_template:
           title: "Camille"
