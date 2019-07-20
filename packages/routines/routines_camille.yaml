@@ -151,8 +151,9 @@ automation:
     action:
       - service: homeassistant.turn_off
         data:
-          entity_id: automation.wakeup_alarm_repeat_camille
-          entity_id: input_boolean.alarm_set_camille
+          entity_id:
+            - automation.wakeup_alarm_repeat_camille
+            - input_boolean.alarm_set_camille
 
 script:
   goodmorning_camille:
