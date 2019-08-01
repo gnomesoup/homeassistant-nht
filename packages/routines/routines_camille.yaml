@@ -30,6 +30,23 @@ group:
       - switch.aeotec_dsc06106_smart_energy_switch_switch_2
 
 automation:
+  - alias: Set status for Camille
+    trigger:
+      - platform: state
+        entity_id: person.camille
+    action:
+      - service: input_select.select_option
+        data_template:
+          entity_id: input_select.camille_status
+          option: >-
+              {% if states("person.camille") == "home" %}
+              Home
+              {% elif states("person.camille") == "School" %}
+              School
+              {% else %}
+              Away
+              {% endif %}
+
   - alias: Wakeup Camille
     trigger:
       - platform: template
