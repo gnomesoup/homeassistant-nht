@@ -1,2 +1,2 @@
 hacs:
-  token: a2484165336270ad87c2481b5cb5b4c02b65f6fe
+  token: !secret hacsToken
