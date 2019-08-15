@@ -19,7 +19,7 @@ automation:
       - platform: event
         event_type: zwave.network_complete_some_dead
     action:
-      - service: notify.ios_ergish
+      - service: notify.ios_ergisch
         data:
           title: "Z-Wave"
           message: "Network Ready"
