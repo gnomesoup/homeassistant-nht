@@ -2,6 +2,7 @@ aarlo:
   username: !secret arloUsername
   password: !secret arloPassword
   refresh_devices_every: 24
+  reconnect_every: 60
 
 camera:
   - platform: aarlo
