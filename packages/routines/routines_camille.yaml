@@ -84,6 +84,7 @@ automation:
       - condition: template
         value_template: >-
           {{ states("input_select.camille_status") != "Asleep" and
+             states("input_select.camille_status") != "Away" and
              states("group.lights_bedroom_camille") == "off" and
              states("alarm_control_panel.home_alarm") == "disarmed" }}
     action:
