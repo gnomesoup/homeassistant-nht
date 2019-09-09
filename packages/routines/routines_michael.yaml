@@ -24,6 +24,9 @@ automation:
     trigger:
       - platform: state
         entity_id: person.michael
+    condition:
+      - condition: template
+        value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
     action:
       - service: input_select.select_option
         data_template:
