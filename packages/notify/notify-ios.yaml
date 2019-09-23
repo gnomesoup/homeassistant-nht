@@ -1,0 +1,58 @@
+ios:
+  push:
+    categories:
+      - name: Alarm
+        identifier: 'alarm'
+        actions:
+          - identifier: 'ALARM_SIREN'
+            title: 'Sound Alarm'
+            activationMode: 'background'
+            authenticationRequired: true
+            destructive: true
+            behavior: 'default'
+          - identifier: 'ALARM_DISARM'
+            title: 'Disarm Alarm'
+            activationMode: 'background'
+            authenticationRequired: true
+            destructive: false
+            behavior: 'textInput'
+            textInputButtonTitle: 'Disarm'
+            textInputPlaceholder: 'Placeholder'
+      - name: Test
+        identifier: 'test'
+        actions:
+          - identifier: 'TEST_A'
+            title: 'Button A'
+            activationMode: 'foreground'
+            authenticationRequired: true
+            destructive: true
+            behavior: 'default'
+          - identifier: 'TEST_B'
+            title: 'Button B'
+            activationMode: 'background'
+            authenticationRequired: false
+            default: true
+            behavior: 'default'
+
+script:
+  notify_ios_button_test:
+    alias: iOS Button Test
+    sequence:
+      - service: notify.ios_ergisch
+        data:
+          message: "Notification test"
+          data:
+            push:
+              badge: 5
+              category: 'test'
+automation:
+  - alias: Button A
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: TEST_A
+    action:
+      service: homeassistant.toggle
+      data:
+        entity_id: light.aeotec_zw111_nano_dimmer_level_2
