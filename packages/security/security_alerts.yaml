@@ -39,9 +39,9 @@ automation:
         entity_id: input_boolean.in_home_services
         state: "off"
     action:
-      - service: switch.turn_on
-        data:
-          entity_id: switch.linear_unknown_type_2005_id_0503_switch
+      # - service: switch.turn_on
+      #   data:
+      #     entity_id: switch.linear_unknown_type_2005_id_0503_switch
       - service: tts.google_translate_say
         entity_id:
           - media_player.living_room_display
