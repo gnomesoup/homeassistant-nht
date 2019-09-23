@@ -56,6 +56,25 @@ automation:
     action:
       - service: script.turn_everything_off
 
+  - alias: "No motion late at night"
+    trigger:
+      - platform: state
+        entity_id: group.motion_sensors
+        to: "off"
+        for:
+          minutes: 45
+    condition:
+      - condition: time
+        after: "01:00:00"
+        before: "05:00:00"
+      - condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "disarmed"
+    action:
+      - service: alarm_control_panel.alarm_arm_home
+        entity_id: alarm_control_panel.home_alarm
+
+
 script:
   turn_everything_off:
     alias: "Turn everything off"
@@ -77,3 +96,14 @@ script:
         data:
           entity_id:
             - group.media_whole_house
+
+  get_dark:
+    alias: "Get dark"
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - light.accordion_lamp
+            - light.living_room_lamp
+            - light.aeotec_zw111_nano_dimmer_level
+            - light.aeotec_zw111_nano_dimmer_level_3
