@@ -122,6 +122,10 @@ automation:
           - input_boolean.minimote_front_door_8
           - input_boolean.flic_button_single_click
           - input_boolean.flic_button_hold
+      - platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: ALARM_DISARM
     condition:
       - condition: template
         value_template: >-

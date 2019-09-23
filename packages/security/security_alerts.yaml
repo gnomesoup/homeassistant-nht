@@ -171,6 +171,10 @@ automation:
         data:
           title: "Alarm"
           message: "Alarm will sound in 15 seconds"
+          data:
+            push:
+              badge: 5
+              category: "alarm"
 
   - alias: Door Open Too Long
     trigger:
@@ -184,6 +188,18 @@ automation:
         data:
           title: "Alert"
           message: "The front door has been open for 5 minutes"
+
+  - alias: Activate Siren
+    trigger:
+      - platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          actionName: ALARM_SIREN
+    action:
+      - service: homeassistant.turn_on
+        data:
+          entity_id:
+            - switch.linear_unknown_type_2005_id_0503_switch
 
 script:
   reset_door_delay:
