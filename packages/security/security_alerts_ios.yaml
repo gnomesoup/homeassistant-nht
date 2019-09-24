@@ -16,3 +16,12 @@ ios:
             authenticationRequired: true
             destructive: true
             behavior: 'default'
+      - name: Alarm Activate
+        identifier: 'alarm_activate'
+        actions:
+          - identifier: 'ALARM_ARM_AWAY'
+            title: 'Arm Away'
+            activationMode: 'background'
+            authenticationRequired: false
+            destructive: false
+            behavior: 'default'
