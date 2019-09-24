@@ -63,6 +63,8 @@ automation:
         to: "off"
         for:
           minutes: 45
+      - platform: time
+        at: "01:05:00"
     condition:
       - condition: time
         after: "01:00:00"
@@ -70,6 +72,10 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home_alarm
         state: "disarmed"
+      - condition: template
+        value_template: >-
+          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.group.motion_sensors.last_changed) > (44*60)
+             and states("group.motion_sensors") == "off" }}
     action:
       - service: alarm_control_panel.alarm_arm_home
         entity_id: alarm_control_panel.home_alarm
