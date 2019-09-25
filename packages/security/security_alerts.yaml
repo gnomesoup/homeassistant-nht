@@ -173,7 +173,6 @@ automation:
           message: "Alarm will sound in 15 seconds"
           data:
             push:
-              badge: 5
               category: "alarm"
 
   - alias: Door Open Too Long
@@ -200,6 +199,35 @@ automation:
         data:
           entity_id:
             - switch.linear_unknown_type_2005_id_0503_switch
+
+  - alias: Notify Arm Away Not Set
+    trigger:
+      - platform: state
+        entity_id:
+          - input_select.michael_status
+          - input_select.angela_status
+          - input_select.camille_status
+        to: away
+        for:
+          minutes: 45
+    condition:
+      - condition: template
+        value_template: >-
+          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.group.motion_sensors.last_changed) > (44*60)
+             and states("group.motion_sensors") == "off" }}
+      - condition: template
+        value_template: >-
+          {{ states("input_select.michael_status") != "Home" and
+             states("input_select.angela_status") != "Home" and
+             states("input_select.camille_status") != "Home" }}
+    action:
+      - service: notify.ios_ergisch
+        data:
+          title: "Alarm Status"
+          message: "The alarm was not set and no one is home"
+          data:
+            push:
+              category: "alarm_activate"
 
 script:
   reset_door_delay:
