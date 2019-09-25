@@ -37,7 +37,7 @@ group:
       - binary_sensor.motion_camille_bedroom
       - binary_sensor.motion_living_room
       - binary_sensor.motion_master_bedroom
-      - binary_sensor.aarlo_motion_mary
+      - binary_sensor.aarlo_motion_bedroom
       - binary_sensor.aarlo_motion_aquarium
       - binary_sensor.aarlo_motion_front_door
       - binary_sensor.aarlo_motion_living_room

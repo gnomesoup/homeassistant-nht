@@ -158,7 +158,7 @@ automation:
           - sensor.linear_wadwaz_1_door_window_sensor_3_battery_level
           - sensor.linear_wadwaz_1_door_window_sensor_4_battery_level
           - sensor.linear_unknown_type_2005_id_0503_battery_level
-          - sensor.aarlo_battery_level_mary
+          - sensor.aarlo_battery_level_bedroom
           - sensor.aarlo_battery_level_aquarium
           - sensor.aarlo_battery_level_front_door
           - sensor.aarlo_battery_level_living_room
