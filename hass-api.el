@@ -196,4 +196,11 @@
     (message "%s" hass-url)))
 (spacemacs/set-leader-keys "ahh" 'mjp/browse-url-hassio)
 
+(spacemacs|define-custom-layout "eulerremote"
+  :binding "e"
+  :body
+  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.137" "-c" "1" "-W" "1")) "eulerlocal" "eulerremote")))
+    (find-file (concat "/scp:" sshConfig ":/config/"))
+    (magit-status)))
+
 (provide 'hass-api)
