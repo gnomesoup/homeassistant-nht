@@ -1,5 +1,3 @@
-# This is yaml copied from the "Edit Config" from the UI
-# These settings are not live and need to be pasted back into the UI to take effect
 resources:
   - type: module
     url: /local/aarlo-glance.js
@@ -13,6 +11,10 @@ views:
           - arm_away
           - arm_night
         type: alarm-panel
+      - entities:
+          - entity: input_boolean.in_home_services
+          - entity: input_boolean.guest_mode
+        type: entities
       - detail: 6
         entity: sensor.temperature_whole_house
         graph: line
@@ -21,18 +23,18 @@ views:
         entity: sensor.humidity_whole_house
         graph: line
         type: sensor
-      - type: vertical-stack
-        cards:
-          - type: glance
-            entities:
+      - cards:
+          - entities:
               - entity: input_select.michael_status
               - entity: input_select.angela_status
               - entity: input_select.camille_status
-          - type: history-graph
-            entities:
+            type: glance
+          - entities:
               - entity: person.michael
               - entity: person.angela
               - entity: person.camille
+            type: history-graph
+        type: vertical-stack
       - card:
           entities:
             - entity: switch.linear_unknown_type_2005_id_0503_switch
@@ -41,74 +43,74 @@ views:
           - entity: switch.linear_unknown_type_2005_id_0503_switch
             state: 'on'
         type: conditional
-      - type: conditional
+      - card:
+          entity: media_player.living_room_tv
+          type: media-control
         conditions:
           - entity: media_player.living_room_tv
             state_not: 'off'
           - entity: media_player.all_rooms
-            state_not: 'playing'
+            state_not: playing
           - entity: media_player.some_things
-            state_not: 'playing'
-        card:
+            state_not: playing
+        type: conditional
+      - card:
+          entity: media_player.living_room_display
           type: media-control
-          entity: media_player.living_room_tv
-      - type: conditional
         conditions:
           - entity: media_player.living_room_display
             state_not: 'off'
-        card:
+        type: conditional
+      - card:
+          entity: media_player.bedroom_speaker
           type: media-control
-          entity: media_player.living_room_display
-      - type: conditional
         conditions:
           - entity: media_player.bedroom_speaker
             state_not: 'off'
           - entity: media_player.all_rooms
-            state_not: 'playing'
-        card:
+            state_not: playing
+        type: conditional
+      - card:
+          entity: media_player.camille_s_speaker
           type: media-control
-          entity: media_player.bedroom_speaker
-      - type: conditional
         conditions:
           - entity: media_player.camille_s_speaker
             state_not: 'off'
           - entity: media_player.all_rooms
-            state_not: 'playing'
-        card:
+            state_not: playing
+        type: conditional
+      - card:
+          entity: media_player.office_speaker
           type: media-control
-          entity: media_player.camille_s_speaker
-      - type: conditional
         conditions:
           - entity: media_player.office_speaker
             state_not: 'off'
-        card:
+        type: conditional
+      - card:
+          entity: media_player.wooly
           type: media-control
-          entity: media_player.office_speaker
-      - type: conditional
         conditions:
           - entity: media_player.wooly
             state_not: 'off'
           - entity: media_player.all_rooms
-            state_not: 'playing'
+            state_not: playing
           - entity: media_player.some_things
-            state_not: 'playing'
-        card:
+            state_not: playing
+        type: conditional
+      - card:
+          entity: media_player.all_rooms
           type: media-control
-          entity: media_player.wooly
-      - type: conditional
         conditions:
           - entity: media_player.all_rooms
             state_not: 'off'
-        card:
+        type: conditional
+      - card:
+          entity: media_player.some_things
           type: media-control
-          entity: media_player.all_rooms
-      - type: conditional
         conditions:
           - entity: media_player.some_things
             state_not: 'off'
-        card:
-          type: media-control
-          entity: media_player.some_things
+        type: conditional
       - entity: weather.dark_sky
         type: weather-forecast
     icon: ''
@@ -137,6 +139,7 @@ views:
       - entities:
           - entity: input_boolean.door_alert_delay
           - entity: switch.linear_unknown_type_2005_id_0503_switch
+          - entity: input_boolean.in_home_services
         show_header_toggle: false
         type: entities
       - entity: alarm_control_panel.aarlo_lancaster
@@ -144,8 +147,7 @@ views:
           - arm_home
           - arm_away
         type: alarm-panel
-      - type: 'custom:aarlo-glance'
-        camera: front_door
+      - camera: front_door
         name: Front Door
         show:
           - motion
@@ -154,9 +156,9 @@ views:
           - battery
           - signal_strength
           - captured
-      - type: 'custom:aarlo-glance'
-        camera: mary
-        name: Mary
+        type: 'custom:aarlo-glance'
+      - camera: bedroom
+        name: Bedroom
         show:
           - motion
           - sound
@@ -164,8 +166,8 @@ views:
           - battery
           - signal_strength
           - captured
-      - type: 'custom:aarlo-glance'
-        camera: living_room
+        type: 'custom:aarlo-glance'
+      - camera: living_room
         name: Living Room
         show:
           - motion
@@ -174,6 +176,17 @@ views:
           - battery
           - signal_strength
           - captured
+        type: 'custom:aarlo-glance'
+      - camera: aquarium
+        name: Aquarium
+        show:
+          - motion
+          - sound
+          - snapshot
+          - battery
+          - signal_strength
+          - captured
+        type: 'custom:aarlo-glance'
     title: Security
   - badges: []
     cards:
@@ -182,7 +195,9 @@ views:
       - entities:
           - entity: input_select.camille_status
           - entity: input_datetime.alarm_time_camille
-          - entity: input_boolean.alarm_disable_camille
+          - entity: input_boolean.alarm_set_camille
+          - entity: automation.wakeup_alarm_repeat_camille
+          - entity: automation.lights_on_motion_camille_s_room
         type: entities
       - entities:
           - entity: binary_sensor.motion_camille_bedroom
@@ -197,6 +212,11 @@ views:
         type: entities
     title: Camille
   - cards:
+      - entities:
+          - entity: switch.zooz_zen06_switch
+          - entity: script.tv_time
+          - entity: script.radio_time
+        type: entities
       - entity: media_player.living_room_tv
         type: media-control
       - entity: media_player.living_room_display
@@ -214,8 +234,7 @@ views:
       - entity: media_player.some_things
         type: media-control
     title: Media
-  - title: Lights
-    badges: []
+  - badges: []
     cards:
       - entities:
           - entity: light.accordion_lamp
@@ -226,19 +245,20 @@ views:
         type: entities
       - entities:
           - entity: light.aeotec_zw111_nano_dimmer_level_2
-        title: "Office"
+        title: Office
         type: entities
       - entities:
           - entity: light.grandma_s_lamp
           - entity: switch.aeotec_dsc06106_smart_energy_switch_switch_2
           - entity: switch.bedroom_canopy
-        title: "Camille's Room"
+        title: Camille's Room
         type: entities
       - entities:
           - entity: light.bedroom_lamp
           - entity: light.metal_lamp
         title: Master Bedroom
         type: entities
+    title: Lights
   - cards:
       - detail: 6
         entity: sensor.temperature_whole_house
@@ -257,7 +277,7 @@ views:
       - entities:
           - entity: sensor.linear_wapirz_1_motion_sensor_temperature
         show_name: false
-        title: Mary's Room
+        title: Office
         type: glance
       - entities:
           - entity: sensor.aeotec_zw100_multisensor_6_temperature
@@ -272,3 +292,41 @@ views:
         title: Camille's Bedroom
         type: glance
     title: Climate
+  - badges: []
+    cards:
+      - entities:
+          - entity: sensor.aarlo_battery_level_aquarium
+          - entity: sensor.aarlo_battery_level_front_door
+          - entity: sensor.aarlo_battery_level_living_room
+          - entity: sensor.aarlo_battery_level_bedroom
+        show_header_toggle: false
+        title: Arlo
+        type: entities
+      - entities:
+          - entity: sensor.aeotec_dsb05_multisensor_battery_level
+          - entity: sensor.aeotec_zw100_multisensor_6_battery_level
+          - entity: sensor.linear_wadwaz_1_door_window_sensor_2_battery_level
+          - entity: sensor.linear_wadwaz_1_door_window_sensor_3_battery_level
+          - entity: sensor.linear_wadwaz_1_door_window_sensor_4_battery_level
+          - entity: sensor.linear_wadwaz_1_door_window_sensor_battery_level
+          - entity: sensor.linear_wapirz_1_motion_sensor_2_battery_level
+          - entity: sensor.linear_wapirz_1_motion_sensor_3_battery_level
+          - entity: sensor.linear_wapirz_1_motion_sensor_battery_level
+        show_header_toggle: false
+        title: Sensors
+        type: entities
+      - entities:
+          - entity: sensor.angela_pfammatters_iphone_battery_level
+          - entity: sensor.ergisch_battery_level
+        show_header_toggle: false
+        title: Phones
+        type: entities
+      - entities:
+          - entity: sensor.date
+          - entity: sensor.time
+          - entity: sensor.weekday
+          - entity: binary_sensor.workday_sensor
+        show_header_toggle: false
+        type: entities
+    icon: ''
+    title: System
