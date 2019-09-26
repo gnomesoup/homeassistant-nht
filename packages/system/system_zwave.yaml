@@ -1,8 +1,8 @@
 input_boolean:
   z_wave_network_ready:
-    - name: Z-Wave Network Ready
-      initial: off
-      icon: mdi:z-wave
+    name: Z-Wave Network Ready
+    initial: off
+    icon: mdi:z-wave
 
 automation:
   - alias: 'Z-Wave network starting'
