@@ -1,3 +1,9 @@
+input_boolean:
+  z_wave_network_ready:
+    - name: Z-Wave Network Ready
+      initial: off
+      icon: mdi:z-wave
+
 automation:
   - alias: 'Z-Wave network starting'
     trigger:
@@ -19,6 +25,9 @@ automation:
       - platform: event
         event_type: zwave.network_complete_some_dead
     action:
+      - service: homeassistant.turn_on
+        entity_id:
+          - input_boolean.network_ready
       - service: notify.ios_ergisch
         data:
           title: "Z-Wave"
@@ -26,3 +35,12 @@ automation:
       - service: persistent_notification.dismiss
         data:
           notification_id: zwave
+
+  - alias: "Z-Wave network stopped"
+    trigger:
+      - platform: event
+        event_type: zwave.network_stop
+    action:
+      - service: homeassistant.turn_off
+        entity_id:
+          - input_boolean.network_ready
