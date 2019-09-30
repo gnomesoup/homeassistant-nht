@@ -1,5 +1,10 @@
 (require 'json)
 
+(setq hass-api/token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
+                                              "~/hassio-config-euler/hass-token.txt"))
+(setq hass-api/url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
+                                            "~/hassio-config-euler/hass-token.txt"))
+
 (defun mjp/match-file-contents (regex filePath)
   "Matches a regular expression with contents in another file"
   (let ((fContents (with-temp-buffer (insert-file-contents filePath nil)
@@ -13,15 +18,11 @@
 
 (defun hass-api/get-all-entities-as-list()
   "Use curl to grab a list of all entities from home assistant"
-  (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "~/hassio-config-euler/hass-token.txt"))
-         (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "~/hassio-config-euler/hass-token.txt"))
-         (entity_ids (shell-command-to-string (concat "curl -s -H \"Content-Type: application/json\" "
+  (let* ((entity_ids (shell-command-to-string (concat "curl -s -H \"Content-Type: application/json\" "
                               "-H \"Authorization: Bearer "
-                              hass-token
+                              hass-api/token
                               "\" "
-                              hass-url
+                              hass-api/url
                               "/api/template "
                               "-d"
                               "\"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\n{% endfor %}\\\"}\""))))
@@ -37,16 +38,12 @@
 
 (defun hass-api/get-all-entities-and-names-as-list()
   "Use curl to grab a list of all entities and their friendly names from home assistant"
-  (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "~/hassio-config-euler/hass-token.txt"))
-         (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "~/hassio-config-euler/hass-token.txt"))
-         (entity_ids (shell-command-to-string
+  (let* ((entity_ids (shell-command-to-string
                       (concat "curl -s -H \"Content-Type: application/json\" "
                               "-H \"Authorization: Bearer "
-                              hass-token
+                              hass-api/token
                               "\" \""
-                              hass-url
+                              hass-api/url
                               "/api/template\" "
                               "-d"
                               "\"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\t'{{state.attributes.friendly_name}}'\\n{% endfor %}\\\"}\""))))
@@ -66,13 +63,10 @@
   "Restart the hassio Git Pull addon"
   (interactive)
   (save-excursion
-    (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)" "~/hassio-config-euler/hass-token.txt"))
-          (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                           "~/hassio-config-euler/hass-token.txt"))
-          (curl-command (concat "curl \"-i\" \"-H\" \"Content-Type: application/json\" \"-H\" \"Authorization: Bearer "
-                                hass-token
+    (let* ((curl-command (concat "curl \"-i\" \"-H\" \"Content-Type: application/json\" \"-H\" \"Authorization: Bearer "
+                                hass-api/token
                                 "\" \"-XPOST\" \""
-                                hass-url
+                                hass-api/url
                                 "/api/services/hassio/addon_restart\" "
                                 "\"-d\" \"{\\\"addon\\\":\\\"core_git_pull\\\"}\"")))
       (async-shell-command curl-command "*hassio*" "*httperror*")
@@ -84,15 +78,11 @@
   "Get all Entity Id's from Home Assistant"
   (interactive)
   (save-excursion
-    (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                                "~/hassio-config-euler/hass-token.txt"))
-           (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                              "~/hassio-config-euler/hass-token.txt"))
-           (curl-command (concat "curl -H \"Content-Type: application/json\" "
+    (let* ((curl-command (concat "curl -H \"Content-Type: application/json\" "
                                  " -H \"Authorization: Bearer "
-                                 hass-token
+                                 hass-api/token
                                  "\" \"-XPOST\" \""
-                                 hass-url
+                                 hass-api/url
                                  "/api/template\" "
                                  "\"-d\" \"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\n{% endfor %}\\\"}\"")))
       (async-shell-command curl-command "*hassio*" "*httperror*"))))
@@ -102,21 +92,17 @@
   (interactive)
   (save-excursion
     (let* ((entity_id (or entity_id (hass-api/get-entity-from-list)))
-           (hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                                "~/hassio-config-euler/hass-token.txt"))
-           (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                              "~/hassio-config-euler/hass-token.txt"))
            (curl-command (concat "curl -H \"Content-Type: application/json\" "
                                  "-H \"Authorization: Bearer "
-                                 hass-token
+                                 hass-api/token
                                  "\" -X GET "
-                                 hass-url
+                                 hass-api/url
                                  "/api/states/"
                                  entity_id)))
       (async-shell-command curl-command "*hassio*" "*httperror*")
       (message "Entities obtained"))))
 
-(spacemacs/set-leader-keys "ahs" 'hass-api/get-state-by-entity)
+(spacemacs/set-leader-keys "ahE" 'hass-api/get-state-by-entity)
 
 (defun hass-api/get-entity-from-list()
   "Get the state properties of the entity provided"
@@ -143,10 +129,6 @@
   "Get entity state from a helm list of entities"
   (interactive)
   (let* ((entity_id (hass-api/get-entity-from-list))
-         (hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "~/hassio-config-euler/hass-token.txt"))
-         (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "~/hassio-config-euler/hass-token.txt"))
          (template_statement
           (concat "\"{\\\"template\\\":\\\""
                   "{{ states." entity_id
@@ -156,9 +138,9 @@
     (message "%s" (shell-command-to-string
                    (concat "curl -s -H \"Content-Type: application/json\" "
                            "-H \"Authorization: Bearer "
-                           hass-token
+                           hass-api/token
                            "\" "
-                           hass-url
+                           hass-api/url
                            "/api/template "
                            "-d"
                            template_statement)))))
@@ -167,33 +149,78 @@
 (defun hass-api/template(arg)
   "Run supplied template as `arg' on Home Assistant instance"
   (interactive "sTemplate: ")
-  (let* ((hass-token (mjp/match-file-contents "hass-token ?= ?\\(.*\\)"
-                                              "~/hassio-config-euler/hass-token.txt"))
-         (hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                            "~/hassio-config-euler/hass-token.txt"))
-         (arg (concat "{\\\"template\\\":\\\"" arg "\\\"}"))
-         )
+  (let* ((arg (concat "{\\\"template\\\":\\\"" arg "\\\"}")))
     (unless arg
       (error "No temlate provided"))
     (async-shell-command
      (concat "curl -s -H \"Content-Type: application/json\" "
              "-H \"Authorization: Bearer "
-             hass-token
+             hass-api/token
              "\" "
-             hass-url
+             hass-api/url
              "/api/template "
              "-d \"" arg "\"")
      "*HA Template*"
      "*HA Error*")
     (message "Template: %s" arg)))
 
+(defun hass-api/json-to-alist(jsonString)
+  "Convert a json object to an alist"
+  (let ((json-object-type 'alist)
+        (json-array-type 'list)
+        (outList ""))
+    (setq outList (json-read-from-string hass-api/services-and-names))
+    outList))
+
+(defun hass-api/get-all-services-and-names-as-list()
+  "Use curl to grab a list of all services and their friendly names from home assistant"
+  (let* ((serviceJson (shell-command-to-string
+                       (concat "curl -s -H \"Content-Type: application/json\" "
+                               "-H \"Authorization: Bearer "
+                               hass-api/token
+                               "\" \""
+                               hass-api/url
+                               "/api/services\" ")))
+         (serviceList (hass-api/json-to-alist serviceJson))
+         outList)
+    (dolist (domains serviceList)
+      (let ((domain (alist-get 'domain domains))
+            (services (mapcar 'car (alist-get 'services domains))))
+        (dolist (service services)
+          (setq outList (cons (concat domain "." (format "%s" service)) outList)))))
+    outList))
+
+(defun hass-api/refresh-services-and-names()
+  "Download latest services from Home Assistant"
+  (interactive)
+  (setq hass-api/services-and-names (hass-api/get-all-services-and-names-as-list)))
+(hass-api/refresh-services-and-names)
+(spacemacs/set-leader-keys "ahrs" 'hass-api/refresh-service-and-names)
+
+(defun hass-api/get-services-from-list()
+  "Get the services from the home assistant api"
+  (save-excursion
+    (let* ((service_id (helm :sources
+                            (helm-build-sync-source "HA Services"
+                              :candidates hass-api/services-and-names
+                              :fuzzy-match t))))
+      (car (split-string service_id "\t")))))
+
+(defun hass-api/get-services-from-list-to-buffer()
+  "Output selected services id from a helm list of entities"
+  (interactive)
+  (save-excursion
+    (let* ((services_id (hass-api/get-services-from-list)))
+      (forward-char)
+      (insert services_id))))
+
+(spacemacs/set-leader-keys "ahs" 'hass-api/get-services-from-list-to-buffer)
+
 (defun mjp/browse-url-hassio()
   "Browse to the hassio url specified in hass-token.txt"
   (interactive)
-  (let ((hass-url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
-                                           "~/hassio-config-euler/hass-token.txt")))
-    (browse-url hass-url)
-    (message "%s" hass-url)))
+  (browse-url hass-api/url)
+  (message "%s" hass-api/url))
 (spacemacs/set-leader-keys "ahh" 'mjp/browse-url-hassio)
 
 (spacemacs|define-custom-layout "eulerremote"

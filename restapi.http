@@ -1,6 +1,6 @@
 # variables
-:hass-url := (mjp/match-file-contents "hass-url = \\(.*\\)" "hass-token.txt")
-:hass-token := (mjp/match-file-contents "hass-token = \\(.*\\)" "hass-token.txt")
+:hass-url := (mjp/match-file-contents "hass-url = \\(.*\\)" "~/hassio-config-euler/hass-token.txt")
+:hass-token := (mjp/match-file-contents "hass-token = \\(.*\\)" "~/hassio-config-euler/hass-token.txt")
 
 # services
 GET :hass-url/api/services
