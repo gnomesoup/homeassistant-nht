@@ -71,7 +71,6 @@ automation:
     action:
       - service: alarm_control_panel.alarm_arm_night
         entity_id: alarm_control_panel.home_alarm
-        state: "armed_home"
 
   - alias: Alarm Arm Away Buttons
     trigger:
