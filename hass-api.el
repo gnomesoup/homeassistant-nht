@@ -169,7 +169,7 @@
   (let ((json-object-type 'alist)
         (json-array-type 'list)
         (outList ""))
-    (setq outList (json-read-from-string hass-api/services-and-names))
+    (setq outList (json-read-from-string jsonString))
     outList))
 
 (defun hass-api/get-all-services-and-names-as-list()
