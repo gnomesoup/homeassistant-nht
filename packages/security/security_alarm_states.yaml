@@ -130,8 +130,8 @@ automation:
              or states("binary_sensor.motion_camille_bedroom") == "on"
              or states("binary_sensor.motion_office") == "on" }}
       - condition: time
-        after: 05:00:00
-        before: 12:00:00
+        after: "05:00:00"
+        before: "12:00:00"
     action:
       - service: alarm_control_panel.alarm_disarm
         entity_id: alarm_control_panel.home_alarm
