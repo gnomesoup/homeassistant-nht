@@ -126,9 +126,9 @@ automation:
         state: "armed_home"
       - condition: template
         value_template:
-          {{ states(binary_sensor.motion_master_bedroom) == "on"
-             or states(binary_sensor.motion_camille_bedroom) == "on"
-             or binary_sensor.motion_office == "on" }}
+          {{ states("binary_sensor.motion_master_bedroom") == "on"
+             or states("binary_sensor.motion_camille_bedroom") == "on"
+             or states("binary_sensor.motion_office") == "on" }}
       - condition: time
         after: 05:00:00
         before: 12:00:00
