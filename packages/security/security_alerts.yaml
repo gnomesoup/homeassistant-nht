@@ -229,7 +229,8 @@ automation:
         value_template: >-
           {{ states("input_select.michael_status") != "Home" and
              states("input_select.angela_status") != "Home" and
-             states("input_select.camille_status") != "Home" }}
+             states("input_select.camille_status") != "Home" and
+             states("alarm_control_panel.home_alarm") == "disarmed"}}
     action:
       - service: notify.ios_ergisch
         data:
