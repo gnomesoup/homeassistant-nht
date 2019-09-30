@@ -125,7 +125,7 @@ automation:
         entity_id: alarm_control_panel.home_alarm
         state: "armed_home"
       - condition: template
-        value_template:
+        value_template: >-
           {{ states("binary_sensor.motion_master_bedroom") == "on"
              or states("binary_sensor.motion_camille_bedroom") == "on"
              or states("binary_sensor.motion_office") == "on" }}
