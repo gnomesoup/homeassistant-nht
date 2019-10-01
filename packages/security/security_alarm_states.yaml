@@ -122,7 +122,7 @@ automation:
     condition:
       - condition: state
         entity_id: alarm_control_panel.home_alarm
-        state: "armed_home"
+        state: "armed_night"
       - condition: template
         value_template: >-
           {{ states("binary_sensor.motion_master_bedroom") == "on"
