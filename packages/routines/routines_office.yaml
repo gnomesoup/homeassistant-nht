@@ -1,0 +1,14 @@
+automation:
+  - alias: Office all lights on with switch
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.aeotec_zw111_nano_dimmer_switch_2
+    action:
+      - entity_id: switch.aeon_labs_zw096_smart_switch_6_switch
+        service_template: >-
+          {% if trigger.to_state.state == "on" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
