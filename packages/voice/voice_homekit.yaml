@@ -1,0 +1,7 @@
+homekit:
+  filter:
+    include_domains:
+      - alarm_control_panel
+      - lights
+      - media_player
+  auto_start: false
