@@ -226,7 +226,8 @@
 (spacemacs|define-custom-layout "eulerremote"
   :binding "e"
   :body
-  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.137" "-c" "1" "-W" "1")) "eulerlocal" "eulerremote")))
+  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.139" "-c" "1" "-W" "1")) "eulerlocal" "eulerremote")))
+    (message "connecting to %s" sshConfig)
     (find-file (concat "/scp:" sshConfig ":/config/"))
     (magit-status)))
 

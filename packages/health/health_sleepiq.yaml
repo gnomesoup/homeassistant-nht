@@ -1,0 +1,3 @@
+sleepiq:
+  username: !secret sleepiqUsername
+  password: !secret sleepiqPassword
