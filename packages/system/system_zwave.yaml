@@ -27,7 +27,7 @@ automation:
     action:
       - service: homeassistant.turn_on
         entity_id:
-          - input_boolean.network_ready
+          - input_boolean.z_wave_network_ready
       - service: notify.ios_ergisch
         data:
           title: "Z-Wave"

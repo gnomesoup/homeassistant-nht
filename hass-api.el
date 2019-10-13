@@ -195,7 +195,7 @@
   (interactive)
   (setq hass-api/services-and-names (hass-api/get-all-services-and-names-as-list)))
 (hass-api/refresh-services-and-names)
-(spacemacs/set-leader-keys "ahrs" 'hass-api/refresh-service-and-names)
+(spacemacs/set-leader-keys "ahrs" 'hass-api/refresh-services-and-names)
 
 (defun hass-api/get-services-from-list()
   "Get the services from the home assistant api"

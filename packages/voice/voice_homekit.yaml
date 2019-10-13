@@ -2,6 +2,14 @@ homekit:
   filter:
     include_domains:
       - alarm_control_panel
-      - lights
+      - light
       - media_player
   auto_start: false
+
+automation:
+  - alias: Homekit start on zwave start
+    trigger:
+      - platform: state
+        entity_id: input_boolean.z_wave_network_ready
+    action:
+      - service: homekit.start
