@@ -78,7 +78,7 @@ automation:
           {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.group.motion_sensors.last_changed) > (44*60)
              and states("group.motion_sensors") == "off" }}
     action:
-      - service: alarm_control_panel.alarm_arm_home
+      - service: alarm_control_panel.alarm_arm_night
         entity_id: alarm_control_panel.home_alarm
 
 
