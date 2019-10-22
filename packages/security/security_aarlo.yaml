@@ -1,7 +1,7 @@
 aarlo:
   username: !secret arloUsername
   password: !secret arloPassword
-  refresh_devices_every: 24
+  refresh_devices_every: 12
   reconnect_every: 60
 
 camera:
@@ -12,7 +12,7 @@ alarm_control_panel:
   - platform: aarlo
     home_mode_name: Home
     away_mode_name: armed
-    night_mode_name: armed
+    night_mode_name: Home
 
 binary_sensor:
   - platform: aarlo
@@ -29,3 +29,8 @@ sensor:
     - battery_level
     - captured_today
     - signal_strength
+
+switch:
+  - platform: aarlo
+    snapshot: True
+    siren: True
