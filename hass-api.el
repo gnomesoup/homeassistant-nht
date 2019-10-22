@@ -195,7 +195,7 @@
   (interactive)
   (setq hass-api/services-and-names (hass-api/get-all-services-and-names-as-list)))
 (hass-api/refresh-services-and-names)
-(spacemacs/set-leader-keys "ahrs" 'hass-api/refresh-service-and-names)
+(spacemacs/set-leader-keys "ahrs" 'hass-api/refresh-services-and-names)
 
 (defun hass-api/get-services-from-list()
   "Get the services from the home assistant api"
@@ -226,7 +226,8 @@
 (spacemacs|define-custom-layout "eulerremote"
   :binding "e"
   :body
-  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.137" "-c" "1" "-W" "1")) "eulerlocal" "eulerremote")))
+  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.139" "-c" "1" "-W" "1")) "eulerlocal" "eulerremote")))
+    (message "connecting to %s" sshConfig)
     (find-file (concat "/scp:" sshConfig ":/config/"))
     (magit-status)))
 

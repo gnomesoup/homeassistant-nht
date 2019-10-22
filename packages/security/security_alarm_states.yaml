@@ -185,7 +185,6 @@ automation:
       - service: alarm_control_panel.alarm_arm_away
         entity_id: alarm_control_panel.home_alarm
 
-
   # Keep arlo alarm states in sync with manual alarm panel
   - alias: Aarlo alarm set from main alarm
     trigger:
