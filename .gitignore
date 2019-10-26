@@ -22,3 +22,5 @@ notebooks
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
+aircast.xml
+custom_components/*
