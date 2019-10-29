@@ -6,3 +6,19 @@ withings:
     - Angela
     - Camille
   base_url: !secret ha_url
+
+sensor:
+  - platform: template
+    sensors:
+      withings_weight_lb_michael:
+        friendly_name: "Withings Weight Michael"
+        unit_of_measurement: 'lbs'
+        value_template: "{{ (float(states('sensor.withings_weight_kg_michael')) / 0.45359237) | round(2) }}"
+      withings_weight_lb_angela:
+        friendly_name: "Withings Weight Angela"
+        unit_of_measurement: 'lbs'
+        value_template: "{{ (float(states('sensor.withings_weight_kg_angela')) / 0.45359237) | round(2) }}"
+      withings_weight_lb_camille:
+        friendly_name: "Withings Weight Camille"
+        unit_of_measurement: 'lbs'
+        value_template: "{{ (float(states('sensor.withings_weight_kg_camille')) / 0.45359237) | round(2) }}"
