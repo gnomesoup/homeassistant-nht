@@ -5,3 +5,4 @@ withings:
     - Michael
     - Angela
     - Camille
+  base_url: !secret ha_url

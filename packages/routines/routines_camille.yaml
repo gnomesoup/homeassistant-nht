@@ -20,6 +20,7 @@ input_boolean:
     name: "Camille's Alarm"
     icon: mdi:alarm
 
+
 group:
   lights_bedroom_camille:
     name: Lights in Camille's Room

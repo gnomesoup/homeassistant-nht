@@ -12,6 +12,8 @@ group:
       - light.aeotec_zw111_nano_dimmer_level
       - light.aeotec_zw111_nano_dimmer_level_2
       - light.aeotec_zw111_nano_dimmer_level_3
+      - light.aeon_labs_zw111_nano_dimmer_level
+
   switches_whole_house:
     name: All switches in the house
     view: false
