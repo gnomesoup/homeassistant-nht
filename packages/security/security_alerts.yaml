@@ -95,11 +95,9 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - binary_sensor.motion_camille_bedroom
           - binary_sensor.motion_hallway
           - binary_sensor.motion_living_room
           - binary_sensor.motion_office
-          - binary_sensor.motion_master_bedroom
         to: "on"
     condition:
       - condition: state
