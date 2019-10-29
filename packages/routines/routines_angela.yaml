@@ -38,3 +38,17 @@ automation:
               {% else %}
               Away
               {% endif %}
+
+  - alias: Set status for Angela asleep
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
+        for:
+          minutes: 2
+    condition:
+      - condition: state
+        entity_id: sensor.aeotec_zw100_multisensor_6_luminance
+        below: 4
+      - condition: state
+        entity_id: person.angela
+        state: "home"

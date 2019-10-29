@@ -1,0 +1,17 @@
+group:
+  kitchen:
+    name: "Lights Master Bedroom"
+    entities:
+      - light.aeon_labs_zw111_nano_dimmer_level
+      - light.bedroom_lamp
+
+# automation:
+#   alias: "Master Bedroom Lights On At Night"
+#   trigger:
+#     - platform: state
+#       entity_id:
+#         - binary_sensor.sleepnumber_michael_angela_is_in_bed
+#         - binary_sensor.sleepnumber_michael_michael_is_in_bed
+#         - binary_sensor.motion_master_bedroom
+#   condition:
+#     - condition: state
