@@ -43,6 +43,7 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
+        to: "on"
         for:
           minutes: 5
       - platform: numeric_state
