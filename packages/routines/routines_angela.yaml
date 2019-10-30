@@ -44,11 +44,19 @@ automation:
       - platform: state
         entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
         for:
-          minutes: 2
+          minutes: 5
+      - platform: state
+        entity_id: sensor.aeotec_zw100_multisensor_6_luminance
+        below: 4
     condition:
       - condition: state
         entity_id: sensor.aeotec_zw100_multisensor_6_luminance
         below: 4
       - condition: state
-        entity_id: person.angela
-        state: "home"
+        entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
+        for:
+          minutes: 5
+    trigger:
+      - service: input_select.select_option
+        entity_id: input_select.angela_status
+        option: "Asleep"
