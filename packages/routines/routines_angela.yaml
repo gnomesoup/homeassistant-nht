@@ -56,7 +56,7 @@ automation:
         entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
         for:
           minutes: 5
-    trigger:
+    action:
       - service: input_select.select_option
         entity_id: input_select.angela_status
         option: "Asleep"
