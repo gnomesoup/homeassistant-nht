@@ -39,3 +39,42 @@ automation:
               {% else %}
               Away
               {% endif %}
+
+  - alias: Set status for Michael asleep
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.sleepnumber_michael_michael_is_in_bed
+        to: "on"
+        for:
+          minutes: 5
+      - platform: numeric_state
+        entity_id: sensor.aeotec_zw100_multisensor_6_luminance
+        below: 4
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.aeotec_zw100_multisensor_6_luminance
+        below: 4
+      - condition: state
+        entity_id: binary_sensor.sleepnumber_michael_michael_is_in_bed
+        state: "on"
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.michael_status
+          option: "Asleep"
+
+  - alias: Set status for Michael awake
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.sleepnumber_michael_michael_is_in_bed
+        to: "off"
+        from: "on"
+    condition:
+      - condition: state
+        entity_id: input_select.michael_status
+        state: "Asleep"
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.michael_status
+          option: "Home"
