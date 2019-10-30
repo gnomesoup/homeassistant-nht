@@ -58,5 +58,6 @@ automation:
         state: "on"
     action:
       - service: input_select.select_option
-        entity_id: input_select.angela_status
-        option: "Asleep"
+        data:
+          entity_id: input_select.angela_status
+          option: "Asleep"
