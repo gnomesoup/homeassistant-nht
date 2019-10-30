@@ -61,3 +61,19 @@ automation:
         data:
           entity_id: input_select.angela_status
           option: "Asleep"
+
+  - alias: Set status for Angela awake
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
+        to: "off"
+        from: "on"
+    condition:
+      - condition: state
+        entity_id: input_select.angela_status
+        state: "Asleep"
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.angela_status
+          option: "Home"
