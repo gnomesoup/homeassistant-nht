@@ -100,7 +100,13 @@
                                  "/api/states/"
                                  entity_id)))
       (async-shell-command curl-command "*hassio*" "*httperror*")
-      (message "Entities obtained"))))
+      (message "Entities obtained")
+      (switch-to-buffer-other-window "*hassio*")
+      (evil-escape)
+      ;; (with-current-buffer "*hassio*"
+      ;;   (json-mode))
+      ;; ;; (json-mode-beautify)
+      )))
 
 (spacemacs/set-leader-keys "ahE" 'hass-api/get-state-by-entity)
 
