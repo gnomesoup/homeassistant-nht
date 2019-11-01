@@ -228,6 +228,9 @@ automation:
           {{ states("input_select.michael_status") != "Home" and
              states("input_select.angela_status") != "Home" and
              states("input_select.camille_status") != "Home" and
+             states("input_select.michael_status") != "Asleep" and
+             states("input_select.angela_status") != "Asleep" and
+             states("input_select.camille_status") != "Asleep" and
              states("alarm_control_panel.home_alarm") == "disarmed"}}
     action:
       - service: notify.ios_ergisch
