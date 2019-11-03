@@ -4,6 +4,7 @@ group:
     entities:
       - light.aeon_labs_zw111_nano_dimmer_level
       - light.bedroom_lamp
+      - light.aeon_labs_zw111_nano_dimmer_level_2
 
 # automation:
 #   alias: "Master Bedroom Lights On At Night"

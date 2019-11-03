@@ -13,6 +13,9 @@ group:
       - light.aeotec_zw111_nano_dimmer_level_2
       - light.aeotec_zw111_nano_dimmer_level_3
       - light.aeon_labs_zw111_nano_dimmer_level
+      - light.aeon_labs_zw111_nano_dimmer_level_2
+      - light.aeon_labs_zw111_nano_dimmer_level_3
+      - light.aeon_labs_zw111_nano_dimmer_level_4
 
   switches_whole_house:
     name: All switches in the house
@@ -85,6 +88,19 @@ automation:
     action:
       - service: alarm_control_panel.alarm_arm_night
         entity_id: alarm_control_panel.home_alarm
+
+  - alias: "Hall light alarm pending"
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        to: "pending"
+    condition:
+      - condition: state
+        entity_id: light.aeon_labs_zw111_nano_dimmer_level_3
+        staet: "off"
+    action:
+      - service: homeassistant.turn_on
+        entity_id: light.aeon_labs_zw111_nano_dimmer_level_3
 
 
 script:
