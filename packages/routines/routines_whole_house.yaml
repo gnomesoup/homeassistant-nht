@@ -97,7 +97,7 @@ automation:
     condition:
       - condition: state
         entity_id: light.aeon_labs_zw111_nano_dimmer_level_3
-        staet: "off"
+        state: "off"
     action:
       - service: homeassistant.turn_on
         entity_id: light.aeon_labs_zw111_nano_dimmer_level_3
