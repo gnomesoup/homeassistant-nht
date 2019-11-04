@@ -135,3 +135,5 @@ script:
             - light.living_room_lamp
             - light.aeotec_zw111_nano_dimmer_level
             - light.aeotec_zw111_nano_dimmer_level_3
+            - light.aeon_labs_zw111_nano_dimmer_level_3
+            - light.aeon_labs_zw111_nano_dimmer_level_4
