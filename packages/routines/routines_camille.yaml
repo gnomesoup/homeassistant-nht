@@ -73,7 +73,7 @@ automation:
           entity_id: media_player.camille_s_speaker
           media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
           media_content_type: "music"
-      - service: notify.ios_ergisch
+      - service: notify.mobile_app_ergisch
         data:
           title: "Routines"
           message: "Wakeup Camille Ran"

@@ -2,7 +2,7 @@ notify:
   - name: Security_Verbose
     platform: group
     services:
-      - service: ios_ergisch
+      - service: mobile_app_ergisch
       - service: firebase_hassio
         platform: html5
         vapid_pub_key: !secret firebaseHtml5Public

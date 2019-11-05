@@ -233,7 +233,7 @@ automation:
              states("input_select.camille_status") != "Asleep" and
              states("alarm_control_panel.home_alarm") == "disarmed"}}
     action:
-      - service: notify.ios_ergisch
+      - service: notify.mobile_app_ergisch
         data:
           title: "Alarm Status"
           message: "The alarm was not set and no one is home"
