@@ -1,12 +1,36 @@
 group:
-  kitchen:
+  lights_master_bedroom:
     name: "Lights Master Bedroom"
     entities:
       - light.aeon_labs_zw111_nano_dimmer_level
       - light.bedroom_lamp
       - light.aeon_labs_zw111_nano_dimmer_level_2
 
-# automation:
+automation:
+  alias: "Lights on motion"
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.motion_master_bedroom
+  condition:
+    - condition: state
+      entity_id: alarm_control_panel.home_alarm
+      state: "disarmed"
+    - condition: state
+      entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
+      state: "off"
+    - condition: state
+      entity_id: binary_sensor.sleepnumber_michael_michael_is_in_bed
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
+  action:
+    service: homeassistant.turn_on
+    data:
+      entity_id:
+        - group.lights_master_bedroom
+
 #   alias: "Master Bedroom Lights On At Night"
 #   trigger:
 #     - platform: state
