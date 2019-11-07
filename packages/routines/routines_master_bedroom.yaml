@@ -5,6 +5,7 @@ group:
       - light.aeon_labs_zw111_nano_dimmer_level
       - light.bedroom_lamp
       - light.aeon_labs_zw111_nano_dimmer_level_2
+      - light.metal_lamp
 
 automation:
   - alias: "Lights on motion"
@@ -53,7 +54,16 @@ automation:
         entity_id: input_boolean.minimote_master_bedroom_5
     action:
       - service: homeassistant.toggle
+        entity_id: light.metal_lamp
+
+  - alias: "Master Bedroom Button 4 Pushed"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_7
+    action:
+      - service: homeassistant.toggle
         entity_id: light.aeon_labs_zw111_nano_dimmer_level
+
 #   alias: "Master Bedroom Lights On At Night"
 #   trigger:
 #     - platform: state
