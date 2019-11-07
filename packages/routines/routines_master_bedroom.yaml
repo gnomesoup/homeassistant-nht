@@ -64,6 +64,32 @@ automation:
       - service: homeassistant.toggle
         entity_id: light.aeon_labs_zw111_nano_dimmer_level
 
+  - alias: "Master Bedroom Lights On 1nd Switch"
+    trigger:
+      - platform: state
+        entity_id: switch.aeon_labs_zw111_nano_dimmer_switch
+      - entity_id: light.bedroom_lamp
+        service_template: >-
+          {% if trigger.to_state.state == "on" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
+
+  - alias: "Master Bedroom Lights On 2nd Switch"
+    trigger:
+      - platform: state
+        entity_id: switch.aeon_labs_zw111_nano_dimmer_switch_2
+      - entity_id: light.metal_lamp
+        service_template: >-
+          {% if trigger.to_state.state == "on" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
+
+
+
 #   alias: "Master Bedroom Lights On At Night"
 #   trigger:
 #     - platform: state
