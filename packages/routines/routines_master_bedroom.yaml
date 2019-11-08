@@ -8,7 +8,7 @@ group:
       - light.metal_lamp
 
 automation:
-  - alias: "Lights on motion"
+  - alias: "Master Bedroom Lights on motion"
     trigger:
       - platform: state
         entity_id:
@@ -67,7 +67,8 @@ automation:
   - alias: "Master Bedroom Lights On 1nd Switch"
     trigger:
       - platform: state
-        entity_id: switch.aeon_labs_zw111_nano_dimmer_switch
+        entity_id:
+          - switch.aeon_labs_zw111_nano_dimmer_switch
     action:
       - entity_id: light.bedroom_lamp
         service_template: >-
@@ -80,7 +81,8 @@ automation:
   - alias: "Master Bedroom Lights On 2nd Switch"
     trigger:
       - platform: state
-        entity_id: switch.aeon_labs_zw111_nano_dimmer_switch_2
+        entity_id:
+          - switch.aeon_labs_zw111_nano_dimmer_switch_2
     action:
       - entity_id: light.metal_lamp
         service_template: >-
