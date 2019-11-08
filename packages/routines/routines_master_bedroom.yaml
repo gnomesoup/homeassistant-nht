@@ -48,6 +48,14 @@ automation:
       - service: homeassistant.toggle
         entity_id: light.aeon_labs_zw111_nano_dimmer_level_2
 
+  - alias: "Master Bedroom Button 2 Held"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_4
+    action:
+      - service: homeassistant.toggle
+        entity_id: group.lights_master_bedroom
+
   - alias: "Master Bedroom Button 3 Pushed"
     trigger:
       - platform: state
