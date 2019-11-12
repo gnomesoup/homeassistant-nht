@@ -9,7 +9,6 @@ automation:
         value_template: >-
           {{ (states.switch.aeotec_zw111_nano_dimmer_switch_2.last_changed | as_timestamp) <
              (states.light.aeotec_zw111_nano_dimmer_level_2.last_changed | as_timestamp)}}
-
     action:
       - entity_id: switch.aeon_labs_zw096_smart_switch_6_switch
         service_template: >-
