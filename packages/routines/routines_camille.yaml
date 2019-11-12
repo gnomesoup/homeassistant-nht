@@ -153,8 +153,31 @@ automation:
       - service: media_player.play_media
         data:
           entity_id: media_player.camille_s_speaker
-          media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
+          # media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
+          media_content_id: "https://dl.dropboxusercontent.com/s/hb2hjr9jfiztzls/train-whistle.mp3"
           media_content_type: "music"
+      - delay: 0:05
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.camille_s_speaker
+          media_content_id: "https://dl.dropboxusercontent.com/s/hb2hjr9jfiztzls/train-whistle.mp3"
+          media_content_type: "music"
+
+  - alias: "Camille mark awake on motion"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_camille_bedroom
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_select.camille_status
+        state: "Asleep"
+    action:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.camille_status
+          option: "Home"
 
   - alias: "Wakeup Alarm Stop Camille"
     trigger:
@@ -188,10 +211,6 @@ script:
       - service: homeassistant.turn_off
         data:
           entity_id: automation.wakeup_alarm_repeat_camille
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.camille_status
-          option: "Home"
       - service: media_player.volume_set
         data:
           entity_id: media_player.camille_s_speaker
