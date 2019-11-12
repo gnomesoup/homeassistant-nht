@@ -85,6 +85,11 @@ automation:
           {% else %}
           homeassistant.turn_off
           {% endif %}
+      - service: notify.notify
+        data_template:
+          title: "Switch"
+          message: >-
+            trigger.to_state.state == {{ trigger.to_state.state }}
 
   - alias: "Master Bedroom Lights On 2nd Switch"
     trigger:
