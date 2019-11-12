@@ -5,7 +5,7 @@ automation:
         entity_id:
           - switch.aeotec_zw111_nano_dimmer_switch_2
     condition:
-      - condition: tempate
+      - condition: template
         value_template: >-
           {{ (states.switch.aeotec_zw111_nano_dimmer_switch_2.last_changed | as_timestamp) <
              (states.light.aeotec_zw111_nano_dimmer_level_2.last_changed | as_timestamp)}}
