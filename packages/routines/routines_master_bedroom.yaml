@@ -26,6 +26,17 @@ automation:
       - condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
+      - condition: template
+        value_template: >-
+          {{ states("input_select.angela_status") != "Asleep" or
+             states("input_select.michael_status") != "Asleep" }}
+      - condition: template
+        value_template: >-
+          {{ states("input_select.angela_status") == "Home" or
+             states("input_select.michael_status") == "Home" }}
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     action:
       - service: homeassistant.turn_on
         data:

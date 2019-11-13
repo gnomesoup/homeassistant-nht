@@ -67,7 +67,9 @@ automation:
       - service: script.goodmorning_camille
       - service: homeassistant.turn_on
         data:
-          entity_id: automation.wakeup_alarm_repeat_camille
+          entity_id:
+            - automation.wakeup_alarm_repeat_camille
+            - automation.camille_mark_awake_on_motion
       - service: media_player.play_media
         data:
           entity_id: media_player.camille_s_speaker
@@ -199,6 +201,21 @@ automation:
           entity_id:
             - automation.wakeup_alarm_repeat_camille
             - input_boolean.alarm_set_camille
+
+  - alias: "Camille turn on mark awake"
+    trigger:
+      - platform: template
+        value_template: >-
+          {{ states.sensor.time.state == states.input_datetime.alarm_time_camille.state[0:5] }}
+    condition:
+      - condition: state
+        entity_id: input_select.camille_status
+        state: "Asleep"
+    action:
+      - service: homeassistant.turn_on
+        data:
+          entity_id:
+            - automation.camille_mark_awake_on_motion
 
 script:
   goodmorning_camille:
