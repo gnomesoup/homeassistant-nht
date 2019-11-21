@@ -43,7 +43,6 @@ script:
         data:
           entity_id:
             - light.accordian_lamp
-          brightness: 127
 
   radio_time:
     alias: Radio Time
@@ -63,7 +62,9 @@ script:
         data:
           entity_id:
             - light.living_room_lamp
-          brightness: 35
+            - light.aeon_labs_zw111_nano_dimmer_level_3
+            - light.aeon_labs_zw111_nano_dimmer_level_4
+          brightness: 64
       - service: light.turn_off
         data:
           entity_id:
@@ -85,6 +86,8 @@ script:
             - light.aeotec_zw111_nano_dimmer_level_3
             - light.accordion_lamp
             - light.living_room_lamp
+            - light.aeon_labs_zw111_nano_dimmer_level_3
+            - light.aeon_labs_zw111_nano_dimmer_level_4
           brightness: 255
       - service: switch.turn_on
         data:

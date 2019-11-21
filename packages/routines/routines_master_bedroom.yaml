@@ -1,11 +1,128 @@
 group:
-  kitchen:
+  lights_master_bedroom:
     name: "Lights Master Bedroom"
     entities:
       - light.aeon_labs_zw111_nano_dimmer_level
       - light.bedroom_lamp
+      - light.aeon_labs_zw111_nano_dimmer_level_2
+      - light.metal_lamp
 
-# automation:
+automation:
+  - alias: "Master Bedroom Lights on motion"
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.motion_master_bedroom
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "disarmed"
+      - condition: state
+        entity_id: binary_sensor.sleepnumber_michael_angela_is_in_bed
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.sleepnumber_michael_michael_is_in_bed
+        state: "off"
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+      - condition: template
+        value_template: >-
+          {{ states("input_select.angela_status") != "Asleep" or
+             states("input_select.michael_status") != "Asleep" }}
+      - condition: template
+        value_template: >-
+          {{ states("input_select.angela_status") == "Home" or
+             states("input_select.michael_status") == "Home" }}
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+    action:
+      - service: homeassistant.turn_on
+        data:
+          entity_id:
+            - group.lights_master_bedroom
+
+  - alias: "Master Bedroom Button 1 Pushed"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_1
+    action:
+      - service: homeassistant.toggle
+        entity_id: light.bedroom_lamp
+
+  - alias: "Master Bedroom Button 2 Pushed"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_3
+    action:
+      - service: homeassistant.toggle
+        entity_id: light.aeon_labs_zw111_nano_dimmer_level_2
+
+  - alias: "Master Bedroom Button 2 Held"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_4
+    action:
+      - service: homeassistant.toggle
+        entity_id: group.lights_master_bedroom
+
+  - alias: "Master Bedroom Button 3 Pushed"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_5
+    action:
+      - service: homeassistant.toggle
+        entity_id: light.metal_lamp
+
+  - alias: "Master Bedroom Button 4 Pushed"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_7
+    action:
+      - service: homeassistant.toggle
+        entity_id: light.aeon_labs_zw111_nano_dimmer_level
+
+  - alias: "Master Bedroom Lights On 1nd Switch"
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.aeon_labs_zw111_nano_dimmer_switch
+    condition:
+      - condition: template
+        value_template: >-
+          {{ (states.switch.aeon_labs_zw111_nano_dimmer_switch.last_changed | as_timestamp) <
+             (states.light.aeon_labs_zw111_nano_dimmer_level.last_changed | as_timestamp)}}
+    action:
+      - entity_id: light.bedroom_lamp
+        service_template: >-
+          {% if trigger.to_state.state == "on" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
+
+  - alias: "Master Bedroom Lights On 2nd Switch"
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.aeon_labs_zw111_nano_dimmer_switch_2
+    condition:
+      - condition: template
+        value_template: >-
+          {{ (states.switch.aeon_labs_zw111_nano_dimmer_switch_2.last_changed | as_timestamp) <
+             (states.light.aeon_labs_zw111_nano_dimmer_level_2.last_changed | as_timestamp)}}
+    action:
+      - entity_id: light.metal_lamp
+        service_template: >-
+          {% if trigger.to_state.state == "on" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
+
+
+
 #   alias: "Master Bedroom Lights On At Night"
 #   trigger:
 #     - platform: state

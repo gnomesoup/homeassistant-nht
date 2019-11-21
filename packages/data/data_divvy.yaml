@@ -1,18 +1,18 @@
-sensor:
-  # - platform: rest
-  #   resource: https://feeds.divvybikes.com/stations/stations.json
-  #   name: Divvy_Report
-  #   json_attributes:
-  #     - stationBeanList
-  #   value_template: 'OK'
+# sensor:
+#   # - platform: rest
+#   #   resource: https://feeds.divvybikes.com/stations/stations.json
+#   #   name: Divvy_Report
+#   #   json_attributes:
+#   #     - stationBeanList
+#   #   value_template: 'OK'
 
-  - platform: citybikes
-    stations:
-      - ece087e696e275399cedbaa0c6b355b6
-      - 1976697fc5cdfc3ed05deba9b59c5f3a
-      - bc9bcc704d05b8355608c21dd284faf7
-      - aa46fd3f3a431b5860dbf50cfc340aac
-      - 12b8254ec71dca55a171f0d2207cd7db
-      - ae17da9ffdb20ad027b9b4b7b6580c84
-      - 06babe745b1c17c12642faf3a76c2336
-      - a0fd691b483dda622169d07dd9d3797b
+#   - platform: citybikes
+#     stations:
+#       - ece087e696e275399cedbaa0c6b355b6
+#       - 1976697fc5cdfc3ed05deba9b59c5f3a
+#       - bc9bcc704d05b8355608c21dd284faf7
+#       - aa46fd3f3a431b5860dbf50cfc340aac
+#       - 12b8254ec71dca55a171f0d2207cd7db
+#       - ae17da9ffdb20ad027b9b4b7b6580c84
+#       - 06babe745b1c17c12642faf3a76c2336
+#       - a0fd691b483dda622169d07dd9d3797b
