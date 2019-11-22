@@ -4,6 +4,12 @@
                                               "~/hassio-config-euler/hass-token.txt"))
 (setq hass-api/url (mjp/match-file-contents "hass-url ?= ?\\(.*\\)"
                                             "~/hassio-config-euler/hass-token.txt"))
+(defun hass-api/connection-check (host)
+  (if (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                   (replace-regexp-in-string
+                    "^https?:\\/\\/" "" host nil)))
+      t
+    (message "Unable to connect to home assistant at %s" host)))
 
 (defun mjp/match-file-contents (regex filePath)
   "Matches a regular expression with contents in another file"
@@ -15,10 +21,12 @@
 
 (spacemacs/declare-prefix "ah" "hass-api")
 (spacemacs/declare-prefix "ahr" "refresh")
-
+(replace-regexp-in-string "^https?:\\/\\/" "" hass-api/url nil)
 (defun hass-api/get-all-entities-as-list()
   "Use curl to grab a list of all entities from home assistant"
-  (let* ((entity_ids (shell-command-to-string (concat "curl -s -H \"Content-Type: application/json\" "
+  (when (hass-api/connection-check hass-api/url)
+      (let* ((entity_ids (shell-command-to-string
+                          (concat "curl -s -H \"Content-Type: application/json\" "
                               "-H \"Authorization: Bearer "
                               hass-api/token
                               "\" "
@@ -26,8 +34,7 @@
                               "/api/template "
                               "-d"
                               "\"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\n{% endfor %}\\\"}\""))))
-    (split-string entity_ids "\n")))
-
+    (split-string entity_ids "\n"))))
 (defun hass-api/refresh-entities()
   "Download latest entities from Home Assistant"
   (interactive)
@@ -38,16 +45,17 @@
 
 (defun hass-api/get-all-entities-and-names-as-list()
   "Use curl to grab a list of all entities and their friendly names from home assistant"
-  (let* ((entity_ids (shell-command-to-string
-                      (concat "curl -s -H \"Content-Type: application/json\" "
-                              "-H \"Authorization: Bearer "
-                              hass-api/token
-                              "\" \""
-                              hass-api/url
-                              "/api/template\" "
-                              "-d"
-                              "\"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\t'{{state.attributes.friendly_name}}'\\n{% endfor %}\\\"}\""))))
-    (split-string entity_ids "\n")))
+  (when (hass-api/connection-check hass-api/url)
+    (let* ((entity_ids (shell-command-to-string
+                        (concat "curl -s -H \"Content-Type: application/json\" "
+                                "-H \"Authorization: Bearer "
+                                hass-api/token
+                                "\" \""
+                                hass-api/url
+                                "/api/template\" "
+                                "-d"
+                                "\"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\t'{{state.attributes.friendly_name}}'\\n{% endfor %}\\\"}\""))))
+      (split-string entity_ids "\n"))))
 
 (defun hass-api/refresh-entities-and-names()
   "Download latest entities from Home Assistant"
@@ -78,35 +86,39 @@
   "Get all Entity Id's from Home Assistant"
   (interactive)
   (save-excursion
-    (let* ((curl-command (concat "curl -H \"Content-Type: application/json\" "
-                                 " -H \"Authorization: Bearer "
-                                 hass-api/token
-                                 "\" \"-XPOST\" \""
-                                 hass-api/url
-                                 "/api/template\" "
-                                 "\"-d\" \"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\n{% endfor %}\\\"}\"")))
-      (async-shell-command curl-command "*hassio*" "*httperror*"))))
+    (when (hass-api/connection-check)
+      (let* ((curl-command (concat "curl -H \"Content-Type: application/json\" "
+                                   " -H \"Authorization: Bearer "
+                                   hass-api/token
+                                   "\" \"-XPOST\" \""
+                                   hass-api/url
+                                   "/api/template\" "
+                                   "\"-d\" \"{\\\"template\\\":\\\"{% for state in states %}{{state.entity_id}}\\n{% endfor %}\\\"}\"")))
+        (async-shell-command curl-command "*hassio*" "*httperror*")))))
 
 (defun hass-api/get-state-by-entity(&optional entity_id)
   "Get the state properties of the entity provided"
   (interactive)
   (save-excursion
-    (let* ((entity_id (or entity_id (hass-api/get-entity-from-list)))
-           (curl-command (concat "curl -H \"Content-Type: application/json\" "
-                                 "-H \"Authorization: Bearer "
-                                 hass-api/token
-                                 "\" -X GET "
-                                 hass-api/url
-                                 "/api/states/"
-                                 entity_id)))
-      (async-shell-command curl-command "*hassio*" "*httperror*")
-      (message "Entities obtained")
-      (switch-to-buffer-other-window "*hassio*")
-      (evil-escape)
-      ;; (with-current-buffer "*hassio*"
-      ;;   (json-mode))
-      ;; ;; (json-mode-beautify)
-      )))
+    (when (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                             (replace-regexp-in-string
+                              "^https?:\\/\\/" "" hass-api/url nil)))
+      (let* ((entity_id (or entity_id (hass-api/get-entity-from-list)))
+             (curl-command (concat "curl -H \"Content-Type: application/json\" "
+                                   "-H \"Authorization: Bearer "
+                                   hass-api/token
+                                   "\" -X GET "
+                                   hass-api/url
+                                   "/api/states/"
+                                   entity_id)))
+        (async-shell-command curl-command "*hassio*" "*httperror*")
+        (message "Entities obtained")
+        (switch-to-buffer-other-window "*hassio*")
+        (evil-escape)
+        ;; (with-current-buffer "*hassio*"
+        ;;   (json-mode))
+        ;; ;; (json-mode-beautify)
+        ))))
 
 (spacemacs/set-leader-keys "ahE" 'hass-api/get-state-by-entity)
 
