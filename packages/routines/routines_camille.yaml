@@ -20,15 +20,15 @@ input_boolean:
     name: "Camille's Alarm"
     icon: mdi:alarm
 
-
 group:
   lights_bedroom_camille:
     name: Lights in Camille's Room
     view: false
     entities:
-      - switch.bedroom_canopy
       - light.grandma_s_lamp
-      - switch.aeotec_dsc06106_smart_energy_switch_switch_2
+      - switch.zooz_zen20_v2_0_power_strip_switch_2
+      - switch.zooz_zen20_v2_0_power_strip_switch_4
+      - switch.zooz_zen20_v2_0_power_strip_switch_6
 
 automation:
   - alias: Set status for Camille
@@ -105,7 +105,9 @@ automation:
     action:
       - service: homeassistant.toggle
         data:
-          entity_id: switch.bedroom_canopy
+          entity_id:
+            - switch.zooz_zen20_v2_0_power_strip_switch_4
+            - switch.zooz_zen20_v2_0_power_strip_switch_6
 
   - alias: "Minimote Camille Hold"
     trigger:
@@ -144,7 +146,8 @@ automation:
     action:
       - service: homeassistant.toggle
         data:
-          entity_id: switch.aeotec_dsc06106_smart_energy_switch_switch_2
+          entity_id:
+          - switch.zooz_zen20_v2_0_power_strip_switch_2
 
   - alias: "Wakeup Alarm Repeat Camille"
     initial_state: false

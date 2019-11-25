@@ -23,8 +23,10 @@ group:
     entities:
       - switch.zooz_zen06_switch
       - switch.bedroom_canopy
-      - switch.aeotec_dsc06106_smart_energy_switch_switch_2
-      - switch.aeon_labs_zw096_smart_switch_6_switch
+      - switch.zooz_zen20_v2_0_power_strip_switch_2
+      - switch.zooz_zen20_v2_0_power_strip_switch_4
+      - switch.zooz_zen20_v2_0_power_strip_switch_6
+
   media_whole_house:
     name: All media in the house
     view: false
