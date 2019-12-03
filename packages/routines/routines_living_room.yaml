@@ -71,6 +71,10 @@ script:
             - light.accordion_lamp
             - light.aeotec_zw111_nano_dimmer_level
             - light.aeotec_zw111_nano_dimmer_level_3
+      - service: switch.turn_on
+        data:
+          entity_id:
+            - switch.bedroom_canopy
 
   goodmorning_living_room:
     alias: Goodmorning Living Room
@@ -84,7 +88,8 @@ script:
           entity_id:
             - light.aeotec_zw111_nano_dimmer_level
             - light.aeotec_zw111_nano_dimmer_level_3
-            - light.accordion_lamp
+            # - light.accordion_lamp
+            - switch.bedroom_canopy
             - light.living_room_lamp
             - light.aeon_labs_zw111_nano_dimmer_level_3
             - light.aeon_labs_zw111_nano_dimmer_level_4
