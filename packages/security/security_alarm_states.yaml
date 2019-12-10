@@ -6,7 +6,8 @@ automation:
         entity_id:
           - input_boolean.alarm_control_panel_trigger
           - binary_sensor.door_sensor_2
-          - binary_sensor.door_sensor_3
+          # - binary_sensor.door_sensor_3
+          # Now that we have a door we don't want to trigger alarms with patio
         to: "on"
     condition:
       - condition: template
@@ -44,6 +45,7 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.door_sensor_1
+          - binary_sensor.door_sensor_3
           - binary_sensor.motion_camille_bedroom
           - binary_sensor.motion_hallway
           # - binary_sensor.motion_living_room
