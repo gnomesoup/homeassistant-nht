@@ -89,7 +89,6 @@ script:
             - light.aeotec_zw111_nano_dimmer_level
             - light.aeotec_zw111_nano_dimmer_level_3
             # - light.accordion_lamp
-            - switch.bedroom_canopy
             - light.living_room_lamp
             - light.aeon_labs_zw111_nano_dimmer_level_3
             - light.aeon_labs_zw111_nano_dimmer_level_4
@@ -98,6 +97,7 @@ script:
         data:
           entity_id:
             - switch.zooz_zen06_switch
+            - switch.bedroom_canopy
       - service: homeassistant.turn_off
         data:
           entity_id:
