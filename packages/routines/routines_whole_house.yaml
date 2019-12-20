@@ -17,14 +17,34 @@ group:
       - light.aeon_labs_zw111_nano_dimmer_level_3
       - light.aeon_labs_zw111_nano_dimmer_level_4
 
+  lights_away:
+    name: All lights when away
+    view: false
+    entities:
+      - light.metal_lamp
+      - light.entry_light
+      - light.bedroom_lamp
+      - light.accordion_lamp
+      - light.grandma_s_lamp
+      - light.living_room_lamp
+      - light.aeotec_zw111_nano_dimmer_level
+      - light.aeotec_zw111_nano_dimmer_level_2
+      - light.aeon_labs_zw111_nano_dimmer_level
+      - light.aeon_labs_zw111_nano_dimmer_level_2
+      - light.aeon_labs_zw111_nano_dimmer_level_3
+      - light.aeon_labs_zw111_nano_dimmer_level_4
+
   switches_whole_house:
     name: All switches in the house
     view: false
     entities:
       - switch.zooz_zen06_switch
       - switch.bedroom_canopy
+      - switch.zooz_zen20_v2_0_power_strip_switch
       - switch.zooz_zen20_v2_0_power_strip_switch_2
+      - switch.zooz_zen20_v2_0_power_strip_switch_3
       - switch.zooz_zen20_v2_0_power_strip_switch_4
+      - switch.zooz_zen20_v2_0_power_strip_switch_5
       - switch.zooz_zen20_v2_0_power_strip_switch_6
       - switch.aeon_labs_zw096_smart_switch_6_switch
 
@@ -63,7 +83,7 @@ automation:
         entity_id: alarm_control_panel.home_alarm
         to: "armed_away"
     action:
-      - service: script.turn_everything_off
+      - service: script.turn_everything_off_away
 
   - alias: "No motion late at night"
     trigger:
@@ -129,6 +149,27 @@ script:
           entity_id:
             - group.media_whole_house
 
+script:
+  turn_everything_off_away:
+    alias: "Turn everything off away"
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - group.lights_away
+            - group.switches_whole_house
+      - service: media_player.media_pause
+        data:
+          entity_id:
+            - group.media_whole_house
+
+  turn_off_media:
+    alias: "Turn off all media"
+    sequence:
+      - service: media_player.media_pause
+        data:
+          entity_id:
+            - group.media_whole_house
   get_dark:
     alias: "Get dark"
     sequence:

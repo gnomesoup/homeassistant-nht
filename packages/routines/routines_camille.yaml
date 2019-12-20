@@ -26,9 +26,8 @@ group:
     view: false
     entities:
       - light.grandma_s_lamp
-      - switch.zooz_zen20_v2_0_power_strip_switch_2
-      - switch.zooz_zen20_v2_0_power_strip_switch_4
-      - switch.zooz_zen20_v2_0_power_strip_switch_6
+      - switch.zooz_zen20_v2_0_power_strip_switch_3
+      - switch.zooz_zen20_v2_0_power_strip_switch_5
 
 automation:
   - alias: Set status for Camille
