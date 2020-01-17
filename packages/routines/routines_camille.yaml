@@ -23,7 +23,6 @@ input_boolean:
 group:
   lights_bedroom_camille:
     name: Lights in Camille's Room
-    view: false
     entities:
       - light.grandma_s_lamp
       - switch.zooz_zen20_v2_0_power_strip_switch_3

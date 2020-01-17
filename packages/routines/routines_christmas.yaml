@@ -1,26 +1,25 @@
-group:
-  christmas_lights:
-    name: Christmas Lights
-    view: false
-    entities:
-      - switch.bedroom_canopy
-      - switch.jasco_products_14284_outdoor_smart_switch_switch
+# group:
+#   christmas_lights:
+#     name: Christmas Lights
+#     entities:
+#       - switch.bedroom_canopy
+#       - switch.jasco_products_14284_outdoor_smart_switch_switch
 
-automation:
-  - alias: Christmas lights on at dusk
-    trigger:
-      - platform: sun
-        event: sunset
-        offset: "-00:30:00"
-    action:
-      - service: homeassistant.turn_on
-        entity_id: group.christmas_lights
+# automation:
+#   - alias: Christmas lights on at dusk
+#     trigger:
+#       - platform: sun
+#         event: sunset
+#         offset: "-00:30:00"
+#     action:
+#       - service: homeassistant.turn_on
+#         entity_id: group.christmas_lights
 
-  - alias: Christmas lights off at dawn
-    trigger:
-      - platform: sun
-        event: sunrise
-        offset: "-01:00:00"
-    action:
-      - service: homeassistant.turn_off
-        entity_id: group.christmas_lights
+#   - alias: Christmas lights off at dawn
+#     trigger:
+#       - platform: sun
+#         event: sunrise
+#         offset: "-01:00:00"
+#     action:
+#       - service: homeassistant.turn_off
+#         entity_id: group.christmas_lights

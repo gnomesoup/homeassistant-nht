@@ -5,7 +5,6 @@ input_boolean:
 
 group:
   guest_lights:
-    view: false
     entities:
       - light.living_room_lamp
       - light.accordion_lamp

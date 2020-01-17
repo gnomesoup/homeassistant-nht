@@ -1,7 +1,6 @@
 group:
   lights_whole_house:
     name: All lights in the house
-    view: false
     entities:
       - light.metal_lamp
       - light.entry_light
@@ -19,7 +18,6 @@ group:
 
   lights_away:
     name: All lights when away
-    view: false
     entities:
       - light.metal_lamp
       - light.entry_light
@@ -36,7 +34,6 @@ group:
 
   switches_whole_house:
     name: All switches in the house
-    view: false
     entities:
       - switch.zooz_zen06_switch
       - switch.bedroom_canopy
@@ -50,7 +47,6 @@ group:
 
   media_whole_house:
     name: All media in the house
-    view: false
     entities:
       - media_player.bedroom_speaker
       - media_player.camille_s_speaker
@@ -149,7 +145,6 @@ script:
           entity_id:
             - group.media_whole_house
 
-script:
   turn_everything_off_away:
     alias: "Turn everything off away"
     sequence:

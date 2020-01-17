@@ -30,7 +30,6 @@ binary_sensor:
 group:
   motion_sensors:
     name: All Motion Sensors
-    view: false
     entities:
       - binary_sensor.motion_office
       - binary_sensor.motion_hallway
