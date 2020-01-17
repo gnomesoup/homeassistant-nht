@@ -157,14 +157,6 @@ script:
         data:
           entity_id:
             - group.media_whole_house
-
-  turn_off_media:
-    alias: "Turn off all media"
-    sequence:
-      - service: media_player.media_pause
-        data:
-          entity_id:
-            - group.media_whole_house
   get_dark:
     alias: "Get dark"
     sequence:
