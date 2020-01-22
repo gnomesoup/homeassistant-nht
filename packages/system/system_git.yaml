@@ -1,2 +1,8 @@
 shell_command:
   git_pull: 'git pull origin'
+
+script:
+ git_pull:
+   alias: Git Pull Origin
+   sequence:
+     - service: shell_command.git_pull
