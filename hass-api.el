@@ -252,7 +252,7 @@
 (spacemacs|define-custom-layout "endor"
   :binding "n"
   :body
-  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.159" "-c" "1" "-W" "1")) "endorlocal" "endoremote")))
+  (let ((sshConfig (if (= 0 (call-process "ping" nil nil nil "192.168.40.159" "-c" "1" "-W" "1")) "endorlocal" "endorremote")))
     (message "connecting to %s" sshConfig)
     (find-file (concat "/scp:" sshConfig ":/homeassistant/"))))
 

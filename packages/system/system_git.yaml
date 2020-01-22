@@ -1,0 +1,2 @@
+shell_command:
+  git_pull: 'git pull origin'
