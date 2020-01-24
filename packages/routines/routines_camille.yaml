@@ -246,6 +246,7 @@ automation:
             - light.hallway_light
             - light.grandma_s_lamp
             - light.aeon_labs_zw111_nano_dimmer_level_4
+            - input_boolean.school_day
       - service: tts.google_translate_say
         data:
           entity_id:
