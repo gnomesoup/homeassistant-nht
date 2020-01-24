@@ -14,14 +14,14 @@ input_datetime:
     has_time: true
 
 input_boolean:
-  alarm_disable_camille:
-    name: "Disable Camille's Alarm"
-  alarm_set_camille:
-    name: "Camille's Alarm"
-    icon: mdi:alarm
-  school_day:
-    name: "School Day"
-    icon: mdi:bus-school
+  - alarm_disable_camille:
+      name: "Disable Camille's Alarm"
+  - alarm_set_camille:
+      name: "Camille's Alarm"
+      icon: mdi:alarm
+  - school_day:
+      name: "School Day"
+      icon: mdi:bus-school
 
 group:
   lights_bedroom_camille:
@@ -246,6 +246,11 @@ automation:
             - light.hallway_light
             - light.grandma_s_lamp
             - light.aeon_labs_zw111_nano_dimmer_level_4
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+          message: "Time to catch the bus."
       - delay:
           seconds: 2
       - service: scene.turn_on
@@ -286,7 +291,9 @@ script:
         data:
           entity_id: media_player.camille_s_speaker
           volume_level: 0.5
-      - entity_id: input_boolean.alarm_set_camille
+      - entity_id:
+          - input_boolean.alarm_set_camille
+          - input_boolean.school_day
         service_template: >-
           {% if states("sensor.weekday") == "Friday" or
              states("sensor.weekday") == "Saturday" %}
