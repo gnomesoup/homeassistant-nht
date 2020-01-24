@@ -19,6 +19,9 @@ input_boolean:
   alarm_set_camille:
     name: "Camille's Alarm"
     icon: mdi:alarm
+  school_day:
+    name: "School Day"
+    icon: mdi:bus-school
 
 group:
   lights_bedroom_camille:
@@ -217,6 +220,37 @@ automation:
         data:
           entity_id:
             - automation.camille_mark_awake_on_motion
+
+  - alias: "Camille Time for school"
+    trigger:
+      - platform: time
+        at: '07:30:00'
+    condition:
+      - condition: state
+        entity_id: input_select.camille_status
+        state: "Home"
+      - condition: state
+        entity_id: input_boolean.school_day
+        state: "on"
+    action:
+      - service: scene.create
+        data:
+          scene_id: school_notify_before_state
+          snapshot_entities:
+            - light.hallway_light
+            - light.grandma_s_lamp
+            - light.aeon_labs_zw111_nano_dimmer_level_4
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - light.hallway_light
+            - light.grandma_s_lamp
+            - light.aeon_labs_zw111_nano_dimmer_level_4
+      - delay:
+          seconds: 2
+      - service: scene.turn_on
+        data:
+          entity_id: scene.school_notify_before_state
 
 script:
   goodmorning_camille:
