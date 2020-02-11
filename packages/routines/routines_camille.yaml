@@ -28,7 +28,7 @@ group:
     name: Lights in Camille's Room
     entities:
       - light.grandma_s_lamp
-      - switch.zooz_zen20_v2_0_power_strip_switch_1
+      - switch.zooz_zen20_v2_0_power_strip_switch
       - switch.zooz_zen20_v2_0_power_strip_switch_3
 
 automation:
@@ -107,7 +107,7 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-            - switch.zooz_zen20_v2_0_power_strip_switch_1
+            - switch.zooz_zen20_v2_0_power_strip_switch
 
   - alias: "Minimote Camille Hold"
     trigger:
@@ -137,7 +137,7 @@ automation:
     action:
       - service: homeassistant.toggle
         data:
-          entity_id: light.grandma_s_lamp
+          entity_id: switch.zooz_zen20_v2_0_power_strip_switch_3
 
   - alias: "Minimote Camille Push 3"
     trigger:
@@ -147,7 +147,7 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-          - switch.zooz_zen20_v2_0_power_strip_switch_3
+          - light.grandma_s_lamp
 
   - alias: "Wakeup Alarm Repeat Camille"
     initial_state: false
