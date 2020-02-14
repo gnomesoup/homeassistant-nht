@@ -223,7 +223,7 @@ automation:
   - alias: "Camille Time for school"
     trigger:
       - platform: time
-        at: '07:30:00'
+        at: '07:35:00'
     condition:
       - condition: state
         entity_id: input_select.camille_status
