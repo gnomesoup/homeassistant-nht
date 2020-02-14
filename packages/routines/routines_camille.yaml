@@ -250,6 +250,7 @@ automation:
         data:
           entity_id:
             - media_player.living_room_display
+            - media_player.camille_s_speaker
           message: "Time to catch the bus."
       - delay:
           seconds: 2
