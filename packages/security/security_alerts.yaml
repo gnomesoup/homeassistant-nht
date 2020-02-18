@@ -8,9 +8,6 @@ automation:
           - binary_sensor.door_sensor_2
           - binary_sensor.door_sensor_3
         to: "on"
-      - platform: state
-        entity_id: binary_sensor.door_sensor_1
-        to: "off"
     condition:
       - condition: state
         entity_id: input_boolean.door_alert_delay

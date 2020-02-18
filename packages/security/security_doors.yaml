@@ -3,7 +3,7 @@ binary_sensor:
   sensors:
       door_sensor_1:
         device_class: opening
-        friendly_name: "Office Door"
+        friendly_name: "Master Closet Door"
         value_template: >-
           {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_3.state|float > 0 }}
       door_sensor_2:
@@ -13,7 +13,7 @@ binary_sensor:
           {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_2.state|float > 0 }}
       door_sensor_3:
         device_class: opening
-        friendly_name: "Patio Door"
+        friendly_name: "Laundry Closet Door"
         value_template: >-
           {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level.state|float > 0 }}
       door_sensor_4:
