@@ -23,7 +23,6 @@ group:
       - light.entry_light
       - light.bedroom_lamp
       - light.accordion_lamp
-      - light.grandma_s_lamp
       - light.living_room_lamp
       - light.aeotec_zw111_nano_dimmer_level
       - light.aeotec_zw111_nano_dimmer_level_2
