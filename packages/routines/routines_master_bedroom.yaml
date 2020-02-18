@@ -121,7 +121,33 @@ automation:
           homeassistant.turn_off
           {% endif %}
 
+  - alias: "Laundry Door Open Turn On Light"
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.door_sensor_3
+    action:
+      - entity_id: light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
+        service_template: >-
+          {% if trigger.to_state.state == "off" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
 
+  - alias: "Master Closet Door Open Turn On Light"
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.door_sensor_1
+    action:
+      - entity_id: light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
+        service_template: >-
+          {% if trigger.to_state.state == "off" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
 
 #   alias: "Master Bedroom Lights On At Night"
 #   trigger:
