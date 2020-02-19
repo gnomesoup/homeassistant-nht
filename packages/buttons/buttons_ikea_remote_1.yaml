@@ -1,0 +1,12 @@
+automation:
+  - alias: "Ikea Remote Power Button"
+    trigger:
+      - device_id: c055457efa8545deba9b0fbffde46270
+        domain: zha
+        platform: device
+        type: remote_button_short_press
+        subtype: turn_on
+    action:
+      - service: homeassistant.toggle
+        data:
+          entity_id: switch.aeotec_dsc06106_smart_energy_switch_switch
