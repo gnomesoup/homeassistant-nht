@@ -5,13 +5,14 @@ automation:
         event_type: zha_event
         event_data:
           device_ieee: "00:0d:6f:ff:fe:4b:6f:12"
+          command: "toggle"
     action:
       - service: homeassistant.toggle
         data:
           entity_id: switch.aeotec_dsc06106_smart_energy_switch_switch
-      - service: notify.mobile_app_ergisch
-        data_template:
-          title: "Ikea Remote Button Press"
-          message: >-
-            Command: {{ trigger.event.data.command }}
-            Args: {{ trigger.event.data.args }}
+      # - service: notify.mobile_app_ergisch
+      #   data_template:
+      #     title: "Ikea Remote Button Press"
+      #     message: >-
+      #       Command: {{ trigger.event.data.command }}
+      #       Args: {{ trigger.event.data.args }}
