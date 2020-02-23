@@ -1,3 +1,20 @@
+group:
+  lights_living_room:
+    name: Living Room Lights
+    entities:
+      - light.living_room_lamp
+  switches_living_room:
+    name: Living Room Switches
+    entities:
+      - switch.aeon_labs_zw096_smart_switch_6_switch
+      - switch.aeon_labs_zw096_smart_switch_6_switch_2
+  lights_switches_living_room:
+    name: Living Room Switches
+    entities:
+      - switch.aeon_labs_zw096_smart_switch_6_switch
+      - switch.aeon_labs_zw096_smart_switch_6_switch_2
+      - light.living_room_lamp
+
 automation:
   - alias: Wakeup Living Room
     trigger:

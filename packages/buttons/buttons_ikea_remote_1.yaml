@@ -9,7 +9,7 @@ automation:
     action:
       - service: homeassistant.toggle
         data:
-          entity_id: switch.aeotec_dsc06106_smart_energy_switch_switch
+          entity_id: group.lights_switches_living_room
       # - service: notify.mobile_app_ergisch
       #   data_template:
       #     title: "Ikea Remote Button Press"
