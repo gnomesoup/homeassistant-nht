@@ -103,18 +103,20 @@ script:
       - service: light.turn_on
         data:
           entity_id:
-            - light.aeotec_zw111_nano_dimmer_level
-            - light.aeotec_zw111_nano_dimmer_level_3
-            # - light.accordion_lamp
+            # - light.aeotec_zw111_nano_dimmer_level
+            # - light.aeotec_zw111_nano_dimmer_level_3
+            - light.accordion_lamp
             - light.living_room_lamp
-            - light.aeon_labs_zw111_nano_dimmer_level_3
-            - light.aeon_labs_zw111_nano_dimmer_level_4
+            # - light.aeon_labs_zw111_nano_dimmer_level_3
+            # - light.aeon_labs_zw111_nano_dimmer_level_4
           brightness: 255
       - service: switch.turn_on
         data:
           entity_id:
             - switch.zooz_zen06_switch
-            - switch.bedroom_canopy
+            # - switch.bedroom_canopy
+            - switch.aeon_labs_zw096_smart_switch_6_switch
+            - switch.aeon_labs_zw096_smart_switch_6_switch_2
       - service: homeassistant.turn_off
         data:
           entity_id:
