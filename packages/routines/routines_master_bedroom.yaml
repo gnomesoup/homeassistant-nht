@@ -2,10 +2,11 @@ group:
   lights_master_bedroom:
     name: "Lights Master Bedroom"
     entities:
-      - light.aeon_labs_zw111_nano_dimmer_level
+      # - light.aeon_labs_zw111_nano_dimmer_level
       - light.bedroom_lamp
-      - light.aeon_labs_zw111_nano_dimmer_level_2
+      # - light.aeon_labs_zw111_nano_dimmer_level_2
       - light.metal_lamp
+      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
 
 automation:
   - alias: "Master Bedroom Lights on motion"
@@ -51,13 +52,14 @@ automation:
       - service: homeassistant.toggle
         entity_id: light.bedroom_lamp
 
+
   - alias: "Master Bedroom Button 2 Pushed"
     trigger:
       - platform: state
         entity_id: input_boolean.minimote_master_bedroom_3
     action:
       - service: homeassistant.toggle
-        entity_id: light.aeon_labs_zw111_nano_dimmer_level_2
+        entity_id: light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
 
   - alias: "Master Bedroom Button 2 Held"
     trigger:
@@ -75,51 +77,51 @@ automation:
       - service: homeassistant.toggle
         entity_id: light.metal_lamp
 
-  - alias: "Master Bedroom Button 4 Pushed"
-    trigger:
-      - platform: state
-        entity_id: input_boolean.minimote_master_bedroom_7
-    action:
-      - service: homeassistant.toggle
-        entity_id: light.aeon_labs_zw111_nano_dimmer_level
+  # - alias: "Master Bedroom Button 4 Pushed"
+  #   trigger:
+  #     - platform: state
+  #       entity_id: input_boolean.minimote_master_bedroom_7
+  #   action:
+  #     - service: homeassistant.toggle
+  #       entity_id: light.aeon_labs_zw111_nano_dimmer_level
 
-  - alias: "Master Bedroom Lights On 1nd Switch"
-    trigger:
-      - platform: state
-        entity_id:
-          - switch.aeon_labs_zw111_nano_dimmer_switch
-    condition:
-      - condition: template
-        value_template: >-
-          {{ (states.switch.aeon_labs_zw111_nano_dimmer_switch.last_changed | as_timestamp) <
-             (states.light.aeon_labs_zw111_nano_dimmer_level.last_changed | as_timestamp)}}
-    action:
-      - entity_id: light.bedroom_lamp
-        service_template: >-
-          {% if trigger.to_state.state == "on" %}
-          homeassistant.turn_on
-          {% else %}
-          homeassistant.turn_off
-          {% endif %}
+  # - alias: "Master Bedroom Lights On 1nd Switch"
+  #   trigger:
+  #     - platform: state
+  #       entity_id:
+  #         - switch.aeon_labs_zw111_nano_dimmer_switch
+  #   condition:
+  #     - condition: template
+  #       value_template: >-
+  #         {{ (states.switch.aeon_labs_zw111_nano_dimmer_switch.last_changed | as_timestamp) <
+  #            (states.light.aeon_labs_zw111_nano_dimmer_level.last_changed | as_timestamp)}}
+  #   action:
+  #     - entity_id: light.bedroom_lamp
+  #       service_template: >-
+  #         {% if trigger.to_state.state == "on" %}
+  #         homeassistant.turn_on
+  #         {% else %}
+  #         homeassistant.turn_off
+  #         {% endif %}
 
-  - alias: "Master Bedroom Lights On 2nd Switch"
-    trigger:
-      - platform: state
-        entity_id:
-          - switch.aeon_labs_zw111_nano_dimmer_switch_2
-    condition:
-      - condition: template
-        value_template: >-
-          {{ (states.switch.aeon_labs_zw111_nano_dimmer_switch_2.last_changed | as_timestamp) <
-             (states.light.aeon_labs_zw111_nano_dimmer_level_2.last_changed | as_timestamp)}}
-    action:
-      - entity_id: light.metal_lamp
-        service_template: >-
-          {% if trigger.to_state.state == "on" %}
-          homeassistant.turn_on
-          {% else %}
-          homeassistant.turn_off
-          {% endif %}
+  # - alias: "Master Bedroom Lights On 2nd Switch"
+  #   trigger:
+  #     - platform: state
+  #       entity_id:
+  #         - switch.aeon_labs_zw111_nano_dimmer_switch_2
+  #   condition:
+  #     - condition: template
+  #       value_template: >-
+  #         {{ (states.switch.aeon_labs_zw111_nano_dimmer_switch_2.last_changed | as_timestamp) <
+  #            (states.light.aeon_labs_zw111_nano_dimmer_level_2.last_changed | as_timestamp)}}
+  #   action:
+  #     - entity_id: light.metal_lamp
+  #       service_template: >-
+  #         {% if trigger.to_state.state == "on" %}
+  #         homeassistant.turn_on
+  #         {% else %}
+  #         homeassistant.turn_off
+  #         {% endif %}
 
   - alias: "Laundry Door Open Turn On Light"
     trigger:
