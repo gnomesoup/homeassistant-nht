@@ -2,9 +2,7 @@ group:
   lights_master_bedroom:
     name: "Lights Master Bedroom"
     entities:
-      # - light.aeon_labs_zw111_nano_dimmer_level
       - light.bedroom_lamp
-      # - light.aeon_labs_zw111_nano_dimmer_level_2
       - light.metal_lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
 
