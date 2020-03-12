@@ -7,7 +7,7 @@ group:
   guest_lights:
     entities:
       - light.living_room_lamp
-      - light.accordion_lamp
+      - light.ge_appliances_zll_light_1b550600_level_on_off
       - light.aeotec_zw111_nano_dimmer_level_3
       - light.aeotec_zw111_nano_dimmer_level
 

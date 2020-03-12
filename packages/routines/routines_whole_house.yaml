@@ -5,7 +5,7 @@ group:
       - light.metal_lamp
       - light.entry_light
       - light.bedroom_lamp
-      - light.accordion_lamp
+      - light.ge_appliances_zll_light_1b550600_level_on_off
       - light.grandma_s_lamp
       - light.living_room_lamp
       - light.aeotec_zw111_nano_dimmer_level
@@ -26,7 +26,7 @@ group:
       - light.metal_lamp
       - light.entry_light
       - light.bedroom_lamp
-      - light.accordion_lamp
+      - light.ge_appliances_zll_light_1b550600_level_on_off
       - light.living_room_lamp
       - light.aeotec_zw111_nano_dimmer_level
       - light.aeotec_zw111_nano_dimmer_level_2
@@ -185,9 +185,7 @@ script:
       - service: homeassistant.turn_off
         data:
           entity_id:
-            - light.accordion_lamp
+            - light.ge_appliances_zll_light_1b550600_level_on_off
             - light.living_room_lamp
-            - light.aeotec_zw111_nano_dimmer_level
-            - light.aeotec_zw111_nano_dimmer_level_3
-            - light.aeon_labs_zw111_nano_dimmer_level_3
-            - light.aeon_labs_zw111_nano_dimmer_level_4
+            - switch.aeon_labs_zw096_smart_switch_6_switch
+            - switch.aeon_labs_zw096_smart_switch_6_switch_2
