@@ -1,0 +1,73 @@
+input_select:
+  daisy_status:
+    name: "Daisy's Status"
+    options:
+      - Home
+      - Away
+      - Asleep
+
+input_boolean:
+  daisy_walked:
+    name: "Daisy Walked"
+  
+Automation:
+  - alias: Daisy awake
+    trigger:
+      - platform: state
+        entity_id: input_select.camille_status
+        from: "Asleep"
+        to: "Awake"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states.input_select.daisy_state != "Away" }}
+    action:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - input_boolean.daisy_walked
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.daisy_status
+          option: Home
+
+  - alias: Daisy walk first thing
+    trigger:
+      - platform: state
+        entity_id: input_boolean.daisy_walked
+        to: "on"
+        for:
+          minutes: 5
+      - platform: state
+        entity_id: input_boolean.daisy_walked
+        to: "on"
+        for:
+          minutes: 10
+    condition:
+      - condition: template
+        value_template: >-
+          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.binary_sensor.door_sensor_2.last_changed) >
+             as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.input_boolean.daisy_walked.last_changed)}}
+    action:
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+            - media_player.camille_s_speaker
+          message: "Take Daisy outside"
+
+  - alias: Daisy time to feed
+    trigger: 
+      - platform: time
+        at: "17:00:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states.input_select.daisy_state != "Away" }}
+    action:
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+            - media_player.camille_s_speaker
+          message: "Time to feed Daisy"
