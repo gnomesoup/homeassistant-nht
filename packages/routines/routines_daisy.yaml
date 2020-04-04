@@ -10,7 +10,7 @@ input_boolean:
   daisy_walked:
     name: "Daisy Walked"
   
-Automation:
+automation:
   - alias: Daisy awake
     trigger:
       - platform: state
