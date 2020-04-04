@@ -1,6 +1,8 @@
 # variables
-:hass-url := (mjp/match-file-contents "hass-url = \\(.*\\)" "~/hassio-config-euler/hass-token.txt")
-:hass-token := (mjp/match-file-contents "hass-token = \\(.*\\)" "~/hassio-config-euler/hass-token.txt")
+# :hass-url := (mjp/match-file-contents "hass-url = \\(.*\\)" "~/hassio-config-euler/hass-token.txt")
+# :hass-token := (mjp/match-file-contents "hass-token = \\(.*\\)" "~/hassio-config-euler/hass-token.txt")
+:hass-url := HASS_URL_PREFIX
+:hass-token := HASS_BEARER_TOKEN
 
 # services
 GET :hass-url/api/services
@@ -14,6 +16,11 @@ Content-Type: application/json
 
 # events
 GET :hass-url/api/events
+Authorization: Bearer :hass-token
+Content-Type: application/json
+
+# states
+GET :hass-url/api/states
 Authorization: Bearer :hass-token
 Content-Type: application/json
 

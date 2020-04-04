@@ -1,2 +1,2 @@
-hacs:
-  token: !secret hacsToken
+# hacs:
+#   token: !secret hacsToken
