@@ -35,12 +35,12 @@ automation:
     trigger:
       - platform: state
         entity_id: input_boolean.daisy_walked
-        to: "on"
+        to: "off"
         for:
           minutes: 5
       - platform: state
         entity_id: input_boolean.daisy_walked
-        to: "on"
+        to: "off"
         for:
           minutes: 10
     condition:
@@ -71,3 +71,9 @@ automation:
             - media_player.living_room_display
             - media_player.camille_s_speaker
           message: "Time to feed Daisy"
+      - service: notify.mobile_app_ergisch
+        data:
+          title: "Time to feed Daisy"
+          message: "Click to fill log"
+          data:
+            url: "https://forms.gle/Jo7do43m9Ti837718"
