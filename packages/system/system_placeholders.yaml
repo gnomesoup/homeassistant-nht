@@ -1,0 +1,5 @@
+script:
+  placeholder:
+    alias: Dummy placeholder script
+    sequence:
+      delay: "00:00:00"
