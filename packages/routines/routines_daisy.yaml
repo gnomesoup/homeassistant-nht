@@ -11,16 +11,16 @@ input_boolean:
     name: "Daisy Walked"
 
 automation:
-  - alias: Daisy awake
+  - alias: "Daisy mark awake on motion"
     trigger:
       - platform: state
-        entity_id: input_select.camille_status
-        from: "Asleep"
-        to: "Home"
+        entity_id: binary_sensor.motion_camille_bedroom
+        from: "off"
+        to: "on"
     condition:
-      - condition: template
-        value_template: >-
-          {{ states.input_select.daisy_state != "Away" }}
+      - condition: state
+        entity_id: input_select.daisy_status
+        state: "Asleep"
     action:
       - service: homeassistant.turn_off
         data:
@@ -30,6 +30,25 @@ automation:
         data:
           entity_id: input_select.daisy_status
           option: "Home"
+  # - alias: Daisy awake
+  #   trigger:
+  #     - platform: state
+  #       entity_id: input_select.camille_status
+  #       from: "Asleep"
+  #       to: "Home"
+  #   condition:
+  #     - condition: template
+  #       value_template: >-
+  #         {{ states.input_select.daisy_state != "Away" }}
+  #   action:
+  #     - service: homeassistant.turn_off
+  #       data:
+  #         entity_id:
+  #           - input_boolean.daisy_walked
+  #     - service: input_select.select_option
+  #       data:
+  #         entity_id: input_select.daisy_status
+  #         option: "Home"
 
   - alias: Daisy walk first thing
     trigger:
@@ -137,3 +156,40 @@ automation:
           message: "Front door opened. Click to fill log"
           data:
             url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+
+  - alias: "Daisy Minimote Camille Hold"
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.minimote_camille_2
+          - input_boolean.minimote_camille_4
+          - input_boolean.minimote_camille_6
+          - input_boolean.minimote_camille_8
+    action:
+      - service: homeassistant.toggle
+        data_template:
+          entity_id: >-
+            {% if is_state("input_select.daisy_status", "Asleep") %}
+              {% set runScript = "script.daisy_goodmorning" %}
+            {% elseif is_state("input_select.daisy_status", "Home") %}
+              {% set runScript = "script.daisy_goodnight" %}
+            {% else %}
+              {% set runScript = "script.placeholder" %}
+            {% endif %}
+            {{ runScript }}
+script:
+  daisy_goodmorning:
+    alias: Good Night Daisy
+    sequence:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.daisy_status
+          option: "Home"
+
+  daisy_goodnight:
+    alias: Good Night Daisy
+    sequence:
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.daisy_status
+          option: "Asleep"
