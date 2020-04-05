@@ -175,7 +175,8 @@ automation:
       - platform: state
         entity_id: input_boolean.daisy_outside
         to: "on"
-        for: 15
+        for:
+          minutes: 15
     condition:
       - condition: state
         entity_id: input_select.daisy_status
