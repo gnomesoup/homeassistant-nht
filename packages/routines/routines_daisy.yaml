@@ -34,7 +34,7 @@ automation:
   - alias: Daisy walk first thing
     trigger:
       - platform: template
-        template: >-
+        value_template: >-
           {{ (as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.input_boolean.daisy_walked.last_changed))|int % 5 == 0}}
     condition:
       - condition: state
