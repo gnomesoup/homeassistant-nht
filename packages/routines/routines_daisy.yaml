@@ -9,6 +9,15 @@ input_select:
 input_boolean:
   daisy_walked:
     name: "Daisy Walked"
+  daisy_outside:
+    name: "Daisy might be outside"
+
+input_datetime:
+  daisy_log_updated:
+    name: "Daisy's Log Updated"
+    icon: mdi:dog
+    has_date: true
+    has_time: true
 
 automation:
   - alias: "Daisy mark awake on motion"
@@ -30,6 +39,7 @@ automation:
         data:
           entity_id: input_select.daisy_status
           option: "Home"
+
   # - alias: Daisy awake
   #   trigger:
   #     - platform: state
@@ -131,6 +141,9 @@ automation:
       - condition: template
         value_template: >-
           {{ states.input_select.daisy_state != "Away" }}
+      - condition: template
+        value_template: >-
+          {{ states.input_select.daisy_state != "Away" }}
     action:
       - service: homeassistant.turn_on
         entity_id: input_boolean.daisy_walked
@@ -139,7 +152,7 @@ automation:
           title: "Daisy Alert"
           message: "Front door opened. Fill out the log."
 
-  - alias: Daisy log on door open Michael
+  - alias: Daisy mark outside
     trigger:
       - platform: state
         entity_id: binary_sensor.door_sensor_2
@@ -147,15 +160,89 @@ automation:
         to: "on"
     condition:
       - condition: state
-        entity_id: input_select.michael_status
+        entity_id: input_select.daisy_status
         state: "Home"
+      - condition: state
+        entity_id: input_boolean.daisy_outside
+        state: "off"
     action:
-      - service: notify.mobile_app_ergisch
+      - service: homeassistant.turn_on
+        data:
+          entity_id: input_boolean.daisy_outside 
+
+  - alias: Daisy mark inside by time
+    trigger:
+      - platform: state
+        entity_id: input_boolean.daisy_outside
+        to: "on"
+        for: 15
+    condition:
+      - condition: state
+        entity_id: input_select.daisy_status
+        state: "Home"
+      - condition: state
+        entity_id: input_boolean.daisy_outside
+        state: "on"
+    action:
+      - service: homeassistant.turn_off
+        data:
+          entity_id: input_boolean.daisy_outside 
+
+  - alias: Daisy mark inside by door
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.door_sensor_2
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_select.daisy_status
+        state: "Home"
+      - condition: state
+        entity_id: input_boolean.daisy_outside
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.door_sensor_2
+        state: "off"
+        for:
+          minutes: 2
+    action:
+      - service: homeassistant.turn_off
+        data:
+          entity_id: input_boolean.daisy_outside 
+      - service: notify.mobile_app_michaels_ipad
         data:
           title: "Daisy Alert"
-          message: "Front door opened. Click to fill log"
+          message: "Click to fill log"
+      - service_template: >-
+          {% if states.input_select.michael_status == "Home" %}
+          notify.mobile_app_ergisch
           data:
-            url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+            title: "Daisy Alert"
+            message: "Front door opened. Click to fill log"
+            data:
+              url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+          {% else %}
+          script.placeholder
+          {% endif %}
+
+  # - alias: Daisy log on door open Michael
+  #   trigger:
+  #     - platform: state
+  #       entity_id: binary_sensor.door_sensor_2
+  #       from: "off"
+  #       to: "on"
+  #   condition:
+  #     - condition: state
+  #       entity_id: input_select.michael_status
+  #       state: "Home"
+  #   action:
+  #     - service: notify.mobile_app_ergisch
+  #       data:
+  #         title: "Daisy Alert"
+  #         message: "Front door opened. Click to fill log"
+  #         data:
+  #           url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
 
   - alias: "Daisy Minimote Camille Hold"
     trigger:
@@ -177,6 +264,19 @@ automation:
               {% set runScript = "script.placeholder" %}
             {% endif %}
             {{ runScript }}
+
+  - alias: "Daisy log time updater"
+    trigger:
+      - platform: webhook
+        webhook_id: d02bf9a5-7dab-4e9f-9e1b-240b6edde23e 
+    action:
+      - service: input_datetime.set_datetime
+        data_template:
+          entity_id: input_datetime.date_and_time
+          date: >-
+            {{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}
+          time: >-
+            {{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}
 script:
   daisy_goodmorning:
     alias: Good Night Daisy
