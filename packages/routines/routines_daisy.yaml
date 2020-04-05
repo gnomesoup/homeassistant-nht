@@ -269,7 +269,7 @@ automation:
     action:
       - service: input_datetime.set_datetime
         data_template:
-          entity_id: input_datetime.date_and_time
+          entity_id: input_datetime.daisy_log_updated
           date: >-
             {{ now().timestamp() | timestamp_custom("%Y-%m-%d", true) }}
           time: >-
