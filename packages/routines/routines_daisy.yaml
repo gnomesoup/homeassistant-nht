@@ -41,7 +41,7 @@ automation:
         state: "off"
       - condition: template
         value_template: >-
-          {{ (as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed))|int % 5 == 0}}
+          {{ (((as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed))/60)|int) % 5 == 0}}
     action:
       - service: notify.mobile_app_ergisch
         data:
