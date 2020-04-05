@@ -193,7 +193,6 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.door_sensor_2
-        from: "off"
         to: "on"
     condition:
       - condition: state
@@ -202,9 +201,6 @@ automation:
       - condition: state
         entity_id: input_boolean.daisy_outside
         state: "on"
-      - condition: state
-        entity_id: binary_sensor.door_sensor_2
-        state: "off"
         for:
           minutes: 2
     action:
@@ -217,7 +213,7 @@ automation:
           message: "Click to fill log"
       - service_template: >-
           {% if states.input_select.michael_status == "Home" %}
-          notify.mobile_app_ergisch
+          service: notify.mobile_app_ergisch
           data:
             title: "Daisy Alert"
             message: "Front door opened. Click to fill log"
