@@ -16,7 +16,7 @@ automation:
       - platform: state
         entity_id: input_select.camille_status
         from: "Asleep"
-        to: "Awake"
+        to: "Home"
     condition:
       - condition: template
         value_template: >-
@@ -29,7 +29,7 @@ automation:
       - service: input_select.select_option
         data:
           entity_id: input_select.daisy_status
-          option: Home
+          option: "Home"
 
   - alias: Daisy walk first thing
     trigger:
@@ -41,18 +41,22 @@ automation:
         state: "off"
       - condition: template
         value_template: >-
-          {{ (((as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed))/60)|int) % 5 == 0}}
+          {{ states.input_select.daisy_state != "Away" }}
+      - condition: template
+        value_template: >-
+          {{ ((as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed)) / 60) > 1 and
+             (((as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed))/60)|int) % 5 == 0 }}
     action:
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+            - media_player.camille_s_speaker
+          message: "Take Daisy outside"
       - service: notify.mobile_app_ergisch
         data:
           title: "Daisy Alert"
           message: "Daisy needs to go!"
-      # - service: tts.google_translate_say
-      #   data:
-      #     entity_id:
-      #       - media_player.living_room_display
-      #       - media_player.camille_s_speaker
-      #     message: "Take Daisy outside"
 
   - alias: Daisy time to feed
     trigger: 
@@ -104,15 +108,17 @@ automation:
         entity_id: binary_sensor.door_sensor_2
         from: "off"
         to: "on"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states.input_select.daisy_state != "Away" }}
     action:
       - service: homeassistant.turn_on
         entity_id: input_boolean.daisy_walked
-  #     - service: notify.mobile_app_Michael
-  #       data:
-  #         title: "Time to feed Daisy"
-  #         message: "Click to fill log"
-  #         data:
-  #           url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+      - service: notify.mobile_app_michaels_ipad
+        data:
+          title: "Daisy Alert"
+          message: "Front door opened. Fill out the log."
 
   - alias: Daisy log on door open Michael
     trigger:
