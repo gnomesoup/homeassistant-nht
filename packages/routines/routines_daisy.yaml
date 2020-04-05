@@ -171,7 +171,7 @@ automation:
           entity_id: >-
             {% if is_state("input_select.daisy_status", "Asleep") %}
               {% set runScript = "script.daisy_goodmorning" %}
-            {% elseif is_state("input_select.daisy_status", "Home") %}
+            {% elif is_state("input_select.daisy_status", "Home") %}
               {% set runScript = "script.daisy_goodnight" %}
             {% else %}
               {% set runScript = "script.placeholder" %}
