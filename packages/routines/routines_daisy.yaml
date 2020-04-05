@@ -9,7 +9,7 @@ input_select:
 input_boolean:
   daisy_walked:
     name: "Daisy Walked"
-  
+
 automation:
   - alias: Daisy awake
     trigger:
@@ -76,4 +76,58 @@ automation:
           title: "Time to feed Daisy"
           message: "Click to fill log"
           data:
-            url: "https://forms.gle/Jo7do43m9Ti837718"
+            url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+
+  - alias: Daisy time to train
+    trigger: 
+      - platform: time
+        at: "15:00:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ states.input_select.daisy_state != "Away" }}
+    action:
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+            - media_player.camille_s_speaker
+          message: "Time to train Daisy"
+      - service: notify.mobile_app_ergisch
+        data:
+          title: "Time to feed Daisy"
+          message: "Click to fill log"
+          data:
+            url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+
+  # - alias: Daisy log on door open iPad
+  #   trigger:
+  #     - platform: state
+  #       entity_id: binary_sensor.door_sensor_2
+  #       from: "off"
+  #       to: "on"
+  #   action:
+  #     - service: notify.mobile_app_Michael
+  #       data:
+  #         title: "Time to feed Daisy"
+  #         message: "Click to fill log"
+  #         data:
+  #           url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+
+  - alias: Daisy log on door open Michael
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.door_sensor_2
+        from: "off"
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_select.michael_status
+        state: "Home"
+    action:
+      - service: notify.mobile_app_ergisch
+        data:
+          title: "Daisy Alert"
+          message: "Front door opened. Click to fill log"
+          data:
+            url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
