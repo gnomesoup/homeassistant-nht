@@ -20,7 +20,8 @@ input_datetime:
     has_time: true
 
 automation:
-  - alias: "Daisy mark awake on motion"
+  - alias: Daisy mark awake on motion
+    # When Daisy is marked "asleep" set her to home if there is motion in Camille's bedroom
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_camille_bedroom
@@ -30,6 +31,9 @@ automation:
       - condition: state
         entity_id: input_select.daisy_status
         state: "Asleep"
+      - condition: time
+        after: "05:00:00"
+        before: "12:00:00"
     action:
       - service: homeassistant.turn_off
         data:
@@ -40,27 +44,8 @@ automation:
           entity_id: input_select.daisy_status
           option: "Home"
 
-  # - alias: Daisy awake
-  #   trigger:
-  #     - platform: state
-  #       entity_id: input_select.camille_status
-  #       from: "Asleep"
-  #       to: "Home"
-  #   condition:
-  #     - condition: template
-  #       value_template: >-
-  #         {{ states.input_select.daisy_state != "Away" }}
-  #   action:
-  #     - service: homeassistant.turn_off
-  #       data:
-  #         entity_id:
-  #           - input_boolean.daisy_walked
-  #     - service: input_select.select_option
-  #       data:
-  #         entity_id: input_select.daisy_status
-  #         option: "Home"
-
-  - alias: Daisy walk first thing
+  - alias: Daisy needs to go outside
+    # If "Daisy Walked" is not on, remind us every 5 minutes to take her out
     trigger:
       - platform: time_pattern
         minutes: "/1"
@@ -88,6 +73,7 @@ automation:
           message: "Daisy needs to go!"
 
   - alias: Daisy time to feed
+    # Send a notification that Daisy needs dinner
     trigger: 
       - platform: time
         at: "17:00:00"
@@ -110,6 +96,7 @@ automation:
             url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
 
   - alias: Daisy time to train
+    # Send notification that it is time to train daisy
     trigger: 
       - platform: time
         at: "15:00:00"
@@ -131,7 +118,9 @@ automation:
           data:
             url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
 
-  - alias: Daisy mark walked on door open
+  - alias: Daisy actions on door open
+    # turn off "Daisy Walked" when the door opens
+    # if the script "daisy go outside delay" is running, turn it off
     trigger:
       - platform: state
         entity_id: binary_sensor.door_sensor_2
@@ -141,18 +130,15 @@ automation:
       - condition: template
         value_template: >-
           {{ states.input_select.daisy_state != "Away" }}
-      - condition: template
-        value_template: >-
-          {{ states.input_select.daisy_state != "Away" }}
     action:
       - service: homeassistant.turn_on
         entity_id: input_boolean.daisy_walked
-      - service: notify.mobile_app_michaels_ipad
-        data:
-          title: "Daisy Alert"
-          message: "Front door opened. Fill out the log."
+      - service: script.turn_off
+        entity_id: script.daisy_go_outside_delay
 
   - alias: Daisy mark outside
+    # If the front door is opened and daisy is not outside mark her as being outside
+    # TODO Can this be merged with the above script?
     trigger:
       - platform: state
         entity_id: binary_sensor.door_sensor_2
@@ -171,6 +157,7 @@ automation:
           entity_id: input_boolean.daisy_outside 
 
   - alias: Daisy mark inside by time
+    # If the door doesn't reopen after 15 minutes, assume daisy wasn't going outside
     trigger:
       - platform: state
         entity_id: input_boolean.daisy_outside
@@ -190,6 +177,8 @@ automation:
           entity_id: input_boolean.daisy_outside 
 
   - alias: Daisy mark inside by door
+    # If Daisy is marked outside, and the door opens again after at least 2 minutes.
+    # Prompt us for logging of activities
     trigger:
       - platform: state
         entity_id: binary_sensor.door_sensor_2
@@ -211,35 +200,12 @@ automation:
         data:
           title: "Daisy Alert"
           message: "Click to fill log"
-      - service_template: >-
-          {% if states.input_select.michael_status == "Home" %}
-          service: notify.mobile_app_ergisch
+      - service: notify.mobile_app_ergisch
+        data:
+          title: "Daisy Alert"
+          message: "Front door opened. Click to fill log"
           data:
-            title: "Daisy Alert"
-            message: "Front door opened. Click to fill log"
-            data:
-              url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
-          {% else %}
-          script.placeholder
-          {% endif %}
-
-  # - alias: Daisy log on door open Michael
-  #   trigger:
-  #     - platform: state
-  #       entity_id: binary_sensor.door_sensor_2
-  #       from: "off"
-  #       to: "on"
-  #   condition:
-  #     - condition: state
-  #       entity_id: input_select.michael_status
-  #       state: "Home"
-  #   action:
-  #     - service: notify.mobile_app_ergisch
-  #       data:
-  #         title: "Daisy Alert"
-  #         message: "Front door opened. Click to fill log"
-  #         data:
-  #           url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+            url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
 
   - alias: "Daisy Minimote Camille Hold"
     trigger:
@@ -290,3 +256,11 @@ script:
         data:
           entity_id: input_select.daisy_status
           option: "Asleep"
+
+  daisy_go_outside_delay:
+    alias: Delay after feeding to go outside
+    sequence:
+      - delay: "01:30:00"
+      - service: homeassistant.turn_off
+        data:
+          entity_id: input_boolean.daisy_walked
