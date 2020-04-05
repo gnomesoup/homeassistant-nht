@@ -33,15 +33,19 @@ automation:
 
   - alias: Daisy walk first thing
     trigger:
-      - platform: template
-        value_template: >-
-          {{ (as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.input_boolean.daisy_walked.last_changed))|int % 5 == 0}}
+      - platform: time_pattern
+        mintues: "/1"
     condition:
       - condition: state
         entity_id: input_boolean.daisy_walked
         state: "off"
+      - condition: template
+        value_template: >-
+          {{ (as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.input_boolean.daisy_walked.last_changed))|int % 5 == 0}}
     action:
-      - service: notify.mobile_app_ergisch
+      - service:
+          - notify.mobile_app_ergisch
+          - notify.mobile_app_michaels_ipad
         data:
           title: "Daisy Alert"
           message: "Daisy needs to go!"
