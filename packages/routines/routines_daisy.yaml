@@ -33,28 +33,24 @@ automation:
 
   - alias: Daisy walk first thing
     trigger:
-      - platform: state
-        entity_id: input_boolean.daisy_walked
-        to: "off"
-        for:
-          minutes: 5
-      - platform: state
-        entity_id: input_boolean.daisy_walked
-        to: "off"
-        for:
-          minutes: 10
+      - platform: template
+        template: >-
+          {{ (as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.input_boolean.daisy_walked.last_changed))|int % 5 == 0}}
     condition:
-      - condition: template
-        value_template: >-
-          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.binary_sensor.door_sensor_2.last_changed) >
-             as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.input_boolean.daisy_walked.last_changed)}}
+      - condition: state
+        entity_id: input_boolean.daisy_walked
+        state: "off"
     action:
-      - service: tts.google_translate_say
+      - service: notify.mobile_app_ergisch
         data:
-          entity_id:
-            - media_player.living_room_display
-            - media_player.camille_s_speaker
-          message: "Take Daisy outside"
+          title: "Daisy Alert"
+          message: "Daisy needs to go!"
+      # - service: tts.google_translate_say
+      #   data:
+      #     entity_id:
+      #       - media_player.living_room_display
+      #       - media_player.camille_s_speaker
+      #     message: "Take Daisy outside"
 
   - alias: Daisy time to feed
     trigger: 
@@ -100,13 +96,15 @@ automation:
           data:
             url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
 
-  # - alias: Daisy log on door open iPad
-  #   trigger:
-  #     - platform: state
-  #       entity_id: binary_sensor.door_sensor_2
-  #       from: "off"
-  #       to: "on"
-  #   action:
+  - alias: Daisy mark walked on door open
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.door_sensor_2
+        from: "off"
+        to: "on"
+    action:
+      - service: homeassistant.turn_on
+        entity_id: input_boolean.daisy_walked
   #     - service: notify.mobile_app_Michael
   #       data:
   #         title: "Time to feed Daisy"
