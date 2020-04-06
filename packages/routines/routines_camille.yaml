@@ -98,6 +98,9 @@ automation:
       - service: homeassistant.turn_on
         data:
           entity_id: group.lights_bedroom_camille
+      - service: homeassistant.turn_off
+        data:
+          entity_id: automation.lights_on_motion_camille_s_room
 
   - alias: "Minimote Camille Push 1"
     trigger:
