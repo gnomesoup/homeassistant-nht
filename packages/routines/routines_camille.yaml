@@ -295,16 +295,17 @@ script:
         data:
           entity_id: media_player.camille_s_speaker
           volume_level: 0.5
-      - entity_id:
-          - input_boolean.alarm_set_camille
-          - input_boolean.school_day
-        service_template: >-
-          {% if states("sensor.weekday") == "Friday" or
-             states("sensor.weekday") == "Saturday" %}
-          homeassistant.turn_off
-          {% else %}
-          homeassistant.turn_on
-          {% endif %}
+      # - entity_id:
+      #     - input_boolean.alarm_set_camille
+      #     - input_boolean.school_day
+      #   service_template: >-
+      #     {% if states("sensor.weekday") == "Friday" or
+      #        states("sensor.weekday") == "Saturday" %}
+      #     homeassistant.turn_off
+      #     {% else %}
+      #     homeassistant.turn_on
+      #     {% endif %}
+      - service: script.daisy_goodnight
       - service: notify.notify
         data_template:
           title: "Camille"
