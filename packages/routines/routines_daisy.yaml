@@ -27,6 +27,10 @@ automation:
         entity_id: binary_sensor.motion_camille_bedroom
         from: "off"
         to: "on"
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        from: "armed_night"
+        to: "disarmed"
     condition:
       - condition: state
         entity_id: input_select.daisy_status
@@ -34,15 +38,12 @@ automation:
       - condition: time
         after: "05:00:00"
         before: "12:00:00"
+      - condition: template
+        value_template: >-
+          {{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.motion_camille_bedroom.last_changed)) / 60) < 2 or
+             (states.alarm_control_panel.home_alarm.state == "disarmed")}}
     action:
-      - service: homeassistant.turn_off
-        data:
-          entity_id:
-            - input_boolean.daisy_walked
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.daisy_status
-          option: "Home"
+      - service: script.daisy_goodmorning
 
   - alias: Daisy needs to go outside
     # If "Daisy Walked" is not on, remind us every 5 minutes to take her out
@@ -94,6 +95,7 @@ automation:
           message: "Click to fill log"
           data:
             url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
+      - service: script.daisy_go_outside_delay
 
   - alias: Daisy time to train
     # Send notification that it is time to train daisy
@@ -113,7 +115,7 @@ automation:
           message: "Time to train Daisy"
       - service: notify.mobile_app_ergisch
         data:
-          title: "Time to feed Daisy"
+          title: "Time to train Daisy"
           message: "Click to fill log"
           data:
             url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
@@ -241,13 +243,17 @@ automation:
           time: >-
             {{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}
 script:
-  daisy_goodmorning:
-    alias: Good Night Daisy
+  daisy_good morning:
+    alias: Good Morning Daisy
     sequence:
       - service: input_select.select_option
         data:
           entity_id: input_select.daisy_status
           option: "Home"
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - input_boolean.daisy_walked
 
   daisy_goodnight:
     alias: Good Night Daisy
