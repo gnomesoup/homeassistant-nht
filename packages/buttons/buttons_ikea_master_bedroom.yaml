@@ -10,7 +10,7 @@ automation:
       - data:
           entity_id: group.lights_master_bedroom
         service_template: >-
-          {% if group.lights_master_bedroom.state == "on" %}
+          {% if group.lights_master_bedroom.state == "off" %}
           homeassistant.turn_on
           {% else %}
           homeassistant.turn_off
