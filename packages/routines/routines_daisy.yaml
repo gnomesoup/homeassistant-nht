@@ -243,7 +243,7 @@ automation:
           time: >-
             {{ now().timestamp() | timestamp_custom("%H:%M:%S", true) }}
 script:
-  daisy_good morning:
+  daisy_goodmorning:
     alias: Good Morning Daisy
     sequence:
       - service: input_select.select_option
