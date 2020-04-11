@@ -32,7 +32,7 @@ automation:
         event_type: zha_event
         event_data:
           device_ieee: "ec:1b:bd:ff:fe:f4:30:29"
-          command: "step_with_on_off"
+          command: "step"
     action:
       - service: homeassistant.turn_on
         data_template:
