@@ -38,7 +38,7 @@ automation:
         data_template:
           entity_id: light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
           brightness: >-
-            {% if state_attr("light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off", "brightness") >= 25 %}
+            {% if state_attr("light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off", "brightness") <= 25 %}
             1
             {% else %}
             {{ state_attr("light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off", "brightness") - 25 }}
