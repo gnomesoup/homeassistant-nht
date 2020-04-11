@@ -1,5 +1,6 @@
+#Living room remote
 automation:
-  - alias: "Ikea Remote Power Button"
+  - alias: "Ikea Remote 1 Power Button"
     trigger:
       - platform: event
         event_type: zha_event
