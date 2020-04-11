@@ -9,15 +9,15 @@ automation:
     action:
       - data_template:
           entity_id: >-
-            - group.lights_master_bedroom
-            {% if is_state("binary_sensor.door_sensor_1", "off") -%}
-            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
+            group.lights_master_bedroom
+            {%- if is_state("binary_sensor.door_sensor_1", "on") -%}
+            ,light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
             {%- endif %}
-            {% if is_state("binary_sensor.door_sensor_3", "off") -%}
-            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
+            {%- if is_state("binary_sensor.door_sensor_3", "on") -%}
+            ,light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
             {%- endif %}          
         service_template: >-
-          {% if is_state("group.lights_master_bedroom", "off") %}
+          {% if is_state("group.lights_master_bedroom_and_closets", "off") %}
           homeassistant.turn_on
           {% else %}
           homeassistant.turn_off
