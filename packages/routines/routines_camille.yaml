@@ -160,6 +160,8 @@ automation:
     trigger:
       - platform: state
         entity_id: input_boolean.minimote_camille_7
+    action:
+      - service: homeassistant.toggle
         data:
           entity_id:
             - light.ge_appliances_zll_light_1b550600_level_on_off
