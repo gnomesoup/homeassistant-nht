@@ -28,8 +28,12 @@ group:
     name: Lights in Camille's Room
     entities:
       - light.grandma_s_lamp
+      # Canopy lights
       - switch.zooz_zen20_v2_0_power_strip_switch
+      # Loft lamp
       - switch.zooz_zen20_v2_0_power_strip_switch_3
+      # Camille's Closet
+      - light.ge_appliances_zll_light_1b550600_level_on_off
 
 automation:
   - alias: Set status for Camille
@@ -150,7 +154,15 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-          - light.grandma_s_lamp
+            - light.grandma_s_lamp
+
+  - alias: "Minimote Camille Push 4"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_camille_7
+        data:
+          entity_id:
+            - light.ge_appliances_zll_light_1b550600_level_on_off
 
   - alias: "Wakeup Alarm Repeat Camille"
     initial_state: false
@@ -239,15 +251,11 @@ automation:
         data:
           scene_id: school_notify_before_state
           snapshot_entities:
-            - light.hallway_light
             - light.grandma_s_lamp
-            - light.aeon_labs_zw111_nano_dimmer_level_4
       - service: homeassistant.turn_off
         data:
           entity_id:
-            - light.hallway_light
             - light.grandma_s_lamp
-            - light.aeon_labs_zw111_nano_dimmer_level_4
             - input_boolean.school_day
       - service: tts.google_translate_say
         data:

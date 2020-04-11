@@ -76,7 +76,6 @@ script:
       - service: light.turn_off
         data:
           entity_id:
-            - light.ge_appliances_zll_light_1b550600_level_on_off
             - light.aeotec_zw111_nano_dimmer_level
             - light.aeotec_zw111_nano_dimmer_level_3
       - service: switch.turn_on
@@ -96,7 +95,6 @@ script:
           entity_id:
             # - light.aeotec_zw111_nano_dimmer_level
             # - light.aeotec_zw111_nano_dimmer_level_3
-            - light.ge_appliances_zll_light_1b550600_level_on_off
             - light.living_room_lamp
             # - light.aeon_labs_zw111_nano_dimmer_level_3
             # - light.aeon_labs_zw111_nano_dimmer_level_4
