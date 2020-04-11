@@ -7,6 +7,11 @@ automation:
           device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
           command: "toggle"
     action:
-      - service: homeassistant.toggle
-        data:
+      - data:
           entity_id: group.lights_master_bedroom
+        service_template: >-
+          {% if group.lights_master_bedroom.state == "on" %}
+          homeassistant.turn_on
+          {% else %}
+          homeassistant.turn_off
+          {% endif %}
