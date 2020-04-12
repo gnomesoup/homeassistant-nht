@@ -165,6 +165,14 @@ automation:
           homeassistant.turn_off
           {% endif %}
 
+  - alias: "Whole House Pandemic Light Party at 8pm"
+    trigger:
+      - platform: time
+        at: '20:00:00'
+    action:
+      - service: script.whole_house_lights_pandemic_flash
+
+
 script:
   turn_everything_off:
     alias: "Turn everything off"
@@ -213,6 +221,30 @@ script:
   whole_house_lights_pandemic_flash:
     alias: "Flash all lights for the pandemic party"
     sequence:
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
       - service: homeassistant.toggle
         data:
           entity_id: group.lights_switches_for_flashing
