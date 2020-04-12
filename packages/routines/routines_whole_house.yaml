@@ -40,21 +40,24 @@ group:
       # Accordion Lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
 
-  lights_that_flash:
-    name: All lights that can flash
+  lights_switches_for_flashing:
+    name: All lights that are good for flashing
     entities:
-      # Master closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-      # Laundry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
-      # Entry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
       # Bedroom lamp left
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
       # Accordion Lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
       # Camille's closet light
       - light.ge_appliances_zll_light_1b550600_level_on_off
+      - switch.bedroom_canopy
+      # Nani' lamp
+      - switch.aeon_labs_zw096_smart_switch_6_switch
+      # Living room lamp lefty
+      - switch.aeon_labs_zw096_smart_switch_6_switch_2
+      - light.living_room_lamp
+      - light.metal_lamp
+      - light.entry_light
+      - light.bedroom_lamp
 
   switches_whole_house:
     name: All switches in the house
@@ -207,10 +210,13 @@ script:
             - switch.aeon_labs_zw096_smart_switch_6_switch
             - switch.aeon_labs_zw096_smart_switch_6_switch_2
 
-  flash_all_lights_that_flash:
-    alias: "Flash all lights with flash capability"
+  whole_house_lights_pandemic_flash:
+    alias: "Flash all lights for the pandemic party"
     sequence:
-      - service: light.turn_on
+      - service: homeassistant.toggle
         data:
-          entity_id: group.lights_that_flash
-          flash: long
+          entity_id: group.lights_switches_for_flashing
+      - delay: "00:00:02"
+      - service: homeassistant.toggle
+        data:
+          entity_id: group.lights_switches_for_flashing
