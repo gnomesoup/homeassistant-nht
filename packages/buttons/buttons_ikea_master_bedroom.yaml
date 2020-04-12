@@ -22,3 +22,63 @@ automation:
           {% else %}
           homeassistant.turn_off
           {% endif %}
+
+  - alias: "Ikea Remote 3 Dim Up Step"
+    trigger:
+      - platform: event
+        event_type: zha_event
+        event_data:
+          device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
+          command: "step_with_on_off"
+      - platform: event
+        event_type: zha_event
+        event_data:
+          device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
+          command: "move_with_on_off"
+    action:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: group.lights_master_bedroom
+          brightness: >-
+            {%- set lightAvg = namespace(total = 0, count=0) -%}
+            {%- set lightList = state_attr("group.lights_master_bedroom", "entity_id") -%}
+            {%- for light in lightList -%}
+            {%- set lightAvg.total = lightAvg.total + state_attr(light, 'brightness') -%}
+            {%- set lightAvg.count = loop.index -%}
+            {%- endfor -%}
+            {%- set newBrightness = (lightAvg.total / lightAvg.count)|int + 32 -%}
+            {%- if newBrightness > 255 -%}
+            255
+            {% else %}
+            {{ newBrightness + 32 }}
+            {% endif %}
+
+  - alias: "Ikea Remote 3 Dim Down Step"
+    trigger:
+      - platform: event
+        event_type: zha_event
+        event_data:
+          device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
+          command: "step"
+      - platform: event
+        event_type: zha_event
+        event_data:
+          device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
+          command: "move"
+    action:
+      - service: homeassistant.turn_on
+        data_template:
+          entity_id: group.lights_master_bedroom
+          brightness: >-
+            {%- set lightAvg = namespace(total = 0, count=0) -%}
+            {%- set lightList = state_attr("group.lights_master_bedroom", "entity_id") -%}
+            {%- for light in lightList -%}
+            {%- set lightAvg.total = lightAvg.total + state_attr(light, 'brightness') -%}
+            {%- set lightAvg.count = loop.index -%}
+            {%- endfor -%}
+            {%- set newBrightness = (lightAvg.total / lightAvg.count)|int - 32 -%}
+            {%- if newBrightness < 1 -%}
+            1
+            {% else %}
+            {{ newBrightness }}
+            {% endif %}
