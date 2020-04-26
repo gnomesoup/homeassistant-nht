@@ -221,6 +221,9 @@ script:
   whole_house_lights_pandemic_flash:
     alias: "Flash all lights for the pandemic party"
     sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.jasco_products_14284_outdoor_smart_switch_switch
       - service: homeassistant.toggle
         data:
           entity_id: group.lights_switches_for_flashing
@@ -252,3 +255,7 @@ script:
       - service: homeassistant.toggle
         data:
           entity_id: group.lights_switches_for_flashing
+      - delay: "00:10:00"
+      - service: homeassistant.turn_off
+        data:
+          entity_id: switch.jasco_products_14284_outdoor_smart_switch_switch
