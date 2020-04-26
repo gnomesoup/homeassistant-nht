@@ -21,6 +21,11 @@ binary_sensor:
         friendly_name: "Bathroom Door"
         value_template: >-
           {{ states.sensor.linear_wadwaz_1_door_window_sensor_alarm_level_4.state|float > 0 }}
+      door_sensor_5:
+        device_class: opening
+        friendly_name: "Kitchen Cabinet Door"
+        value_template: >-
+          {{ states.sensor.linear_nortek_security_control_llc_wadwaz_1_door_window_sensor_alarm_level|float > 0 }}
 
 input_boolean:
   door_alert_delay:
