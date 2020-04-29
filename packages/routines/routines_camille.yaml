@@ -271,6 +271,17 @@ automation:
         data:
           entity_id: scene.school_notify_before_state
 
+  - alias: "Camille take meds"
+    trigger:
+      - platform: time_pattern
+
+      - platform: state
+        entity_id: input_select.camille_status
+        to: "Home"
+        for:
+          minutes: 60
+    action: script.camille_notify_meds
+
 script:
   goodmorning_camille:
     alias: Goodmorning Camille
@@ -325,3 +336,13 @@ script:
             {%- if is_state("input_boolean.alarm_set_camille", "on") %} for{{ " " }}
             {{- states("input_datetime.alarm_time_camille")[0:5] }}
             {%- endif %}.
+
+  camille_meds_notify:
+    alias: Camille notify about meds
+    sequence:
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+            - media_player.camille_s_speaker
+          message: "Did you take your meds?"
