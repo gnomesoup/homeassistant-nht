@@ -273,14 +273,17 @@ automation:
 
   - alias: "Camille take meds"
     trigger:
-      - platform: time_pattern
-
       - platform: state
         entity_id: input_select.camille_status
         to: "Home"
         for:
           minutes: 60
-    action: script.camille_notify_meds
+    condition:
+      - condition: template
+        value_template: >-
+          {{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.door_sensor_5.last_changed)) / 60) > 60 }}
+    action: 
+      - service: script.camille_meds_notify
 
 script:
   goodmorning_camille:
