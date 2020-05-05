@@ -50,12 +50,11 @@ group:
       # Camille's closet light
       - light.ge_appliances_zll_light_1b550600_level_on_off
       - switch.bedroom_canopy
-      # Nani' lamp
+      # Nani's lamp
       - switch.aeon_labs_zw096_smart_switch_6_switch
       # Living room lamp lefty
       - switch.aeon_labs_zw096_smart_switch_6_switch_2
-      - light.living_room_lamp
-      - light.metal_lamp
+      - light.living_room_lamp - light.metal_lamp
       - light.entry_light
       - light.bedroom_lamp
 
@@ -169,6 +168,8 @@ automation:
     trigger:
       - platform: time
         at: '20:00:00'
+      - platform: time
+        at: '20:30:00'
     action:
       - service: script.whole_house_lights_pandemic_flash
 
