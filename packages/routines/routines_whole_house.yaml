@@ -54,7 +54,8 @@ group:
       - switch.aeon_labs_zw096_smart_switch_6_switch
       # Living room lamp lefty
       - switch.aeon_labs_zw096_smart_switch_6_switch_2
-      - light.living_room_lamp - light.metal_lamp
+      - light.living_room_lamp 
+      - light.metal_lamp
       - light.entry_light
       - light.bedroom_lamp
 
