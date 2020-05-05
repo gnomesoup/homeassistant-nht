@@ -277,13 +277,39 @@ automation:
         entity_id: input_select.camille_status
         to: "Home"
         for:
-          minutes: 60
+          minutes: 55
     condition:
       - condition: template
         value_template: >-
           {{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.door_sensor_5.last_changed)) / 60) > 60 }}
     action: 
       - service: script.camille_meds_notify
+
+  - alias: "Camille Brush Teeth Morning"
+    trigger:
+      - platform: state
+        entity_id: input_select.camille_status
+        to: "Home"
+        for:
+          minutes: 60
+    condition:
+      - condition: time
+        after: "05:00:00"
+        before: "11:00:00"
+    action:
+      - service: script.camille_brush_teeth_notify
+
+  - alias: "Camille Brush Teeth Evening"
+    trigger:
+      - platform: time
+        at: "20:45:00"
+    condition:
+      - condition: state
+        entity_id: input_select.camille_status
+        state: "Home"
+    action:
+      - service: script.camille_brush_teeth_notify
+        
 
 script:
   goodmorning_camille:
@@ -349,3 +375,13 @@ script:
             - media_player.living_room_display
             - media_player.camille_s_speaker
           message: "Did you take your meds?"
+
+  camille_brush_teeth_notify:
+    alias: Camille remind to brush teeth
+    sequence:
+      - service: tts.google_translate_say
+        data:
+          entity_id:
+            - media_player.living_room_display
+            - media_player.camille_s_speaker
+          message: "Camille, did you brush your teeth?"
