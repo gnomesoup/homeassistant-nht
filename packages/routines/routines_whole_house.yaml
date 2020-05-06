@@ -168,8 +168,6 @@ automation:
   - alias: "Whole House Pandemic Light Party at 8pm"
     trigger:
       - platform: time
-        at: '20:00:00'
-      - platform: time
         at: '20:30:00'
     action:
       - service: script.whole_house_lights_pandemic_flash
