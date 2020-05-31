@@ -1,11 +1,11 @@
 aarlo:
   username: !secret arloUsername
   password: !secret arloPassword
-  refresh_devices_every: 6
+  refresh_devices_every: 2
+  stream_timeout: 120
 
 camera:
   - platform: aarlo
-    ffmpeg_arguments: '-pred 1 -q:v 2'
 
 alarm_control_panel:
   - platform: aarlo

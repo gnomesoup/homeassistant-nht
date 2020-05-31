@@ -1,6 +1,3 @@
-http:
-  base_url: !secret ha_url
-
 withings:
   client_id: !secret withings_client_id
   client_secret: !secret withings_client_secret
