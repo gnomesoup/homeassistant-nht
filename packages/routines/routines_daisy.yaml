@@ -258,7 +258,7 @@ script:
   daisy_go_outside_delay:
     alias: Delay after feeding to go outside
     sequence:
-      - delay: "01:30:00"
+      - delay: "03:45:00"
       - service: homeassistant.turn_off
         data:
           entity_id: input_boolean.daisy_walked
