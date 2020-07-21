@@ -242,6 +242,7 @@ script:
         data:
           entity_id: input_select.daisy_status
           option: "Home"
+      - delay: "00:30:00"
       - service: homeassistant.turn_off
         data:
           entity_id:
