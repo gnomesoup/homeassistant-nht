@@ -133,7 +133,6 @@ automation:
         to: "on"
     condition:
       - condition: template
-        entity_id: input_select.angela_status
         value_template: >-
           {{ states("input_select.angela_status") != "Home" and
              states("input_select.michael_status") != "Home" and
