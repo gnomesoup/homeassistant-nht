@@ -191,7 +191,6 @@ recorder:
       - sensor.spruce_sensor_6237_temperature_measurement
       - sensor.time
       - sensor.weekday
-      # - sensor.yr_symbol
       - sensor.zooz_zen06_current
       - sensor.zooz_zen06_previous_reading
       - sensor.zooz_zen20_v2_0_power_strip_alarm_type
