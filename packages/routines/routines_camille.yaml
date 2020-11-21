@@ -36,26 +36,6 @@ group:
       - light.ge_appliances_zll_light_1b550600_level_on_off
 
 automation:
-  - alias: Set status for Camille
-    trigger:
-      - platform: state
-        entity_id: person.camille
-    condition:
-      - condition: template
-        value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
-    action:
-      - service: input_select.select_option
-        data_template:
-          entity_id: input_select.camille_status
-          option: >-
-              {% if states("person.camille") == "home" %}
-              Home
-              {% elif states("person.camille") == "School" %}
-              School
-              {% else %}
-              Away
-              {% endif %}
-
   - alias: Wakeup Camille
     trigger:
       - platform: template

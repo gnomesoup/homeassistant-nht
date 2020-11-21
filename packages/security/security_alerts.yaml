@@ -133,9 +133,10 @@ automation:
         to: "on"
     condition:
       - condition: template
+        entity_id: input_select.angela_status
         value_template: >-
-          {{ states("person.angela") != "home" and
-             states("person.michael") != "home" and
+          {{ states("input_select.angela_status") != "Home" and
+             states("input_select.michael_status") != "Home" and
              is_state("input_boolean.in_home_services", "off")}}
     action:
       - service: tts.google_say

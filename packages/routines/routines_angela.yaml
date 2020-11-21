@@ -19,26 +19,6 @@ input_select:
     #   {% endif %}
 
 automation:
-  - alias: Set status for Angela
-    trigger:
-      - platform: state
-        entity_id: person.angela
-    condition:
-      - condition: template
-        value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
-    action:
-      - service: input_select.select_option
-        data_template:
-          entity_id: input_select.angela_status
-          option: >-
-              {% if states("person.angela") == "home" %}
-              Home
-              {% elif states("person.angela") == "Work Angela" %}
-              Work
-              {% else %}
-              Away
-              {% endif %}
-
   - alias: Set status for Angela asleep
     trigger:
       - platform: state
