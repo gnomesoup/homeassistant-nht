@@ -1,4 +1,2 @@
 logger:
   default: info
-  logs:
-    pyaarlo: debug
