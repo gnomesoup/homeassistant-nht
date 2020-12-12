@@ -1,7 +1,7 @@
 notify:
   - name: master_ha_notify
     platform: rest
-    resource: http://192.168.40.163:8122/api/services/notify/notify
+    resource: http://192.168.40.159:8122/api/services/notify/notify
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
@@ -9,7 +9,7 @@ notify:
     message_param_name: message
   - name: master_ha_michael
     platform: rest
-    resource: http://192.168.40.163:8122/api/services/notify/michael
+    resource: http://192.168.40.159:8122/api/services/notify/michael
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
@@ -17,7 +17,7 @@ notify:
     message_param_name: message
   - name: master_ha_angela
     platform: rest
-    resource: http://192.168.40.163:8122/api/services/notify/angela
+    resource: http://192.168.40.159:8122/api/services/notify/angela
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
@@ -25,7 +25,7 @@ notify:
     message_param_name: message
   - name: master_ha_camille
     platform: rest
-    resource: http://192.168.40.163:8122/api/services/notify/camille
+    resource: http://192.168.40.159:8122/api/services/notify/camille
     method: POST_JSON
     headers:
       Authorization: !secret master_ha_header
