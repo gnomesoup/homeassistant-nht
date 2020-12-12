@@ -60,7 +60,7 @@ automation:
             - media_player.living_room_display
             - media_player.camille_s_speaker
           message: "Take Daisy outside"
-      - service: notify.mobile_app_ergisch
+      - service: notify.master_ha_michael
         data:
           title: "Daisy Alert"
           message: "Daisy needs to go!"
@@ -81,7 +81,7 @@ automation:
             - media_player.living_room_display
             - media_player.camille_s_speaker
           message: "Time to feed Daisy"
-      - service: notify.mobile_app_ergisch
+      - service: notify.master_ha_michael
         data:
           title: "Time to feed Daisy"
           message: "Click to fill log"
@@ -105,7 +105,7 @@ automation:
             - media_player.living_room_display
             - media_player.camille_s_speaker
           message: "Time to train Daisy"
-      - service: notify.mobile_app_ergisch
+      - service: notify.master_ha_michael
         data:
           title: "Time to train Daisy"
           message: "Click to fill log"
@@ -194,7 +194,7 @@ automation:
         data:
           title: "Daisy Alert"
           message: "Click to fill log"
-      - service: notify.mobile_app_ergisch
+      - service: notify.master_ha_michael
         data:
           title: "Daisy Alert"
           message: "Front door opened. Click to fill log"

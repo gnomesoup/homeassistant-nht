@@ -1,20 +1,40 @@
 notify:
+  - name: master_ha_notify
+    platform: rest
+    resource: http://192.168.40.163:8122/api/services/notify/notify
+    method: POST_JSON
+    headers:
+      Authorization: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
+  - name: master_ha_michael
+    platform: rest
+    resource: http://192.168.40.163:8122/api/services/notify/michael
+    method: POST_JSON
+    headers:
+      Authorization: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
+  - name: master_ha_angela
+    platform: rest
+    resource: http://192.168.40.163:8122/api/services/notify/angela
+    method: POST_JSON
+    headers:
+      Authorization: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
+  - name: master_ha_camille
+    platform: rest
+    resource: http://192.168.40.163:8122/api/services/notify/camille
+    method: POST_JSON
+    headers:
+      Authorization: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
   - name: Security_Verbose
     platform: group
     services:
-      - service: mobile_app_ergisch
-      - service: firebase_hassio
-        platform: html5
-        vapid_pub_key: !secret firebaseHtml5Public
-        vapid_prv_key: !secret firebaseHtml5Private
-        vapid_email: !secret firebaseHtml5Email
-
-
-  - name: firebase_hassio
-    platform: html5
-    vapid_pub_key: !secret firebaseHtml5Public
-    vapid_prv_key: !secret firebaseHtml5Private
-    vapid_email: !secret firebaseHtml5Email
+      - service: master_ha_michael
 
 input_select:
   notify_level_michael:
