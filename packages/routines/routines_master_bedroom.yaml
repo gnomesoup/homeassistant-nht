@@ -2,18 +2,18 @@ group:
   lights_master_bedroom:
     name: "Lights Master Bedroom"
     entities:
-      - light.bedroom_lamp
-      - light.metal_lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
+      - light.ge_appliances_zll_light_3aae1600_level_on_off
+      - light.ge_appliances_zll_light_49251600_level_on_off
 
   lights_master_bedroom_and_closets:
     name: "Lights in Master Bedroom and Closets"
     entities:
-      - light.bedroom_lamp
-      - light.metal_lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
+      - light.ge_appliances_zll_light_3aae1600_level_on_off
+      - light.ge_appliances_zll_light_49251600_level_on_off
 
 automation:
   - alias: "Master Bedroom Lights on motion"
