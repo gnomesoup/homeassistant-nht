@@ -27,7 +27,8 @@ group:
   lights_bedroom_camille:
     name: Lights in Camille's Room
     entities:
-      - light.grandma_s_lamp
+      # Grandma's Lamp
+      - light.philips_lwb006_097e3010_level_on_off
       # Canopy lights
       - switch.zooz_zen20_v2_0_power_strip_switch
       # Loft lamp
@@ -134,7 +135,7 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-            - light.grandma_s_lamp
+            - light.philips_lwb006_097e3010_level_on_off
 
   - alias: "Minimote Camille Push 4"
     trigger:
