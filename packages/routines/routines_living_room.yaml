@@ -2,18 +2,18 @@ group:
   lights_living_room:
     name: Living Room Lights
     entities:
-      - light.living_room_lamp
+      - light.ge_appliances_zll_light_15cd1400_level_on_off
+      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
   switches_living_room:
     name: Living Room Switches
     entities:
-      - switch.aeon_labs_zw096_smart_switch_6_switch
       - switch.aeon_labs_zw096_smart_switch_6_switch_2
   lights_switches_living_room:
     name: Living Room Switches
     entities:
-      - switch.aeon_labs_zw096_smart_switch_6_switch
+      - light.ge_appliances_zll_light_15cd1400_level_on_off
+      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
       - switch.aeon_labs_zw096_smart_switch_6_switch_2
-      - light.living_room_lamp
 
 automation:
   - alias: Wakeup Living Room
@@ -69,19 +69,13 @@ script:
       - service: light.turn_on
         data:
           entity_id:
-            - light.living_room_lamp
-            - light.aeon_labs_zw111_nano_dimmer_level_3
-            - light.aeon_labs_zw111_nano_dimmer_level_4
-          brightness: 64
-      - service: light.turn_off
+            - light.ge_appliances_zll_light_15cd1400_level_on_off
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
+          brightness: 10
+      - service: homeassistant.turn_off
         data:
           entity_id:
-            - light.aeotec_zw111_nano_dimmer_level
-            - light.aeotec_zw111_nano_dimmer_level_3
-      - service: switch.turn_on
-        data:
-          entity_id:
-            - switch.bedroom_canopy
+            - switch.aeon_labs_zw096_smart_switch_6_switch_2
 
   goodmorning_living_room:
     alias: Goodmorning Living Room
