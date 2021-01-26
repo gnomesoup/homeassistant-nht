@@ -17,7 +17,7 @@ sensor:
               'sensor.zw100_multisensor_6_air_temperature',
               'sensor.dsb05_multisensor_air_temperature'
             ] %}
-            {% if states(sensor) != "unknown" %}
+            {% if states(sensor)|float > 0 %}
               {% set temp.sum = temp.sum + (states(sensor)|float) %}
               {% set temp.count = temp.count + 1 %}
             {% endif %}
