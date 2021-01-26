@@ -1,3 +1,11 @@
+group:
+  temperature_sensors:
+    name: Temperature Sensors
+    entities:
+      - sensor.zw100_multisensor_6_air_temperature
+      - sensor.dsb05_multisensor_air_temperature
+      - sensor.linear_wapirz_1_motion_sensor_temperature
+  
 sensor:
   - platform: template
     sensors:
@@ -5,12 +13,14 @@ sensor:
         friendly_name: Whole House Temperature
         unit_of_measurement: '°F'
         value_template: >-
-          {% if states("input_boolean.z_wave_network_ready") == "on" %}
-          {{ ((states("sensor.aeotec_dsb05_multisensor_temperature")|float +
-              states("sensor.aeotec_zw100_multisensor_6_temperature")|float +
-              states("sensor.linear_wapirz_1_motion_sensor_temperature")|float +
-              states("sensor.linear_wapirz_1_motion_sensor_temperature_2")|float +
-              states("sensor.linear_wapirz_1_motion_sensor_temperature_3")|float) / 5)|round(1) }}
-          {% else %}
-          {{ states("sensor.temperature_whole_house") }}
+          {% set temp = namespace(sum=0, count=0) %}
+          {% for sensor in expand('group.temperature_sensors') %}
+            {% if states(sensor) != "unknown" %}
+              {% set temp.sum = temp.sum + (states(sensor)|float) %}
+              {% set temp.count = temp.count + 1 %}
+            {% endif %}
+          {% endfor %}
+          {% if temp.count == 0 %}
+            {% set temp.count = 1 %}
           {% endif %}
+          {{ (temp.sum / temp.count)|round(1) }}
