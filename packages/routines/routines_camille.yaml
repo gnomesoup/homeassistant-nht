@@ -30,9 +30,7 @@ group:
       # Grandma's Lamp
       - light.philips_lwb006_097e3010_level_on_off
       # Canopy lights
-      - switch.zooz_zen20_v2_0_power_strip_switch
-      # Loft lamp
-      - switch.zooz_zen20_v2_0_power_strip_switch_3
+      - switch.power_strip_instance_6_switch
       # Camille's Closet
       - light.ge_appliances_zll_light_1b550600_level_on_off
 
@@ -95,7 +93,7 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-            - switch.zooz_zen20_v2_0_power_strip_switch
+            - switch.power_strip_instance_6_switch
 
   - alias: "Minimote Camille Hold"
     trigger:
@@ -125,7 +123,8 @@ automation:
     action:
       - service: homeassistant.toggle
         data:
-          entity_id: switch.zooz_zen20_v2_0_power_strip_switch_3
+          entity_id:
+            - switch.power_strip_instance_6_switch
 
   - alias: "Minimote Camille Push 3"
     trigger:
