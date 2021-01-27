@@ -30,10 +30,12 @@ automation:
     alias: Camille's Minimote Control
     trigger:
       - platform: event
-        event_type: zwave.scene_activated
+        event_type: ozw.scene_activated
         event_data:
-          entity_id:
-            zwave.aeotec_dsa03202_minimote_3
+          node_id: 3
+          scene_id: 0
+
+            
     action:
       - service: homeassistant.toggle
         data_template:

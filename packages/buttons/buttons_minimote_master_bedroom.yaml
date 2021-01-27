@@ -29,9 +29,10 @@ automation:
   - alias: Minimote Master Bedroom
     trigger:
       - platform: event
-        event_type: zwave.scene_activated
+        event_type: ozw.scene_activated
         event_data:
-          entity_id: zwave.aeotec_dsa03202_minimote_2
+          node_id: 14
+          scene_id: 0
     action:
       - service: homeassistant.toggle
         data_template:

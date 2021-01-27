@@ -29,10 +29,10 @@ automation:
   - alias: Minimote Front Door
     trigger:
       - platform: event
-        event_type: zwave.scene_activated
+        event_type: ozw.scene_activated
         event_data:
-          entity_id:
-            zwave.aeotec_dsa03202_minimote
+          node_id: 16 
+          scene_id: 0
     condition:
       - condition: state
         entity_id: input_boolean.guest_mode
