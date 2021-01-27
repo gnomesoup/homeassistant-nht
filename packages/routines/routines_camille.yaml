@@ -124,7 +124,7 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-            - switch.power_strip_instance_6_switch
+            - light.philips_lwb006_097e3010_level_on_off
 
   - alias: "Minimote Camille Push 3"
     trigger:
@@ -134,17 +134,17 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-            - light.philips_lwb006_097e3010_level_on_off
+            - camille light.ge_appliances_zll_light_1b550600_level_on_off
 
-  - alias: "Minimote Camille Push 4"
-    trigger:
-      - platform: state
-        entity_id: input_boolean.minimote_camille_7
-    action:
-      - service: homeassistant.toggle
-        data:
-          entity_id:
-            - light.ge_appliances_zll_light_1b550600_level_on_off
+  # - alias: "Minimote Camille Push 4"
+  #   trigger:
+  #     - platform: state
+  #       entity_id: input_boolean.minimote_camille_7
+  #   action:
+  #     - service: homeassistant.toggle
+  #       data:
+  #         entity_id:
+  #           - light.ge_appliances_zll_light_1b550600_level_on_off
 
   - alias: "Wakeup Alarm Repeat Camille"
     initial_state: false
