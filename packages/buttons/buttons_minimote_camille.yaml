@@ -48,4 +48,4 @@ automation:
                           6: "input_boolean.minimote_camille_6",
                           7: "input_boolean.minimote_camille_7",
                           8: "input_boolean.minimote_camille_8"} %}
-            {{ map[trigger.event.data.scene_id|int] }}
+            {{ map[trigger.event.data.scene_value_id|int] }}

@@ -45,4 +45,4 @@ automation:
                           6: "input_boolean.minimote_master_bedroom_6",
                           7: "input_boolean.minimote_master_bedroom_7",
                           8: "input_boolean.minimote_master_bedroom_8"} %}
-            {{ map[trigger.event.data.scene_id|int] }}
+            {{ map[trigger.event.data.scene_value_id|int] }}
