@@ -10,7 +10,6 @@ binary_sensor:
           device_class: opening
           friendly_name: "Front Door"
           value_template: >-
-          entity_id:
             {{ states("binary_sensor.lumi_lumi_sensor_magnet_aq2_8a344f04_on_off") == 'on'}}
         door_sensor_3:
           device_class: opening
