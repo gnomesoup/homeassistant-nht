@@ -9,7 +9,7 @@ automation:
       - platform: event
         event_type: zha_event
         event_data:
-          device_id: ec:1b:bd:ff:fe:f4:30:29
+          device_id: 30d57fa264aa496fb36f231e0e2be127
 
     action:
       - variables:
