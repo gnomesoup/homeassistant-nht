@@ -10,7 +10,7 @@ automation:
     action:
       - data:
           entity_id: group.lights_switches_living_room
-        service_template: >-
+        service: >-
           {% if is_state("group.lights_switches_living_room", "off") %}
           homeassistant.turn_on
           {% else %}
