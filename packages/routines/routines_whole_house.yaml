@@ -22,6 +22,8 @@ group:
       # - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
       # Nani's Lamp
       - light.philips_lwb006_097e3010_level_on_off
+      # Master Bath lights
+      - light.master_bath_lights_zha_group_0x0002
 
   lights_away:
     name: All lights when away
@@ -46,6 +48,8 @@ group:
       # - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
       # Nani's Lamp
       - light.philips_lwb006_097e3010_level_on_off
+      # Master Bath lights
+      - light.master_bath_lights_zha_group_0x0002
 
   lights_switches_for_flashing:
     name: All lights that are good for flashing
@@ -77,16 +81,11 @@ group:
       - switch.power_strip_instance_1_switch
       - switch.power_strip_instance_2_switch
       - switch.power_strip_instance_3_switch
-      # - switch.zooz_zen06_switch
-      # - switch.bedroom_canopy
-      # - switch.zooz_zen20_v2_0_power_strip_switch
-      # - switch.zooz_zen20_v2_0_power_strip_switch_2
-      # - switch.zooz_zen20_v2_0_power_strip_switch_3
-      # - switch.zooz_zen20_v2_0_power_strip_switch_4
-      # - switch.zooz_zen20_v2_0_power_strip_switch_5
-      # - switch.zooz_zen20_v2_0_power_strip_switch_6
-      # - switch.aeon_labs_zw096_smart_switch_6_switch
-      # - switch.aeon_labs_zw096_smart_switch_6_switch_2
+      - switch.power_strip_instance_6_switch
+      - switch.zen06_smart_plug_switch
+      - switch.zw096_smart_switch_6_switch
+      - switch.zw096_smart_switch_6_switch_2
+
 
   media_whole_house:
     name: All media in the house
