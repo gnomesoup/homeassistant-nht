@@ -134,7 +134,7 @@ automation:
       - service: homeassistant.toggle
         data:
           entity_id:
-            - camille light.ge_appliances_zll_light_1b550600_level_on_off
+            - light.ge_appliances_zll_light_1b550600_level_on_off
 
   # - alias: "Minimote Camille Push 4"
   #   trigger:
