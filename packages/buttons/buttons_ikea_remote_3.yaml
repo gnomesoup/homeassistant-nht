@@ -58,6 +58,10 @@ automation:
                           entity_id: light.master_bath_lights_zha_group_0x0002
                         data:
                           brightness: 1
+                      - service: notify.master_ha_michael
+                        data:
+                          title: "NHT Test"
+                          message: "Brightness down to lowest"
                 default:
                   - service: light.turn_on
                     target: 
@@ -65,6 +69,10 @@ automation:
                     data:
                       brightness_step: 64
                       transition: 1
+                  - service: notify.master_ha_michael
+                    data:
+                      title: "NHT Test"
+                      message: "Brightness stepped down"
 
           # - conditions:
           #     - "{{ command == 'move_with_on_off' }}"
@@ -102,6 +110,10 @@ automation:
                           entity_id: light.master_bath_lights_zha_group_0x0002
                         data:
                           brightness: 255
+                      - service: notify.master_ha_michael
+                        data:
+                          title: "NHT Test"
+                          message: "Brightness up to highest"
                 default:
                   - service: light.turn_on
                     target: 
@@ -109,7 +121,10 @@ automation:
                     data:
                       brightness_step: -64
                       transition: 1
-
+                  - service: notify.master_ha_michael
+                    data:
+                      title: "NHT Test"
+                      message: "Brightness step up"
           # - conditions:
           #     - "{{ command == 'move' }}"
           #     - "{{ cluster_id == 8 }}"
