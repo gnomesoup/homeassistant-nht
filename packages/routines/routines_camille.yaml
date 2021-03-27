@@ -265,7 +265,9 @@ automation:
     condition:
       - condition: template
         value_template: >-
-          {{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.door_sensor_5.last_changed)) / 60) > 60 }}
+          {{ ((as_timestamp(utcnow()) - 
+            as_timestamp(states.binary_sensor.door_sensor_5.last_changed)) / 60) 
+            > 60 }}
     action: 
       - service: script.camille_meds_notify
 

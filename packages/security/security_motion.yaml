@@ -15,7 +15,7 @@ binary_sensor:
         device_class: motion
         friendly_name: "Camille's Bedroom Motion"
         value_template: >-
-          {{ states("binary_sensor.dsb05_multisensor_sensor") == "on" }}
+          {{ states("binary_sensor.4_in_one_multisensor_any") == "on" }}
       motion_living_room:
         device_class: motion
         friendly_name: "Living Room Motion"
@@ -25,7 +25,7 @@ binary_sensor:
         device_class: motion
         friendly_name: "Master Bedroom Motion"
         value_template: >-
-          {{ states("binary_sensor.zw100_multisensor_6_home_security_motion_detected") == "on" }}
+          {{ states("binary_sensor.multisensor_6_home_security_motion_detection") == "on" }}
 
 group:
   motion_sensors:
@@ -36,5 +36,3 @@ group:
       - binary_sensor.motion_camille_bedroom
       # - binary_sensor.motion_living_room
       - binary_sensor.motion_master_bedroom
-      # - binary_sensor.zw100_multisensor_6_home_security_motion_detected
-      # - binary_sensor.dsb05_multisensor_sensor
