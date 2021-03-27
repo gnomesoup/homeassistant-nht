@@ -51,17 +51,17 @@ automation:
                         condition: numeric_state
                         entity_id: light.master_bath_lights_zha_group_0x0002
                         attribute: brightness
-                        below: 64
+                        above: 192
                     sequence:
                       - service: light.turn_on
                         target: 
                           entity_id: light.master_bath_lights_zha_group_0x0002
                         data:
-                          brightness: 1
+                          brightness: 255
                       - service: notify.master_ha_michael
                         data:
                           title: "NHT Test"
-                          message: "Brightness down to lowest"
+                          message: "Brightness up to highest"
                 default:
                   - service: light.turn_on
                     target: 
@@ -72,7 +72,7 @@ automation:
                   - service: notify.master_ha_michael
                     data:
                       title: "NHT Test"
-                      message: "Brightness stepped down"
+                      message: "Brightness step up"
 
           # - conditions:
           #     - "{{ command == 'move_with_on_off' }}"
@@ -103,17 +103,17 @@ automation:
                         condition: numeric_state
                         entity_id: light.master_bath_lights_zha_group_0x0002
                         attribute: brightness
-                        above: 192
+                        below: 64
                     sequence:
                       - service: light.turn_on
                         target: 
                           entity_id: light.master_bath_lights_zha_group_0x0002
                         data:
-                          brightness: 255
+                          brightness: 1
                       - service: notify.master_ha_michael
                         data:
                           title: "NHT Test"
-                          message: "Brightness up to highest"
+                          message: "Brightness down to lowest"
                 default:
                   - service: light.turn_on
                     target: 
@@ -124,7 +124,7 @@ automation:
                   - service: notify.master_ha_michael
                     data:
                       title: "NHT Test"
-                      message: "Brightness step up"
+                      message: "Brightness step down"
           # - conditions:
           #     - "{{ command == 'move' }}"
           #     - "{{ cluster_id == 8 }}"
