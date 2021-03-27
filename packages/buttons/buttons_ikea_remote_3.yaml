@@ -1,7 +1,7 @@
 # Accordion Lamp Remote
 automation:
   - alias: "Bathroom Lights IKEA Button"
-    mode: restart
+    mode: queued
     max_exceeded: silent
     variables:
       force_brightness: false
