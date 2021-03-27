@@ -47,7 +47,7 @@ automation:
             sequence:
               - choose:
                   - conditions:
-                      - alias: "Brightness less than 25%"
+                      - alias: "Brightness greater than 75%"
                         condition: numeric_state
                         entity_id: light.master_bath_lights_zha_group_0x0002
                         attribute: brightness
@@ -91,7 +91,7 @@ automation:
             sequence:
               - choose:
                   - conditions:
-                      - alias: "Brightness greater than 75%"
+                      - alias: "Brightness lower than 25%"
                         condition: numeric_state
                         entity_id: light.master_bath_lights_zha_group_0x0002
                         attribute: brightness

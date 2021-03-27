@@ -133,6 +133,10 @@ automation:
         entity_id:
           - light.master_bath_lights_zha_group_0x0002
         state: "off"
+      - alias: "condition alias (name)"
+        condition: time
+        after: "22:00:00"
+        before: "07:00:00"
     action:
       - choose:
         - conditions: "{{ trigger.to_state.state == 'on' }}"
