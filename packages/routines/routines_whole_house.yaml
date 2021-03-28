@@ -24,6 +24,8 @@ group:
       - light.philips_lwb006_097e3010_level_on_off
       # Master Bath lights
       - light.master_bath_lights_zha_group_0x0002
+      # front bathroom lights
+      - light.bathroom_lights_zha_group_0x0003
 
   lights_away:
     name: All lights when away
@@ -50,6 +52,8 @@ group:
       - light.philips_lwb006_097e3010_level_on_off
       # Master Bath lights
       - light.master_bath_lights_zha_group_0x0002
+      # Front Bathroom Lights
+      - light.bathroom_lights_zha_group_0x0003
 
   lights_switches_for_flashing:
     name: All lights that are good for flashing
@@ -78,13 +82,18 @@ group:
   switches_whole_house:
     name: All switches in the house
     entities:
-      - switch.power_strip_instance_1_switch
-      - switch.power_strip_instance_2_switch
-      - switch.power_strip_instance_3_switch
-      - switch.power_strip_instance_6_switch
-      - switch.zen06_smart_plug_switch
-      - switch.zw096_smart_switch_6_switch
-      - switch.zw096_smart_switch_6_switch_2
+      # TV Plug
+      - switch.smart_plug_with_2_usb_ports
+      # Living Room Lamp Left
+      - switch.smart_switch_6
+      # Michael's Lamp
+      - switch.smart_switch_6_2
+      # Camille's power strip
+      - switch.z_wave_plus_power_strip_ver_2_0
+      - switch.z_wave_plus_power_strip_ver_2_0_2
+      - switch.z_wave_plus_power_strip_ver_2_0_3
+      - switch.z_wave_plus_power_strip_ver_2_0_4
+      - switch.z_wave_plus_power_strip_ver_2_0_5
 
 
   media_whole_house:
