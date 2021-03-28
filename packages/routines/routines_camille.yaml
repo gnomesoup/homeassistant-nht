@@ -32,7 +32,7 @@ group:
       # Canopy lights
       - switch.z_wave_plus_power_strip_ver_2_0_5
       # Camille's Closet
-      - light.ge_appliances_zll_light_1b550600_level_on_off
+      # - light.ge_appliances_zll_light_1b550600_level_on_off
 
 automation:
   - alias: Wakeup Camille
@@ -84,6 +84,17 @@ automation:
       - service: homeassistant.turn_off
         data:
           entity_id: automation.lights_on_motion_camille_s_room
+      - alias: "Turn on closet light only if door open"
+        choose:
+        - conditions:
+            - alias: "Closet door open"
+              condition: state
+              entity_id: binary_sensor.door_sensor_5
+              state: "off"
+          sequence:
+            service: homeassistant.turn_on
+            data:
+              entity_id: light.ge_appliances_zll_light_1b550600_level_on_off
 
   - alias: "Minimote Camille Push 1"
     trigger:
@@ -334,6 +345,7 @@ script:
         data:
           entity_id:
             - group.lights_bedroom_camille
+            - light.ge_appliances_zll_light_1b550600_level_on_off
       - service: input_select.select_option
         data:
           entity_id: input_select.camille_status
