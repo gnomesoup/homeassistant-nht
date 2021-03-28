@@ -1,16 +1,16 @@
 binary_sensor:
   - platform: template
     sensors:
-      motion_office:
+      motion_server_cabinet:
         device_class: motion
-        friendly_name: "Office Motion"
+        friendly_name: "Server Cabinet"
         value_template: >-
-          {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level")|float > 0 }}
+          {{ states("binary_sensor.pir_motion_detector_any") == "on" }}
       motion_hallway:
         device_class: motion
         friendly_name: "Hallway Motion"
         value_template: >-
-          {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level_2")|float > 0 }}
+          {{ states("binary_sensor.pir_motion_detector_any_2") == "on" }}
       motion_camille_bedroom:
         device_class: motion
         friendly_name: "Camille's Bedroom Motion"
@@ -31,8 +31,8 @@ group:
   motion_sensors:
     name: All Motion Sensors
     entities:
-      # - binary_sensor.motion_office
-      # - binary_sensor.motion_hallway
+      - binary_sensor.motion_server_cabinet
+      - binary_sensor.motion_hallway
       - binary_sensor.motion_camille_bedroom
       # - binary_sensor.motion_living_room
       - binary_sensor.motion_master_bedroom
