@@ -2,8 +2,9 @@ group:
   temperature_sensors:
     name: Temperature Sensors
     entities:
-      - sensor.zw100_multisensor_6_air_temperature
       - sensor.dsb05_multisensor_air_temperature
+      - sensor.smartthings_moisture_temperature
+      - sensor.multisensor_6_air_temperature
   
 sensor:
   - platform: template
@@ -14,8 +15,8 @@ sensor:
         value_template: >-
           {% set temp = namespace(sum=0, count=0) %}
           {% for sensor in [
-              'sensor.zw100_multisensor_6_air_temperature',
-              'sensor.dsb05_multisensor_air_temperature'
+              'sensor.smartthings_moisture_temperature',
+              'sensor.multisensor_6_air_temperature'
             ] %}
             {% if states(sensor)|float > 0 %}
               {% set temp.sum = temp.sum + (states(sensor)|float) %}
