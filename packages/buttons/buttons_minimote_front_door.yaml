@@ -29,10 +29,10 @@ automation:
   - alias: Minimote Front Door
     trigger:
       - platform: event
-        event_type: ozw.scene_activated
+        event_type: zwave_js_event
         event_data:
           node_id: 16 
-          scene_id: 0
+          home_id: 3996165589
     condition:
       - condition: state
         entity_id: input_boolean.guest_mode
@@ -49,7 +49,7 @@ automation:
                           6: "input_boolean.minimote_front_door_6",
                           7: "input_boolean.minimote_front_door_7",
                           8: "input_boolean.minimote_front_door_8"} %}
-            {{ map[trigger.event.data.scene_value_id|int] }}
+            {{ map[trigger.event.data.value|int] }}
 
   - alias: Minimote Front Door Guest Mode
     trigger:
