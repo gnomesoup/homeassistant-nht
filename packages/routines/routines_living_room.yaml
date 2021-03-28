@@ -7,13 +7,13 @@ group:
   switches_living_room:
     name: Living Room Switches
     entities:
-      - switch.zw096_smart_switch_6_switch
+      - switch.smart_switch_6
   lights_switches_living_room:
     name: Living Room Switches
     entities:
       - light.ge_appliances_zll_light_15cd1400_level_on_off
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
-      - switch.zw096_smart_switch_6_switch
+      - switch.smart_switch_6
 
 automation:
   - alias: Wakeup Living Room
@@ -75,7 +75,7 @@ script:
       - service: homeassistant.turn_off
         data:
           entity_id:
-            - switch.zw096_smart_switch_6_switch
+            - switch.smart_switch_6
 
   goodmorning_living_room:
     alias: Goodmorning Living Room
@@ -93,7 +93,7 @@ script:
       - service: switch.turn_on
         data:
           entity_id:
-            - switch.zw096_smart_switch_6_switch
+            - switch.smart_switch_6
       - service: homeassistant.turn_off
         data:
           entity_id:

@@ -4,7 +4,7 @@ group:
     entities:
       - light.ge_appliances_zll_light_3aae1600_level_on_off
       - light.ge_appliances_zll_light_49251600_level_on_off
-      - switch.zw096_smart_switch_6_switch_2
+      - switch.smart_switch_6_2
 
   lights_master_bedroom_and_closets:
     name: "Lights in Master Bedroom and Closets"
@@ -13,7 +13,7 @@ group:
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
       - light.ge_appliances_zll_light_3aae1600_level_on_off
       - light.ge_appliances_zll_light_49251600_level_on_off
-      - switch.zw096_smart_switch_6_switch_2
+      - switch.smart_switch_6_2
 
 automation:
   - alias: "Master Bedroom Lights on motion"
@@ -68,7 +68,7 @@ automation:
     action:
       - service: homeassistant.toggle
         entity_id: 
-          - switch.zw096_smart_switch_6_switch_2
+          - switch.smart_switch_6_2
 
 
   - alias: "Master Bedroom Button 2 Held"
