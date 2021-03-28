@@ -29,10 +29,10 @@ automation:
   - alias: Minimote Master Bedroom
     trigger:
       - platform: event
-        event_type: ozw.scene_activated
+        event_type: zwave_js_event
         event_data:
           node_id: 14
-          scene_id: 0
+          home_id: 3996165589
     action:
       - service: homeassistant.toggle
         data_template:
@@ -45,4 +45,4 @@ automation:
                           6: "input_boolean.minimote_master_bedroom_6",
                           7: "input_boolean.minimote_master_bedroom_7",
                           8: "input_boolean.minimote_master_bedroom_8"} %}
-            {{ map[trigger.event.data.scene_value_id|int] }}
+            {{ map[trigger.event.data.value|int] }}

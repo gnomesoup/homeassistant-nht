@@ -88,6 +88,15 @@ automation:
         entity_id: 
           - light.ge_appliances_zll_light_49251600_level_on_off
 
+  - alias: "Master Bedroom Button 4 Pushed"
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_master_bedroom_7
+    action:
+      - service: homeassistant.toggle
+        entity_id: 
+          - light.master_bath_lights_zha_group_0x0002
+
   - alias: "Laundry Door Open Turn On Light"
     trigger:
       - platform: state
