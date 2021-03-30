@@ -83,3 +83,25 @@ automation:
                     data:
                       brightness_step: -64
                       transition: 1
+          
+          # Arrow Left pressed
+          - conditions:
+              - "{{ command == 'press' }}"
+              - "{{ cluster_id == 5 }}"
+              - "{{ endpoint_id == 1 }}"
+              - "{{ args == [257, 13, 0] }}"
+            sequence:
+              - service: media_player.volume_down
+                target:
+                  entity_id: media_player.living_room_tv
+
+          # Arrow Left pressed
+          - conditions:
+              - "{{ command == 'press' }}"
+              - "{{ cluster_id == 5 }}"
+              - "{{ endpoint_id == 1 }}"
+              - "{{ args == [256, 13, 0] }}"
+            sequence:
+              - service: media_player.volume_up
+                target:
+                  entity_id: media_player.living_room_tv
