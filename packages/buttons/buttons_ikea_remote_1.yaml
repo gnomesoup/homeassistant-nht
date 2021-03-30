@@ -36,19 +36,12 @@ automation:
               - "{{ endpoint_id == 1 }}"
               - "{{ args == [0, 43, 5] }}"
             sequence:
-              - variables:
-                  minBrightness: >
-                    {{ expand('group.lights_living_room') | 
-                      map(attribute='attributes.brightness') | 
-                      list | min | int }}
               - choose:
                   - conditions:
-                      - "{{ minBrightness > 192}}"
-                      # - alias: "Brightness greater than 75%"
-                      #   condition: numeric_state
-                      #   entity_id: group.lights_living_room
-                      #   attribute: brightness
-                      #   above: 192
+                    - >
+                      {{ (expand('group.lights_living_room') | 
+                        map(attribute='attributes.brightness') | 
+                        list | min | int) > 191 }}
                     sequence:
                       - service: light.turn_on
                         target: 
@@ -71,19 +64,12 @@ automation:
               - "{{ endpoint_id == 1 }}"
               - "{{ args == [1, 43, 5] }}"
             sequence:
-              - variables:
-                  minBrightness: >
-                    {{ expand('group.lights_living_room') | 
-                      map(attribute='attributes.brightness') | 
-                      list | min | int }}
               - choose:
                   - conditions:
-                      - "{{ minBrightness < 64}}"
-                      # - alias: "Brightness lower than 25%"
-                      #   condition: numeric_state
-                      #   entity_id: group.lights_living_room
-                      #   attribute: brightness
-                      #   below: 64
+                    - >
+                      {{ (expand('group.lights_living_room') | 
+                        map(attribute='attributes.brightness') | 
+                        list | min | int) < 65 }}
                     sequence:
                       - service: light.turn_on
                         target: 
