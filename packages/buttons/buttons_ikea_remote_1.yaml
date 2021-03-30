@@ -36,18 +36,19 @@ automation:
               - "{{ endpoint_id == 1 }}"
               - "{{ args == [0, 43, 5] }}"
             sequence:
-              # - variables:
-              #     minBrightness: >
-              #       {{ expand('group.lights_living_room') | 
-              #         map(attribute='attributes.brightness') | 
-              #         list | min | int}}
+              - variables:
+                  minBrightness: >
+                    {{ expand('group.lights_living_room') | 
+                      map(attribute='attributes.brightness') | 
+                      list | min | int }}
               - choose:
                   - conditions:
-                      - alias: "Brightness greater than 75%"
-                        condition: numeric_state
-                        entity_id: group.lights_living_room
-                        attribute: brightness
-                        above: 192
+                      - "{{ minBrightness > 192}}"
+                      # - alias: "Brightness greater than 75%"
+                      #   condition: numeric_state
+                      #   entity_id: group.lights_living_room
+                      #   attribute: brightness
+                      #   above: 192
                     sequence:
                       - service: light.turn_on
                         target: 
@@ -70,19 +71,26 @@ automation:
               - "{{ endpoint_id == 1 }}"
               - "{{ args == [1, 43, 5] }}"
             sequence:
+              - variables:
+                  minBrightness: >
+                    {{ expand('group.lights_living_room') | 
+                      map(attribute='attributes.brightness') | 
+                      list | min | int }}
               - choose:
                   - conditions:
-                      - alias: "Brightness lower than 25%"
-                        condition: numeric_state
-                        entity_id: group.lights_living_room
-                        attribute: brightness
-                        below: 64
+                      - "{{ minBrightness < 64}}"
+                      # - alias: "Brightness lower than 25%"
+                      #   condition: numeric_state
+                      #   entity_id: group.lights_living_room
+                      #   attribute: brightness
+                      #   below: 64
                     sequence:
                       - service: light.turn_on
                         target: 
                           entity_id: group.lights_living_room
                         data:
                           brightness: 1
+                          transition: 1
                 default:
                   - service: light.turn_on
                     target: 
