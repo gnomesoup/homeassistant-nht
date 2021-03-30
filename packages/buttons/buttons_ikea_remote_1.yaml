@@ -1,18 +1,92 @@
 #Living room remote
 automation:
-  - alias: "Ikea Remote 1 Power Button"
+  - alias: "Living Room Ikea Button"
+    mode: queued
+    max_exceeded: silent
     trigger:
       - platform: event
         event_type: zha_event
         event_data:
-          device_ieee: "00:0d:6f:ff:fe:4b:6f:12"
-          command: "toggle"
+          device_id: df652b4f32fb44e7b43f0cd53db701c5
     action:
-      - data:
-          entity_id: group.lights_switches_living_room
-        service: >-
-          {% if is_state("group.lights_switches_living_room", "off") %}
-          homeassistant.turn_on
-          {% else %}
-          homeassistant.turn_off
-          {% endif %}
+      - variables:
+          command: "{{ trigger.event.data.command }}"
+          cluster_id: "{{ trigger.event.data.cluster_id }}"
+          endpoint_id: "{{ trigger.event.data.endpoint_id }}"
+          args: "{{ trigger.event.data.args }}"
+      - choose:
+          - conditions:
+              - "{{ command == 'toggle' }}"
+              - "{{ cluster_id == 6 }}"
+              - "{{ endpoint_id == 1 }}"
+            sequence:
+              - data:
+                  entity_id: group.lights_switches_living_room
+                service: >-
+                  {% if is_state("group.lights_switches_living_room", "off") %}
+                  homeassistant.turn_on
+                  {% else %}
+                  homeassistant.turn_off
+                  {% endif %}
+
+          # Brightness Up pressed
+          - conditions:
+              - "{{ command == 'step_with_on_off' }}"
+              - "{{ cluster_id == 8 }}"
+              - "{{ endpoint_id == 1 }}"
+              - "{{ args == [0, 43, 5] }}"
+            sequence:
+              # - variables:
+              #     minBrightness: >
+              #       {{ expand('group.lights_living_room') | 
+              #         map(attribute='attributes.brightness') | 
+              #         list | min | int}}
+              - choose:
+                  - conditions:
+                      - alias: "Brightness greater than 75%"
+                        condition: numeric_state
+                        entity_id: group.lights_living_room
+                        attribute: brightness
+                        above: 192
+                    sequence:
+                      - service: light.turn_on
+                        target: 
+                          entity_id: group.lights_living_room
+                        data:
+                          brightness: 255
+                default:
+                  - service: light.turn_on
+                    target: 
+                      entity_id: group.lights_living_room
+                    data:
+                      brightness:
+                      brightness_step: 64
+                      transition: 1
+
+          # Brightness Down pressed
+          - conditions:
+              - "{{ command == 'step' }}"
+              - "{{ cluster_id == 8 }}"
+              - "{{ endpoint_id == 1 }}"
+              - "{{ args == [1, 43, 5] }}"
+            sequence:
+              - choose:
+                  - conditions:
+                      - alias: "Brightness lower than 25%"
+                        condition: numeric_state
+                        entity_id: group.lights_living_room
+                        attribute: brightness
+                        below: 64
+                    sequence:
+                      - service: light.turn_on
+                        target: 
+                          entity_id: group.lights_living_room
+                        data:
+                          brightness: 1
+                default:
+                  - service: light.turn_on
+                    target: 
+                      entity_id: group.lights_living_room
+                    data:
+                      brightness_step: -64
+                      transition: 1

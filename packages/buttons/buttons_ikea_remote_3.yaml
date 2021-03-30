@@ -1,4 +1,4 @@
-# Accordion Lamp Remote
+# Master Bath Remote
 automation:
   - alias: "Bathroom Lights IKEA Button"
     mode: queued
