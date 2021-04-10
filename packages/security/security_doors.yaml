@@ -5,7 +5,7 @@ binary_sensor:
           device_class: opening
           friendly_name: "Master Closet Door"
           value_template: >-
-            {{ states("sensor.node_8_basic")|int == 0 }}
+            {{ states("sensor.node_8_basic")|int == 255 }}
         door_sensor_2:
           device_class: opening
           friendly_name: "Front Door"
@@ -15,17 +15,17 @@ binary_sensor:
           device_class: opening
           friendly_name: "Laundry Closet Door"
           value_template: >-
-            {{ states("sensor.node_7_basic")|int == 0}}
+            {{ states("sensor.node_7_basic")|int == 255}}
         door_sensor_4:
           device_class: opening
           friendly_name: "Front Closet Door"
           value_template: >-
-            {{ states("sensor.door_windows_sensor_basic")|int == 0}}
+            {{ states("sensor.door_windows_sensor_basic")|int == 255 }}
         door_sensor_5:
           device_class: opening
           friendly_name: "Camille's Closet"
           value_template: >-
-            {{ states("sensor.node_9_basic")|int == 0 }}
+            {{ states("sensor.node_9_basic")|int == 255 }}
 
 input_boolean:
   door_alert_delay:
