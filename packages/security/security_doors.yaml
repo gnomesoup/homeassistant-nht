@@ -6,7 +6,6 @@ binary_sensor:
           friendly_name: "Master Closet Door"
           value_template: >-
             {{ states("sensor.node_8_basic")|int == 0 }}
-          entity_id:
         door_sensor_2:
           device_class: opening
           friendly_name: "Front Door"
