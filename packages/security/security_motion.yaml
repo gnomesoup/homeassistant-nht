@@ -5,12 +5,12 @@ binary_sensor:
         device_class: motion
         friendly_name: "Server Cabinet"
         value_template: >-
-          {{ states("binary_sensor.pir_motion_detector_any") == "on" }}
+          {{ states("sensor.node_13_basic")|int == 255 }}
       motion_hallway:
         device_class: motion
         friendly_name: "Hallway Motion"
         value_template: >-
-          {{ states("binary_sensor.pir_motion_detector_any_2") == "on" }}
+          {{ states("sensor.node_17_basic")|int == 255 }}
       motion_camille_bedroom:
         device_class: motion
         friendly_name: "Camille's Bedroom Motion"
