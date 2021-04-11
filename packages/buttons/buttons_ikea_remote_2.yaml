@@ -58,7 +58,7 @@ automation:
                     sequence:
                       - service: light.turn_on
                         target:
-                          entity_id: light.master_bath_lights_zha_group_0x0002
+                          entity_id: light.bathroom_lights_zha_group_0x0003
                         data:
                           brightness: 255
                   - conditions:
