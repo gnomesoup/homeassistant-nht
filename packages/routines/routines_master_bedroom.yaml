@@ -140,7 +140,7 @@ automation:
       - alias: "Light already on"
         condition: state
         entity_id:
-          - light.master_bath_lights_zha_group_0x0002
+          - light.master_bath_1_level_light_color_on_off
         state: "off"
       - alias: "condition alias (name)"
         condition: time

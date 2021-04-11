@@ -195,7 +195,7 @@ automation:
       - alias: "Light already on"
         condition: state
         entity_id:
-          - light.bathroom_light_4_level_light_color_on_off
+          - light.bathroom_light_1_level_light_color_on_off
         state: "off"
       - alias: "condition alias (name)"
         condition: time
