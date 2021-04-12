@@ -20,18 +20,23 @@ automation:
               - "{{ cluster_id == 6 }}"
               - "{{ endpoint_id == 1 }}"
             sequence:
-              - data:
-                  entity_id: group.lights_switches_living_room
-                service: >-
-                  {% if is_state("group.lights_switches_living_room", "off") %}
-                  homeassistant.turn_on
-                  {% else %}
-                  homeassistant.turn_off
-                  {% endif %}
-              - service: homeassistant.turn_on
-                data:
-                  entity_id:
-                    - switch.smart_plug_with_2_usb_ports
+              - choose:
+                - conditions:
+                  - alias: "Lights are off"
+                    condition: state
+                    entity_id: group.lights_switches_living_room
+                    state: "off"
+                  sequence:
+                  - service: homeassistant.turn_on
+                    target:
+                      entity_id:
+                        - group.lights_switches_living_room
+                        - switch.smart_plug_with_2_usb_ports
+                default:
+                - service: homeassistant.turn_off
+                  target:
+                    entity_id:
+                      - group.lights_switches_living_room
 
           # Brightness Up pressed
           - conditions:
