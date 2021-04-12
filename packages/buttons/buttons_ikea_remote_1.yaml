@@ -28,6 +28,10 @@ automation:
                   {% else %}
                   homeassistant.turn_off
                   {% endif %}
+              - service: homeassistant.turn_on
+                data:
+                  entity_id:
+                    - switch.smart_plug_with_2_usb_ports
 
           # Brightness Up pressed
           - conditions:
