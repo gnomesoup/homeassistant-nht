@@ -56,6 +56,9 @@ input_select:
 script:
   notify_camille_with_sound:
     alias: "Notify Camille with sound"
+    variables:
+      volume: >
+        {{ state_attr("media_player.notify_camille", "volume_level") }}
     fields:
       message:
         description: Message to broadcast to speaker
@@ -74,3 +77,9 @@ script:
             - media_player.notify_camille
         data:
           message: "{{ message }}"
+      - alias: "Return volume on speakers"
+        service: media_player.volume_set
+        target:
+          entity_id: media_player.notify_camille
+        data:
+          volume_level: "{{ volume_level }}"
