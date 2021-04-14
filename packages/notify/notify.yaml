@@ -67,5 +67,5 @@ script:
           entity_id:
             - media_player.camille_s_speaker
             - media_player.living_room_display
-          data:
-            message: "{{ message }}"
+        data:
+          message: "{{ message }}"
