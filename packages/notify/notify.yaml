@@ -52,3 +52,20 @@ input_select:
       - Major
       - None
     icon: mdi:bell-ring
+
+script:
+  notify_camille_with_sound:
+    alias: "Notify Camille with sound"
+    fields:
+      message:
+        description: Message to broadcast to speaker
+        example: "Camille, time to wake up"
+    sequence:
+      - alias: "Google TTY to camille's speakers"
+        service: tts.google_translate_say
+        target:
+          entity_id:
+            - media_player.camille_s_speaker
+            - media_player.living_room_display
+          data:
+            message: "{{ message }}"
