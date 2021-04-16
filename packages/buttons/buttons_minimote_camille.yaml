@@ -30,7 +30,7 @@ automation:
     alias: Camille's Minimote Control
     trigger:
       - platform: event
-        event_type: zwave_js_event
+        event_type: zwave_js_value_notification
         event_data:
           node_id: 3
     action:

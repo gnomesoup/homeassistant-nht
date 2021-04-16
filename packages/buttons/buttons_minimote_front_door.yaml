@@ -29,10 +29,9 @@ automation:
   - alias: Minimote Front Door
     trigger:
       - platform: event
-        event_type: zwave_js_event
+        event_type: zwave_js_value_notification
         event_data:
           node_id: 16 
-          home_id: 3996165589
     condition:
       - condition: state
         entity_id: input_boolean.guest_mode
@@ -54,10 +53,9 @@ automation:
   - alias: Minimote Front Door Guest Mode
     trigger:
       - platform: event
-        event_type: zwave.scene_activated
+        event_type: zwave_js_value_notification
         event_data:
-          entity_id:
-            zwave.aeotec_dsa03202_minimote
+          node_id: 16 
     condition:
       - condition: state
         entity_id: input_boolean.guest_mode

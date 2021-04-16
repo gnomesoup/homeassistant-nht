@@ -29,7 +29,7 @@ automation:
   - alias: Minimote Master Bedroom
     trigger:
       - platform: event
-        event_type: zwave_js_event
+        event_type: zwave_js_value_notification
         event_data:
           node_id: 14
           home_id: 3996165589
