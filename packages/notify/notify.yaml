@@ -64,12 +64,16 @@ script:
         description: Message to broadcast to speaker
         example: "Camille, time to wake up"
     sequence:
+      - alias: "Pause if something is playing"
+        service: media_player.media_pause
+        target:
+          entity_id: media_player.notify_camille
       - alias: "Raise volume on speakers"
         service: media_player.volume_set
         target:
           entity_id: media_player.notify_camille
         data:
-          volume_level: 0.75
+          volume_level: 0.5
       - alias: "Google TTS to camille's speakers"
         service: tts.google_translate_say
         target:
@@ -82,4 +86,4 @@ script:
         target:
           entity_id: media_player.notify_camille
         data:
-          volume_level: "{{ volume_level }}"
+          volume_level: "{{ volume }}"
