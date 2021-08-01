@@ -55,7 +55,7 @@ automation:
                   condition: numeric_state
                   entity_id: light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
                   attribute: brightness
-                  above: 192
+                  below: 192
                 sequence:
                   - service: light.turn_on
                     target:
