@@ -27,6 +27,7 @@ input_boolean:
 
 automation:
   - alias: Minimote Master Bedroom
+    id: "8264c12f-69dc-412d-9ce8-f745a13f6ad6"
     trigger:
       - platform: event
         event_type: zwave_js_value_notification
