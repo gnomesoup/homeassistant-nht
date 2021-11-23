@@ -8,7 +8,7 @@ template:
         unit_of_measurement: °C
         device_class: temperature
       - name: "Air Quality Humidity"
-        state: "{{ trigger.json.humdity }}"
+        state: "{{ trigger.json.humidity }}"
         unit_of_measurement: "%"
         device_class: humidity
       - name: "Air Quality Pressure"
