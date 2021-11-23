@@ -3,6 +3,17 @@ template:
     - platform: webhook
       webhook_id: d19052285ece475eb0e31ae0de91c007
     sensor:
-      name: "Air Quality Temperature"
-      state: "{{ trigger.json.temperature }}"
-      unit_of_measurement: °C
+      - name: "Air Quality Temperature"
+        state: "{{ trigger.json.temperature }}"
+        unit_of_measurement: °C
+        device_class: temperature
+      - name: "Air Quality Humidity"
+        state: "{{ trigger.json.humdity }}"
+        unit_of_measurement: "%"
+        device_class: humidity
+      - name: "Air Quality Pressure"
+        state: "{{ trigger.json.pressure }}"
+        unit_of_measurement: hPa
+        device_class: pressure
+
+
