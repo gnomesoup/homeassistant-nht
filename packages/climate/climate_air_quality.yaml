@@ -1,0 +1,9 @@
+template:
+  - trigger:
+    - platform: webhook
+      webhook_id: d19052285ece475eb0e31ae0de91c007
+    sensors:
+      unique_id: "air_quality_air_temperature"
+      name: "Air Quality Temperature"
+      state: "{{ trigger.json.temperature }}"
+      unit_of_measurement: "°C"
