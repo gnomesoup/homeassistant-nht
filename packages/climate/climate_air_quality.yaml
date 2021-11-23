@@ -15,5 +15,9 @@ template:
         state: "{{ trigger.json.pressure }}"
         unit_of_measurement: hPa
         device_class: pressure
+      - name: "Air Quality Voltage"
+        state: "{{ trigger.json.voltage }}"
+        unit_of_measurement: V
+        device_class: voltage
 
 
