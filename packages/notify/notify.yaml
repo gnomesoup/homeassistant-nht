@@ -7,6 +7,14 @@ notify:
       Authorization: !secret master_ha_header
     title_param_name: title
     message_param_name: message
+  - name: master_ha_grownups
+    platform: rest
+    resource: http://192.168.40.159:8122/api/services/notify/grown_ups
+    method: POST_JSON
+    headers:
+      Authorization: !secret master_ha_header
+    title_param_name: title
+    message_param_name: message
   - name: master_ha_michael
     platform: rest
     resource: http://192.168.40.159:8122/api/services/notify/michael
