@@ -47,3 +47,24 @@ template:
         state: "{{ trigger.json['pm100 standard'] }}"
         unit_of_measurement: µg/m³
         device_class: pm10
+
+automation:
+  - id: 55913ca2-3c78-4df7-91d7-c5d65ea263c0
+    alias: Alert on PM levels
+    trigger:
+      - platform: numeric_state
+        entity_id: 
+          - sensor.feather_particle_sensor_1_0um
+          - sensor.feather_particle_sensor_2_5um
+          - sensor.feather_particle_sensor_10um
+        value_template: "{{ template }}"
+        above: 17
+        below: 25
+        for: "01:10:05"
+    condition: []
+    action:
+      - alias: "Notify on high levels"
+        service: notify.master_ha_michael
+        data:
+          title: NHT Alert
+          message: High PM levels detected in bathroom
