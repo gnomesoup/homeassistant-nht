@@ -23,5 +23,12 @@ template:
         state: "{{ trigger.json.battery }}"
         unit_of_measurement: "%"
         device_class: battery
+      - name: "Air Quality CO2"
+        state: "{{ trigger.json.co2 }}"
+        unit_of_measurement: ppm
+        device_class: carbon_dioxide
+      - name: "Air Quality TVOC"
+        state: "{{ trigger.json.tvoc }}"
+        unit_of_measurement: ppb
 
 
