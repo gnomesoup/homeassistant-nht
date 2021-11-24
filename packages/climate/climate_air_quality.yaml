@@ -31,4 +31,19 @@ template:
         state: "{{ trigger.json.tvoc }}"
         unit_of_measurement: ppb
 
-
+  - trigger:
+    - platform: webhook
+      webhook_id: e70fb951f53e43d8926364c74e904617
+    sensor:
+      - name: "Feather Particle Sensor 1.0um"
+        state: "{{ trigger.json['pm10 standard'] }}"
+        unit_of_measurement: µg/m³
+        device_class: pm1
+      - name: "Feather Particle Sensor 2.5um"
+        state: "{{ trigger.json['pm25 standard'] }}"
+        unit_of_measurement: µg/m³
+        device_class: pm25
+      - name: "Feather Particle Sensor 10um"
+        state: "{{ trigger.json['pm100 standard'] }}"
+        unit_of_measurement: µg/m³
+        device_class: pm10
