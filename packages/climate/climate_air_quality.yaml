@@ -66,3 +66,4 @@ automation:
         data:
           title: NHT Alert
           message: High PM levels detected in bathroom
+      - delay: "00:30:00"
