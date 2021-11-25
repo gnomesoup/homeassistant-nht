@@ -79,15 +79,12 @@ automation:
               entity_id:
                 - switch.smart_plug_with_2_usb_ports
 
-      # - service: homeassistant.toggle
-      #   data_template:
-      #     entity_id: >
-      #       {% set map = {1: "input_boolean.minimote_master_bedroom_1",
-      #                     2: "input_boolean.minimote_master_bedroom_2",
-      #                     3: "input_boolean.minimote_master_bedroom_3",
-      #                     4: "input_boolean.minimote_master_bedroom_4",
-      #                     5: "input_boolean.minimote_master_bedroom_5",
-      #                     6: "input_boolean.minimote_master_bedroom_6",
-      #                     7: "input_boolean.minimote_master_bedroom_7",
-      #                     8: "input_boolean.minimote_master_bedroom_8"} %}
-      #       {{ map[trigger.event.data.value|int] }}
+        - conditions:
+          - "{{trigger.event.data.value|int == 3}}"
+          sequence:
+          - service: homeassistant.toggle
+            target:
+              entity_id:
+                - switch.smart_switch_6
+                - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
+                - light.smart_switch_6
