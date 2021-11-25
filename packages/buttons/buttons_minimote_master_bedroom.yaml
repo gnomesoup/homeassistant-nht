@@ -80,7 +80,7 @@ automation:
                 - switch.smart_plug_with_2_usb_ports
 
         - conditions:
-          - "{{trigger.event.data.value|int == 3}}"
+          - "{{trigger.event.data.value|int == 5}}"
           sequence:
           - service: homeassistant.toggle
             target:
