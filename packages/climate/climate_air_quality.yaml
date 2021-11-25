@@ -51,6 +51,7 @@ template:
 automation:
   - id: 55913ca2-3c78-4df7-91d7-c5d65ea263c0
     alias: Alert on PM levels
+    mode: single
     trigger:
       - platform: numeric_state
         entity_id: 
@@ -66,3 +67,4 @@ automation:
         data:
           title: NHT Alert
           message: High PM levels detected in bathroom
+      - delay: "00:30:00"
