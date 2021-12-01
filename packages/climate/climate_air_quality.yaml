@@ -32,7 +32,8 @@ template:
         unit_of_measurement: ppb
       - name: "Air Quality Chip Temperature"
         state: "{{ trigger.json.chipTemperature }}"
-        unit_of_measurement: ppb
+        unit_of_measurement: °C
+        device_class: temperature
 
   - trigger:
     - platform: webhook
