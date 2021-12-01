@@ -20,7 +20,7 @@ template:
         unit_of_measurement: V
         device_class: voltage
       - name: "Air Quality Battery Level"
-        state: "{{ trigger.json.battery }}"
+        state: "{{ trigger.json.percent }}"
         unit_of_measurement: "%"
         device_class: battery
       - name: "Air Quality CO2"

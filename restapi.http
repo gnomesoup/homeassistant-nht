@@ -60,3 +60,7 @@ Content-Type: application/json
 GET :hass-url/api/states/switch.linear_unknown_type_2005_id_0503_switch
 Authorization: Bearer :hass-token
 Content-Type: application/json
+
+GET https://nht.mmjo.com/api/states
+Authorization:  Bearer {{$vscode-home-assistant.longLivedAccessToken}}
+Content-Type: application/json
