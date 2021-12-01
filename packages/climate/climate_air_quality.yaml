@@ -30,6 +30,9 @@ template:
       - name: "Air Quality TVOC"
         state: "{{ trigger.json.tvoc }}"
         unit_of_measurement: ppb
+      - name: "Air Quality Chip Temperature"
+        state: "{{ trigger.json.chipTemperature }}"
+        unit_of_measurement: ppb
 
   - trigger:
     - platform: webhook
