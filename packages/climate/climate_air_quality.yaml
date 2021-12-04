@@ -51,10 +51,26 @@ template:
         state: "{{ trigger.json['pm100 standard'] }}"
         unit_of_measurement: µg/m³
         device_class: pm10
+      - name: "Feather Particle Sensor Temperature"
+        state: "{{ trigger.json.temperature }}"
+        unit_of_measurement: °C
+        device_class: temperature
+      - name: "Feather Particle Sensor Humidity"
+        state: "{{ trigger.json.humidity }}"
+        unit_of_measurement: "%"
+        device_class: humidity
+      - name: "Feather Particle Sensor Pressure"
+        state: "{{ trigger.json.pressure }}"
+        unit_of_measurement: hPa
+        device_class: pressure
+      # - name: "Feather CPU Temperature"
+      #   state: "{{ trigger.json.chipTemperature }}"
+      #   unit_of_measurement: °C
+      #   device_class: temperature
 
 automation:
   - id: 55913ca2-3c78-4df7-91d7-c5d65ea263c0
-    alias: Alert on PM levels
+    alias: Alert on PM levels above 50ppm
     mode: single
     trigger:
       - platform: numeric_state
@@ -62,7 +78,7 @@ automation:
           - sensor.feather_particle_sensor_1_0um
           - sensor.feather_particle_sensor_2_5um
           - sensor.feather_particle_sensor_10um
-        above: 40
+        above: 50
         for: "00:00:02"
     condition: []
     action:
@@ -70,5 +86,31 @@ automation:
         service: notify.master_ha_grown_ups
         data:
           title: NHT Alert
-          message: High PM levels detected in bathroom
+          message: PM levels above 50 ppm
+      - delay: "00:30:00"
+  - id: f1d0431a-925f-4bef-8696-f4ffccd9dddf
+    alias: Alert on PM levels above 200ppm
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: 
+          - sensor.feather_particle_sensor_1_0um
+          - sensor.feather_particle_sensor_2_5um
+          - sensor.feather_particle_sensor_10um
+        above: 50
+        for: "00:00:02"
+      - platform: numeric_state
+        entity_id: 
+          - sensor.feather_particle_sensor_1_0um
+          - sensor.feather_particle_sensor_2_5um
+          - sensor.feather_particle_sensor_10um
+        above: 200
+        for: "00:00:02"
+    condition: []
+    action:
+      - alias: "Notify on high levels"
+        service: notify.master_ha_grown_ups
+        data:
+          title: NHT Alert
+          message: PM levels above 200 ppm
       - delay: "00:30:00"
