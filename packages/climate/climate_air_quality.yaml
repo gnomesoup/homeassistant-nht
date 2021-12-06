@@ -97,13 +97,6 @@ automation:
           - sensor.feather_particle_sensor_1_0um
           - sensor.feather_particle_sensor_2_5um
           - sensor.feather_particle_sensor_10um
-        above: 50
-        for: "00:00:02"
-      - platform: numeric_state
-        entity_id: 
-          - sensor.feather_particle_sensor_1_0um
-          - sensor.feather_particle_sensor_2_5um
-          - sensor.feather_particle_sensor_10um
         above: 200
         for: "00:00:02"
     condition: []
