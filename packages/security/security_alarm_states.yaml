@@ -124,11 +124,13 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home_alarm
         state: "armed_night"
-      - condition: template
+      - condition: numeric_state
+        entity_id:
+          - binary_sensor.motion_master_bedroom
+          - binary_sensor.motion_camille_bedroom
         value_template: >-
-          {{ states("binary_sensor.motion_master_bedroom") == "on"
-             or states("binary_sensor.motion_camille_bedroom") == "on"
-             or states("binary_sensor.motion_office") == "on" }}
+          {{((now() | as_timestamp) - (state.last_changed | as_timestamp)) / 60 }}
+        below: 15
       - condition: time
         after: "05:00:00"
         before: "12:00:00"
