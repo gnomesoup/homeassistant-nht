@@ -3,7 +3,7 @@ binary_sensor:
     sensors:
       motion_server_cabinet:
         device_class: motion
-        friendly_name: "Server Cabinet"
+        friendly_name: "Kitchen Motion"
         value_template: >-
           {{ states("binary_sensor.pir_motion_detector_any") == "on" }}
       motion_hallway:
