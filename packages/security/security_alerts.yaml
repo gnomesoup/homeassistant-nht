@@ -148,6 +148,21 @@ automation:
           title: "Alarm"
           message: "Motion in Master Bedroom"
 
+  - id: 8c5e57ec-aa00-4d31-9a80-e2ca1051a83a
+    alias: Notify motion in kitchen
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion_server_cabinet
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - alias: "Notify grown ups"
+        service: notify.master_ha_grown_ups
+        data:
+          title: Camille Alert
+          message: Motion in the kitchen
+
   - alias: Notify Pending Trigger
     trigger:
       - platform: state
