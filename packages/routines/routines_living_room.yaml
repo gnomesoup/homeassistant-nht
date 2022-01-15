@@ -46,7 +46,7 @@ script:
     sequence:
       - service: switch.turn_on
         data:
-          entity_id: switch.zen06_smart_plug_switch
+          entity_id: switch.smart_plug_with_2_usb_ports
       - service: media_player.volume_set
         data:
           entity_id: media_player.living_room_tv
