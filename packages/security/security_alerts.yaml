@@ -181,9 +181,6 @@ automation:
         data:
           title: "Alarm"
           message: "Alarm will sound in 15 seconds"
-          data:
-            push:
-              category: "alarm"
 
   - alias: Door Open Too Long
     trigger:
@@ -237,9 +234,6 @@ automation:
         data:
           title: "Alarm Status"
           message: "The alarm was not set and no one is home"
-          data:
-            push:
-              category: "alarm_activate"
 
 script:
   reset_door_delay:
