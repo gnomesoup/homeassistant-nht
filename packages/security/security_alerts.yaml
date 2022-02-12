@@ -198,18 +198,6 @@ automation:
           title: "Alert"
           message: "The front door has been open for 5 minutes"
 
-  - alias: Activate Siren
-    trigger:
-      - platform: event
-        event_type: ios.notification_action_fired
-        event_data:
-          actionName: ALARM_SIREN
-    action:
-      - service: homeassistant.turn_on
-        data:
-          entity_id:
-            - switch.linear_unknown_type_2005_id_0503_switch
-
   - alias: Notify Arm Away Not Set
     trigger:
       - platform: state

@@ -97,10 +97,6 @@ automation:
           - input_boolean.minimote_master_bedroom_8
           - input_boolean.minimote_front_door_8
           - input_boolean.flic_button_single_click
-      - platform: event
-        event_type: ios.notification_action_fired
-        event_data:
-          actionName: ALARM_DISARM
     condition:
       - condition: template
         value_template: >-
@@ -162,10 +158,6 @@ automation:
           - input_boolean.minimote_front_door_8
           - input_boolean.flic_button_single_click
           - input_boolean.flic_button_hold
-      - platform: event
-        event_type: ios.notification_action_fired
-        event_data:
-          actionName: ALARM_DISARM
     condition:
       - condition: template
         value_template: >-
@@ -182,21 +174,6 @@ automation:
           entity_id:
             - media_player.bedroom_speaker
             - media_player.living_room_display
-
-  - alias: Set Away from push message
-    id: 144eb954-a01b-4cc7-8169-318cf4a9a597
-    trigger:
-      - platform: event
-        event_type: ios.notification_action_fired
-        event_data:
-          actionName: ALARM_ARM_AWAY
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.home_alarm") == "disarmed" }}
-    action:
-      - service: alarm_control_panel.alarm_arm_away
-        entity_id: alarm_control_panel.home_alarm
 
   - alias: In Home Service Over
     id: 4c535958-c183-47c0-8ec4-24b9d41f2483
