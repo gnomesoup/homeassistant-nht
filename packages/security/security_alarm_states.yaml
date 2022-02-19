@@ -119,6 +119,7 @@ automation:
         entity_id:
           - binary_sensor.motion_hallway
           - binary_sensor.motion_living_room
+          - binary_sensor.motion_server_cabinet
           - binary_sensor.motion_master_bedroom
           - binary_sensor.motion_camille_bedroom
         from: "off"
