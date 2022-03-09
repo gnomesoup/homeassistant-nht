@@ -129,14 +129,6 @@ automation:
         alias: "Alarm set to night"
         entity_id: alarm_control_panel.home_alarm
         state: "armed_night"
-      - condition: numeric_state
-        alias: "Motion in bedroom within 30 minutes"
-        entity_id:
-          - binary_sensor.motion_master_bedroom
-          - binary_sensor.motion_camille_bedroom
-        value_template: >-
-          {{((now() | as_timestamp) - (state.last_changed | as_timestamp)) / 60 }}
-        below: 30
       - condition: time
         alias: "Time between 5am and noon"
         after: "05:00:00"
