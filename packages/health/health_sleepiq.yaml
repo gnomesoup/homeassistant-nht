@@ -1,14 +1,14 @@
-sleepiq:
-  username: !secret sleepiqUsername
-  password: !secret sleepiqPassword
+# sleepiq:
+#   username: !secret sleepiqUsername
+#   password: !secret sleepiqPassword
 
-homeassistant:
-  customize:
-    sensor.sleepnumber_michael_angela_sleepnumber:
-      friendly_name: Angela SleepNumber
-    binary_sensor.sleepnumber_michael_angela_is_in_bed:
-      friendly_name: Angela Is In Bed
-    sensor.sleepnumber_michael_michael_sleepnumber:
-      friendly_name: Michael SleepNumber
-    binary_sensor.sleepnumber_michael_michael_is_in_bed:
-      friendly_name: Michael Is In Bed
+# homeassistant:
+#   customize:
+#     sensor.sleepnumber_michael_angela_sleepnumber:
+#       friendly_name: Angela SleepNumber
+#     binary_sensor.sleepnumber_michael_angela_is_in_bed:
+#       friendly_name: Angela Is In Bed
+#     sensor.sleepnumber_michael_michael_sleepnumber:
+#       friendly_name: Michael SleepNumber
+#     binary_sensor.sleepnumber_michael_michael_is_in_bed:
+#       friendly_name: Michael Is In Bed
