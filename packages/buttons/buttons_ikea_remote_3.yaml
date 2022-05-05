@@ -1,6 +1,7 @@
 # Master Bath Remote
 automation:
   - alias: "Bathroom Lights IKEA Button"
+    id: "4c60f177-8875-4cce-a696-3341629f9c54"
     mode: queued
     max_exceeded: silent
     variables:

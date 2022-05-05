@@ -1,6 +1,7 @@
 #Living room remote
 automation:
   - alias: "Living Room Ikea Button"
+    id: "86096adc-328b-4435-a5ec-882adbe0da81"
     mode: queued
     max_exceeded: silent
     trigger:
