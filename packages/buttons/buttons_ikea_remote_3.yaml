@@ -44,7 +44,7 @@ automation:
               - "{{ command == 'step_with_on_off' }}"
               - "{{ cluster_id == 8 }}"
               - "{{ endpoint_id == 1 }}"
-              - "{{ args == [0, 43, 5] }}"
+              # - "{{ args == [0, 43, 5] }}"
             sequence:
               - choose:
                   - conditions:
@@ -103,7 +103,7 @@ automation:
               - "{{ command == 'step' }}"
               - "{{ cluster_id == 8 }}"
               - "{{ endpoint_id == 1 }}"
-              - "{{ args == [1, 43, 5] }}"
+              # - "{{ args == [1, 43, 5] }}"
             sequence:
               - choose:
                   - conditions:
