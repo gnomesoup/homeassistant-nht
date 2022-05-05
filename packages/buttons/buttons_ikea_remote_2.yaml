@@ -44,7 +44,6 @@ automation:
               - "{{ command == 'step_with_on_off' }}"
               - "{{ cluster_id == 8 }}"
               - "{{ endpoint_id == 1 }}"
-              - "{{ args == [0, 43, 5] }}"
             sequence:
               - choose:
                   - conditions:
@@ -86,7 +85,6 @@ automation:
           #     - "{{ command == 'move_with_on_off' }}"
           #     - "{{ cluster_id == 8 }}"
           #     - "{{ endpoint_id == 1 }}"
-          #     - "{{ args == [0, 84] }}"
           #   sequence:
           #     - repeat:
           #         count: 10
@@ -103,7 +101,6 @@ automation:
               - "{{ command == 'step' }}"
               - "{{ cluster_id == 8 }}"
               - "{{ endpoint_id == 1 }}"
-              - "{{ args == [1, 43, 5] }}"
             sequence:
               - choose:
                   - conditions:
@@ -130,7 +127,6 @@ automation:
           #     - "{{ command == 'move' }}"
           #     - "{{ cluster_id == 8 }}"
           #     - "{{ endpoint_id == 1 }}"
-          #     - "{{ args == [1, 84] }}"
           #   sequence:
           #     - repeat:
           #         count: 10
@@ -147,7 +143,6 @@ automation:
           #     - "{{ command == 'press' }}"
           #     - "{{ cluster_id == 5 }}"
           #     - "{{ endpoint_id == 1 }}"
-          #     - "{{ args == [257, 13, 0] }}"
           #   sequence:
           #     - service: light.turn_on
           #       target:
@@ -159,19 +154,16 @@ automation:
           #     - "{{ command == 'hold' }}"
           #     - "{{ cluster_id == 5 }}"
           #     - "{{ endpoint_id == 1 }}"
-          #     - "{{ args == [3329, 0] }}"
           #   sequence: !input button_left_long
 
           # - conditions:
           #     - "{{ command == 'press' }}"
           #     - "{{ cluster_id == 5 }}"
           #     - "{{ endpoint_id == 1 }}"
-          #     - "{{ args == [256, 13, 0] }}"
           #   sequence: !input button_right_short
 
           # - conditions:
           #     - "{{ command == 'hold' }}"
           #     - "{{ cluster_id == 5 }}"
           #     - "{{ endpoint_id == 1 }}"
-          #     - "{{ args == [3328, 0] }}"
           #   sequence: !input button_right_long
