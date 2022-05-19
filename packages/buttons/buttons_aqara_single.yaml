@@ -9,7 +9,7 @@ input_boolean:
     name: "Aqara Button Hold"
     icon: mdi:gesture-tap-hold
   aqara_button_1_release:
-    name: "Aqara Button Hold"
+    name: "Aqara Button Release"
     icon: mdi:gesture-tap-box
 
 automation:
