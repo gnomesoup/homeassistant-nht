@@ -338,7 +338,7 @@ automation:
             target:
               entity_id: input_boolean.points_increment
         - conditions:
-            - "{{ command == 'release' }}"
+            - "{{ command == 'hold' }}"
           sequence:
             service: homeassistant.turn_on
             target:
