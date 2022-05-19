@@ -22,6 +22,12 @@ input_boolean:
   school_day:
     name: "School Day"
     icon: mdi:bus-school
+  points_increment:
+    name: "Increment Point"
+    icon: mdi:arrow-up
+  points_claim_reward:
+    name: "Claim Reward"
+    icon: mdi:trophy
 
 group:
   lights_bedroom_camille:
@@ -147,16 +153,6 @@ automation:
         data:
           entity_id:
             - light.ge_appliances_zll_light_1b550600_level_on_off
-
-  # - alias: "Minimote Camille Push 4"
-  #   trigger:
-  #     - platform: state
-  #       entity_id: input_boolean.minimote_camille_7
-  #   action:
-  #     - service: homeassistant.toggle
-  #       data:
-  #         entity_id:
-  #           - light.ge_appliances_zll_light_1b550600_level_on_off
 
   - alias: "Wakeup Alarm Repeat Camille"
     initial_state: false
@@ -322,6 +318,31 @@ automation:
           {% else %}
           homeassistant.turn_off
           {% endif %}
+
+  - id: 03bc99bb-5728-4aae-98d9-17b03d9a0244
+    alias: Points Button Action
+    trigger:
+      platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 5eb4d5579d0f2e30673144140b1fbf4a
+    action:
+      - variables:
+          command: "{{ trigger.event.data.command }}"
+      - alias: "Action on button command"
+        choose:
+        - conditions:
+            - "{{ command == 'single' }}"
+          sequence:
+            service: homeassistant.turn_on
+            target:
+              entity_id: input_boolean.points_increment
+        - conditions:
+            - "{{ command == 'release' }}"
+          sequence:
+            service: homeassistant.turn_on
+            target:
+              entity_id: input_boolean.points_claim_reward
 
 script:
   goodmorning_camille:
