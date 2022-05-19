@@ -1,0 +1,51 @@
+input_boolean:
+  aqara_button_1_single:
+    name: "Aqara Button Single Click"
+    icon: mdi:gesture-tap
+  aqara_button_1_double:
+    name: "Aqara Button Double Click"
+    icon: mdi:gesture-double-tap
+  aqara_button_1_hold:
+    name: "Aqara Button Hold"
+    icon: mdi:gesture-tap-hold
+  aqara_button_1_release:
+    name: "Aqara Button Hold"
+    icon: mdi:gesture-tap-box
+
+automation:
+  - id: 03bc99bb-5728-4aae-98d9-17b03d9a0244
+    alias: Points Button Action
+    trigger:
+      platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 5eb4d5579d0f2e30673144140b1fbf4a
+    action:
+      - variables:
+          command: "{{ trigger.event.data.command }}"
+      - alias: "Action on button command"
+        choose:
+        - conditions:
+            - "{{ command == 'single' }}"
+          sequence:
+            service: homeassistant.toggle
+            target:
+              entity_id: input_boolean.aqara_button_1_single
+        - conditions:
+            - "{{ command == 'double' }}"
+          sequence:
+            service: homeassistant.toggle
+            target:
+              entity_id: input_boolean.aqara_button_1_double
+        - conditions:
+            - "{{ command == 'hold' }}"
+          sequence:
+            service: homeassistant.toggle
+            target:
+              entity_id: input_boolean.aqara_button_1_hold
+        - conditions:
+            - "{{ command == 'release' }}"
+          sequence:
+            service: homeassistant.toggle
+            target:
+              entity_id: input_boolean.aqara_button_1_release
