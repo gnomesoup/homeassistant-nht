@@ -8,7 +8,7 @@ sensor:
           {% set humidity = namespace(sum=0, count=0) %}
           {% for sensor in [
               'sensor.4_in_1_multisensor_humidity',
-              'sensor.zw100_multisensor_6_humidity'
+              'sensor.multisensor_6_humidity'
             ] %}
             {% if states(sensor)|float > 0 %}
               {% set humidity.sum = humidity.sum + (states(sensor)|float) %}
