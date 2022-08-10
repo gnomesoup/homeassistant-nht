@@ -1,5 +1,5 @@
 group:
-  all_locks:
+  locks_all:
     name: "All Locks"
     entities:
       - lock.touchscreen_electronic_deadbolt
