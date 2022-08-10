@@ -1,0 +1,25 @@
+group:
+  all_locks:
+    name: "All Locks"
+    entities:
+      - lock.touchscreen_electronic_deadbolt
+      - lock.touchscreen_electronic_deadbolt_2
+      - lock.touchscreen_electronic_deadbolt_3
+
+lock:
+  - platform: template
+    name: All Locks
+    value_template: >-
+      {{
+        is_state('lock.touchscreen_electronic_deadbolt', 'locked') and
+        is_state('lock.touchscreen_electronic_deadbolt_2', 'locked') and
+        is_state('lock.touchscreen_electronic_deadbolt_3', 'locked')
+      }}
+    lock:
+      service: lock.lock
+      target:
+        entity_id: group.all_locks
+    unlock:
+      service: lock.unlock
+      target:
+        entity_id: group.all_locks
