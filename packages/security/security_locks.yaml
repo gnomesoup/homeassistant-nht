@@ -18,8 +18,39 @@ lock:
     lock:
       service: lock.lock
       target:
-        entity_id: group.all_locks
+        entity_id:
+          - lock.touchscreen_electronic_deadbolt
+          - lock.touchscreen_electronic_deadbolt_2
+          - lock.touchscreen_electronic_deadbolt_3
     unlock:
       service: lock.unlock
       target:
-        entity_id: group.all_locks
+        entity_id:
+          - lock.touchscreen_electronic_deadbolt
+          - lock.touchscreen_electronic_deadbolt_2
+          - lock.touchscreen_electronic_deadbolt_3
+
+automation:
+  - id: 74ffe94e-c2e3-43c3-9eef-395ae0e81a38
+    alias: Lock locks when it's late
+    trigger:
+      - platform: time_pattern
+        minutes: "/30"
+    condition:
+      - alias: "Only when it's late"
+        condition: time
+        after: "22:00:00"
+        before: "05:00:00"
+      - alias: "Not in guest mode"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+      - alias: "All locks not locked"
+        condition: state
+        entity_id: group.loc
+        state: "state"
+    action:
+      - alias: "Lock all locks"
+        service: lock.lock
+        target:
+          entity_id: lock.all_locks
