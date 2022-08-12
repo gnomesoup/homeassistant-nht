@@ -47,8 +47,8 @@ automation:
         state: "off"
       - alias: "All locks not locked"
         condition: state
-        entity_id: group.loc
-        state: "state"
+        entity_id: lock.all_locks
+        state: "unlocked"
     action:
       - alias: "Lock all locks"
         service: lock.lock
