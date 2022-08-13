@@ -6,7 +6,48 @@ group:
       - sensor.smartthings_moisture_temperature
       - sensor.multisensor_6_air_temperature
       - sensor.4_in_1_multisensor_air_temperature
-  
+
+input_datetime:
+  thermostat_night:
+
+input_number:
+  thermostat_setpoint_cool_day:
+    name: Thermostat Setpoint Cool Day
+    icon: mdi:thermostat
+    min: 65
+    max: 80
+    mode: box
+  thermostat_setpoint_cool_night:
+    name: Thermostat Setpoint Cool Night
+    icon: mdi:thermostat
+    min: 65
+    max: 80
+    mode: box
+  thermostat_setpoint_cool_away:
+    name: Thermostat Setpoint Cool Away
+    icon: mdi:thermostat
+    min: 65
+    max: 80
+    mode: box
+  thermostat_setpoint_heat_day:
+    name: Thermostat Setpoint Heat Day
+    icon: mdi:thermostat
+    min: 50
+    max: 80
+    mode: box
+  thermostat_setpoint_heat_night:
+    name: Thermostat Setpoint Heat Night
+    icon: mdi:thermostat
+    min: 50
+    max: 80
+    mode: box
+  thermostat_setpoint_heat_away:
+    name: Thermostat Setpoint Heat Away
+    icon: mdi:thermostat
+    min: 50
+    max: 80
+    mode: box
+
 sensor:
   - platform: template
     sensors:
@@ -28,3 +69,47 @@ sensor:
             {% set temp.count = 1 %}
           {% endif %}
           {{ (temp.sum / temp.count)|round(1) }}
+
+# automation:
+#   - id: eac65317-2910-4553-811a-92795aaa6cc7
+#     alias: Set Thermostat Night
+#     trigger:
+#       - platform: time
+#         at: "22:00:00"
+#     condition:
+#       - condition: not
+#         conditions:
+#           - alias: "Alarm is not away"
+#             condition: state
+#             entity_id: alarm_control_panel.home_alarm
+#             state: "armed_away"
+#       - alias: "Not in guest mode"
+#         condition: state
+#         entity_id: input_boolean.guest_mode
+#         state: "off"
+#     action:
+#       - alias: "Heet or cool"
+#         choose:
+#         - conditions:
+#             - alias: "Heat is on"
+#               condition: state
+#               entity_id: climate.z_wave_plus_thermostat
+#               state: "heat"
+#           sequence:
+#             - alias: "Set thremostat setpoint"
+#               service: climate.set_temperature
+#               target:
+#                 entity_id: climate.z_wave_plus_thermostat
+#               data:
+#                 temperature: "{{ state('input_number.thermostat_setpoint_cool_night')}}"
+
+#         - conditions:
+#             condition
+#           sequence:
+#             action
+#         default:
+#             action
+#       - alias: "Set thremostat setpoint"
+#         service: climate.set_temperature
+#         target:
+#           entity_id: climate.z_wave_plus_thermostat
