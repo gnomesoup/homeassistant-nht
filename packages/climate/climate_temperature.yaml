@@ -8,7 +8,14 @@ group:
       - sensor.4_in_1_multisensor_air_temperature
 
 input_datetime:
-  thermostat_night:
+  thermostat_time_day:
+    name: Thermostat Time Day
+    has_date: false
+    has_time: true
+  thermostat_time_night:
+    name: Thermostat Time Night
+    has_date: false
+    has_time: true
 
 input_number:
   thermostat_setpoint_cool_day:
