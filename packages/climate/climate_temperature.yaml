@@ -12,6 +12,10 @@ input_datetime:
     name: Thermostat Time Day
     has_date: false
     has_time: true
+  thermostat_time_weekend_day:
+    name: Thermostat Time Weekend Day
+    has_date: false
+    has_time: true
   thermostat_time_night:
     name: Thermostat Time Night
     has_date: false
@@ -77,46 +81,164 @@ sensor:
           {% endif %}
           {{ (temp.sum / temp.count)|round(1) }}
 
-# automation:
-#   - id: eac65317-2910-4553-811a-92795aaa6cc7
-#     alias: Set Thermostat Night
-#     trigger:
-#       - platform: time
-#         at: "22:00:00"
-#     condition:
-#       - condition: not
-#         conditions:
-#           - alias: "Alarm is not away"
-#             condition: state
-#             entity_id: alarm_control_panel.home_alarm
-#             state: "armed_away"
-#       - alias: "Not in guest mode"
-#         condition: state
-#         entity_id: input_boolean.guest_mode
-#         state: "off"
-#     action:
-#       - alias: "Heet or cool"
-#         choose:
-#         - conditions:
-#             - alias: "Heat is on"
-#               condition: state
-#               entity_id: climate.z_wave_plus_thermostat
-#               state: "heat"
-#           sequence:
-#             - alias: "Set thremostat setpoint"
-#               service: climate.set_temperature
-#               target:
-#                 entity_id: climate.z_wave_plus_thermostat
-#               data:
-#                 temperature: "{{ state('input_number.thermostat_setpoint_cool_night')}}"
+automation:
+  - id: eac65317-2910-4553-811a-92795aaa6cc7
+    alias: Set Thermostat Night
+    trigger:
+      - platform: time
+        at: input_datetime.thermostat_time_day
+    condition:
+      - condition: not
+        conditions:
+          - alias: "Alarm is not away"
+            condition: state
+            entity_id: alarm_control_panel.home_alarm
+            state: "armed_away"
+      - alias: "Not in guest mode"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+    action:
+      - alias: "Heat or cool"
+        choose:
+        - conditions:
+            - alias: "Heat is on"
+              condition: state
+              entity_id: climate.z_wave_plus_thermostat
+              state: "heat"
+          sequence:
+            - alias: "Set thremostat setpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                temperature: "{{ states('input_number.thermostat_setpoint_heat_night')}}"
+            - alias: "Set fan"
+              service: climate.set_fan_mode
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                fan_mode: "low"
+        default:
+          - alias: "Set thremostat setpoint"
+            service: climate.set_temperature
+            target:
+              entity_id: climate.z_wave_plus_thermostat
+            data:
+              temperature: "{{states('input_number.thermostat_setpoint_cool_night')}}"
+          - alias: "Set fan"
+            service: climate.set_fan_mode
+            target:
+              entity_id: climate.z_wave_plus_thermostat
+            data:
+              fan_mode: "low"
 
-#         - conditions:
-#             condition
-#           sequence:
-#             action
-#         default:
-#             action
-#       - alias: "Set thremostat setpoint"
-#         service: climate.set_temperature
-#         target:
-#           entity_id: climate.z_wave_plus_thermostat
+  - id: 1dd4b108-62d8-4a37-bc79-db7401a53565
+    alias: Set Thermostat Workday
+    trigger:
+      - platform: time
+        at: input_datetime.thermostat_time_day
+    condition:
+      - condition: not
+        conditions:
+          - alias: "Alarm is not away"
+            condition: state
+            entity_id: alarm_control_panel.home_alarm
+            state: "armed_away"
+      - alias: "Not in guest mode"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+      - alias: "Is a workday"
+        condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: "on"
+    action:
+      - alias: "Heat or cool"
+        choose:
+        - conditions:
+            - alias: "Heat is on"
+              condition: state
+              entity_id: climate.z_wave_plus_thermostat
+              state: "heat"
+          sequence:
+            - alias: "Set thremostat setpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                temperature: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+            - alias: "Set fan"
+              service: climate.set_fan_mode
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                fan_mode: "low"
+        default:
+          - alias: "Set thremostat setpoint"
+            service: climate.set_temperature
+            target:
+              entity_id: climate.z_wave_plus_thermostat
+            data:
+              temperature: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+          - alias: "Set fan"
+            service: climate.set_fan_mode
+            target:
+              entity_id: climate.z_wave_plus_thermostat
+            data:
+              fan_mode: "low"
+
+  - id: f4b02269-3f4b-48df-9748-f5dc3399fd46
+    alias: Set Thermostat Non Workday
+    trigger:
+      - platform: time
+        at: input_datetime.thermostat_time_weekend_day
+    condition:
+      - condition: not
+        conditions:
+          - alias: "Alarm is not away"
+            condition: state
+            entity_id: alarm_control_panel.home_alarm
+            state: "armed_away"
+      - alias: "Not in guest mode"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+      - alias: "Is a workday"
+        condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: "off"
+    action:
+      - alias: "Heat or cool"
+        choose:
+        - conditions:
+            - alias: "Heat is on"
+              condition: state
+              entity_id: climate.z_wave_plus_thermostat
+              state: "heat"
+          sequence:
+            - alias: "Set thremostat setpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                temperature: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+            - alias: "Set fan"
+              service: climate.set_fan_mode
+              target:
+                entity_id: climate.z_wave_plus_thermostat
+              data:
+                fan_mode: "low"
+        default:
+          - alias: "Set thremostat setpoint"
+            service: climate.set_temperature
+            target:
+              entity_id: climate.z_wave_plus_thermostat
+            data:
+              temperature: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+          - alias: "Set fan"
+            service: climate.set_fan_mode
+            target:
+              entity_id: climate.z_wave_plus_thermostat
+            data:
+              fan_mode: "low"
