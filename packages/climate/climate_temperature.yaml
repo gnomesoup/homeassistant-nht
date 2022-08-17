@@ -118,7 +118,7 @@ automation:
               target:
                 entity_id: climate.z_wave_plus_thermostat
               data:
-                fan_mode: "low"
+                fan_mode: "Low"
         default:
           - alias: "Set thremostat setpoint"
             service: climate.set_temperature
@@ -131,7 +131,7 @@ automation:
             target:
               entity_id: climate.z_wave_plus_thermostat
             data:
-              fan_mode: "low"
+              fan_mode: "Low"
 
   - id: 1dd4b108-62d8-4a37-bc79-db7401a53565
     alias: Set Thermostat Workday
@@ -173,7 +173,7 @@ automation:
               target:
                 entity_id: climate.z_wave_plus_thermostat
               data:
-                fan_mode: "low"
+                fan_mode: "Low"
         default:
           - alias: "Set thremostat setpoint"
             service: climate.set_temperature
@@ -186,7 +186,7 @@ automation:
             target:
               entity_id: climate.z_wave_plus_thermostat
             data:
-              fan_mode: "low"
+              fan_mode: "Low"
 
   - id: f4b02269-3f4b-48df-9748-f5dc3399fd46
     alias: Set Thermostat Non Workday
@@ -228,7 +228,7 @@ automation:
               target:
                 entity_id: climate.z_wave_plus_thermostat
               data:
-                fan_mode: "low"
+                fan_mode: "Low"
         default:
           - alias: "Set thremostat setpoint"
             service: climate.set_temperature
@@ -241,4 +241,4 @@ automation:
             target:
               entity_id: climate.z_wave_plus_thermostat
             data:
-              fan_mode: "low"
+              fan_mode: "Low"
