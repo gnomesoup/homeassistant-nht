@@ -86,7 +86,7 @@ automation:
     alias: Set Thermostat Night
     trigger:
       - platform: time
-        at: input_datetime.thermostat_time_day
+        at: input_datetime.thermostat_time_night
     condition:
       - condition: not
         conditions:
