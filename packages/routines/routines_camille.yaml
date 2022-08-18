@@ -137,7 +137,7 @@ automation:
         target:
           entity_id: input_boolean.camille_med_notification_enabled
 
-  - alias: Camille Sent Medication Actionalbe Notification
+  - alias: Camille Sent Medication Actionable Notification
     id: fb06daa2-4eef-4aa6-817d-be5e7452131c
     mode: restart
     trigger:
@@ -145,8 +145,6 @@ automation:
         entity_id: input_boolean.camille_med_notification_enabled
         from: "off"
         to: "on"
-      - platform: time_pattern
-        minutes: "/15"
     condition:
       - alias: "Med notification enabled"
         condition: state
@@ -163,10 +161,12 @@ automation:
                 title: "Taken"
       - alias: "Wait for response"
         wait_for_trigger:
-          platform: event
-          event_type: mobile_app_notification_action
-          event_data:
-            action: "CAMILLE_MED_TAKEN"
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: "CAMILLE_MED_TAKEN"
+        timeout:
+          minutes: 5
       - alias: "Turn off med notifiations"
         choose:
         - conditions: '{{ wait.trigger.event.data.action == "CAMILLE_MED_TAKEN"}}'
@@ -175,6 +175,15 @@ automation:
               service: input_boolean.turn_off
               target:
                 entity_id: input_boolean.camille_med_notification_enabled
+        default:
+          - alias: "turn off med notification"
+            service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.camille_med_notification_enabled
+          - alias: "turn on med notification to restart automation"
+            service: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.camille_med_notification_enabled
 
 script:
   goodmorning_camille:
