@@ -175,12 +175,6 @@ automation:
               target:
                 entity_id: input_boolean.camille_med_notification_enabled
 
-  - id: 77d4416d-eddb-46a8-a0ce-8e567a1fb17f
-    alias: automation alias (name)
-    trigger:
-    condition:
-    action:
-
 script:
   goodmorning_camille:
     alias: Goodmorning Camille
