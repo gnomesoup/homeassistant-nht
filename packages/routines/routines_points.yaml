@@ -1,0 +1,53 @@
+input_number:
+  camille_reward_points:
+    name: Reward Points
+    icon: mdi:star
+    min: 0
+    max: 100
+    step: 1
+    mode: box
+
+automation:
+  - id: 74647280-16cd-4ef8-ab5c-0165287ec715
+    alias: Increment points on aqara button click
+    trigger:
+      - platform: state
+        entity_id: input_boolean.nht_aqara_button_1_single
+        from: "off"
+        to: "on"
+    condition:
+      - alias: "condition alias (name)"
+        condition: numeric_state
+        entity_id: input_number.camille_reward_points
+        below: 100
+    action:
+      - alias: "turn nht button trigger back off"
+        service: homeassistant.turn_off
+        target:
+          entity_id: input_boolean.nht_aqara_button_1_single
+      - alias: "increment point"
+        service: input_number.increment
+        target:
+          entity_id: input_number.camille_reward_points
+
+  - id: fd05679b-8582-4a01-b583-aad5ccd5997a
+    alias: Point notification
+    trigger:
+      - platform: state
+        entity_id: input_number.camille_reward_points
+        for: "00:00:01"
+    action:
+      - variables:
+          from_state: "{{ trigger.from_state.state }}"
+          to_state: "{{ trigger.to_state.state }}"
+          total: "{{ (trigger.to_state.state)|int - (trigger.from_state.state)|int }}"
+      - alias: "Determine point status"
+        choose:
+        - conditions:
+            - "{{ total > 0 }}"
+          sequence:
+            - alias: "Notify point awarded"
+              service: notify.notify
+              data:
+                title: Rewards
+                message: "Point(s) awarded! Point total is {{ to_state }}"
