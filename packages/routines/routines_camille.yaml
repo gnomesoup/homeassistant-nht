@@ -1,3 +1,7 @@
+input_boolean:
+  camille_med_notification_enabled:
+    name: Camille Medication Notification On
+
 input_select:
   camille_status:
     name: "Camille's Status"
@@ -8,20 +12,14 @@ input_select:
       - Asleep
 
 input_datetime:
-  alarm_time_camille:
-    name: "Set Camille's Alarm Time"
+  camille_meds_morning:
+    name: "Camille's Morning Med Time"
     has_date: false
     has_time: true
-
-input_boolean:
-  alarm_disable_camille:
-    name: "Disable Camille's Alarm"
-  alarm_set_camille:
-    name: "Camille's Alarm"
-    icon: mdi:alarm
-  school_day:
-    name: "School Day"
-    icon: mdi:bus-school
+  camille_meds_evening:
+    name: "Camille's Evening Med Time"
+    has_date: false
+    has_time: true
 
 group:
   lights_bedroom_camille:
@@ -36,36 +34,9 @@ group:
       # - light.ge_appliances_zll_light_1b550600_level_on_off
 
 automation:
-  - alias: Wakeup Camille
-    trigger:
-      - platform: template
-        value_template: >-
-          {{ states.sensor.time.state == states.input_datetime.alarm_time_camille.state[0:5] }}
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("input_select.camille_status") != "Away" }}
-      - condition: state
-        entity_id: input_boolean.alarm_set_camille
-        state: "on"
-    action:
-      - service: script.goodmorning_camille
-      - service: homeassistant.turn_on
-        data:
-          entity_id:
-            - automation.wakeup_alarm_repeat_camille
-            - automation.camille_mark_awake_on_motion
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.camille_s_speaker
-          media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
-          media_content_type: "music"
-      - service: notify.master_ha_michael
-        data:
-          title: "Routines"
-          message: "Wakeup Camille Ran"
 
   - alias: "Lights on Motion Camille's Room"
+    id: 5f0e3383-0a41-4193-93a6-5fe7cf4403c9
     trigger:
       - platform: state
         entity_id: binary_sensor.motion_camille_bedroom
@@ -98,6 +69,7 @@ automation:
               entity_id: light.ge_appliances_zll_light_1b550600_level_on_off
 
   - alias: "Minimote Camille Push 1"
+    id: 17963bb0-262e-439d-873a-a6b148fd8f84
     trigger:
       - platform: state
         entity_id: input_boolean.minimote_camille_1
@@ -108,6 +80,7 @@ automation:
             - switch.z_wave_plus_power_strip_ver_2_0_5
 
   - alias: "Minimote Camille Hold"
+    id: 5203c99e-ae5c-411e-a031-58b29f231d2d
     trigger:
       - platform: state
         entity_id:
@@ -129,6 +102,7 @@ automation:
             {{ runScript }}
 
   - alias: "Minimote Camille Push 2"
+    id: d03bc5e4-ce23-43e7-9da2-5d5196165e1d
     trigger:
       - platform: state
         entity_id: input_boolean.minimote_camille_3
@@ -139,6 +113,7 @@ automation:
             - light.philips_lwb006_097e3010_level_on_off
 
   - alias: "Minimote Camille Push 3"
+    id: 963391e8-09e0-477d-80bd-717c2c0cd7fc
     trigger:
       - platform: state
         entity_id: input_boolean.minimote_camille_5
@@ -147,171 +122,64 @@ automation:
         data:
           entity_id:
             - light.ge_appliances_zll_light_1b550600_level_on_off
-
-  - alias: "Wakeup Alarm Repeat Camille"
-    initial_state: false
+  
+  - alias: Camille Medication Notifications On
+    id: a7e85b57-53c2-4aee-94d6-6fa856a4089e
     trigger:
+      - platform: time
+        at: input_datetime.camille_meds_morning 
+      - platform: time
+        at: input_datetime.camille_meds_evening 
+    condition: []
+    action:
+      - alias: "Turn on med notifications"
+        service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.camille_med_notification_enabled
+
+  - alias: Camille Sent Medication Actionalbe Notification
+    id: fb06daa2-4eef-4aa6-817d-be5e7452131c
+    trigger:
+      - platform: state
+        entity_id: input_boolean.camille_med_notification_enabled
+        from: "off"
+        to: "on"
       - platform: time_pattern
-        minutes: "/2"
-    action:
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.camille_s_speaker
-          # media_content_id: "https://dl.dropboxusercontent.com/s/mpdyuzl5svyuxmq/Rooster%20Crowing-SoundBible.com-43612401.mp3"
-          media_content_id: "https://dl.dropboxusercontent.com/s/hb2hjr9jfiztzls/train-whistle.mp3"
-          media_content_type: "music"
-      - delay: 0:05
-      - service: media_player.play_media
-        data:
-          entity_id: media_player.camille_s_speaker
-          media_content_id: "https://dl.dropboxusercontent.com/s/hb2hjr9jfiztzls/train-whistle.mp3"
-          media_content_type: "music"
-
-  - alias: "Camille mark awake on motion"
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.motion_camille_bedroom
-        from: "off"
-        to: "on"
+        minutes: "/15"
     condition:
-      - condition: state
-        entity_id: input_select.camille_status
-        state: "Asleep"
-      - condition: time
-        after: "06:00:00"
-        before: "11:00:00"
+      - alias: "Med notification enabled"
+        condition: state
+        entity_id: input_boolean.camille_med_notification_enabled
+        state: "state"
     action:
-      - service: input_select.select_option
+      - alias: "Actionable notification to family"
+        service: notify.mobile_app_kashyyyk
         data:
-          entity_id: input_select.camille_status
-          option: "Home"
+          message: "Time for meds"
+          data: 
+            actions:
+              - action: "CAMILLE_MED_TAKEN"
+                title: "Taken"
+      - alias: "Wait for response"
+        wait_for_trigger:
+          platform: event
+          event_type: mobile_app_notification_action
+          event_data:
+            action: "CAMILLE_MED_TAKEN"
+      - alias: "Turn off med notifiations"
+        choose:
+        - conditions: '{{ wait.trigger.event.data.action == "CAMILLE_MED_TAKEN"}}'
+          sequence:
+            - alias: "Turn off med notification input"
+              service: input_boolean.turn_off
+              target:
+                entity_id: input_boolean.camille_med_notification_enabled
 
-  - alias: "Wakeup Alarm Stop Camille"
+  - id: 77d4416d-eddb-46a8-a0ce-8e567a1fb17f
+    alias: automation alias (name)
     trigger:
-      - platform: state
-        entity_id: binary_sensor.motion_camille_bedroom
-        from: "off"
-        to: "on"
-      - platform: state
-        entity_id: input_boolean.alarm_set_camille
-        from: "on"
-        to: "off"
     condition:
-      - condition: state
-        entity_id: automation.wakeup_alarm_repeat_camille
-        state: "on"
     action:
-      - service: homeassistant.turn_off
-        data:
-          entity_id:
-            - automation.wakeup_alarm_repeat_camille
-            - input_boolean.alarm_set_camille
-
-  - alias: "Camille turn on mark awake"
-    trigger:
-      - platform: template
-        value_template: >-
-          {{ states.sensor.time.state == states.input_datetime.alarm_time_camille.state[0:5] }}
-    condition:
-      - condition: state
-        entity_id: input_select.camille_status
-        state: "Asleep"
-    action:
-      - service: homeassistant.turn_on
-        data:
-          entity_id:
-            - automation.camille_mark_awake_on_motion
-
-  - alias: "Camille Time for school"
-    trigger:
-      - platform: time
-        at: '07:35:00'
-    condition:
-      - condition: state
-        entity_id: input_select.camille_status
-        state: "Home"
-      - condition: state
-        entity_id: input_boolean.school_day
-        state: "on"
-    action:
-      - service: scene.create
-        data:
-          scene_id: school_notify_before_state
-          snapshot_entities:
-            - light.grandma_s_lamp
-      - service: homeassistant.turn_off
-        data:
-          entity_id:
-            - light.grandma_s_lamp
-            - input_boolean.school_day
-      - service: tts.google_translate_say
-        data:
-          entity_id:
-            - media_player.living_room_display
-            - media_player.camille_s_speaker
-          message: "Time to catch the bus."
-      - delay:
-          seconds: 2
-      - service: scene.turn_on
-        data:
-          entity_id: scene.school_notify_before_state
-
-  - alias: "Camille take meds"
-    trigger:
-      - platform: state
-        entity_id: input_select.camille_status
-        from: "Asleep"
-        to: "Home"
-        for:
-          minutes: 55
-    condition:
-      - condition: template
-        value_template: >-
-          {{ ((as_timestamp(utcnow()) - 
-            as_timestamp(states.binary_sensor.door_sensor_5.last_changed)) / 60) 
-            > 60 }}
-    action: 
-      - service: script.camille_meds_notify
-
-  - alias: "Camille Brush Teeth Morning"
-    trigger:
-      - platform: state
-        entity_id: input_select.camille_status
-        from: "Asleep"
-        to: "Home"
-        for:
-          minutes: 60
-    condition:
-      - condition: time
-        after: "05:00:00"
-        before: "11:00:00"
-    action:
-      - service: script.camille_brush_teeth_notify
-
-  - alias: "Camille Brush Teeth Evening"
-    trigger:
-      - platform: time
-        at: "20:45:00"
-    condition:
-      - condition: state
-        entity_id: input_select.camille_status
-        state: "Home"
-    action:
-      - service: script.camille_brush_teeth_notify
-        
-  - alias: "Camille's Closet Door Open Turn On Light"
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.door_sensor_5
-    action:
-      - entity_id: light.ge_appliances_zll_light_1b550600_level_on_off
-        service: >-
-          {% if trigger.to_state.state == "on" %}
-          homeassistant.turn_on
-          {% else %}
-          homeassistant.turn_off
-          {% endif %}
 
 script:
   goodmorning_camille:
