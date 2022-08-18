@@ -150,7 +150,7 @@ automation:
       - alias: "Med notification enabled"
         condition: state
         entity_id: input_boolean.camille_med_notification_enabled
-        state: "state"
+        state: "on"
     action:
       - alias: "Actionable notification to family"
         service: notify.mobile_app_kashyyyk
