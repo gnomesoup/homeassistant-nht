@@ -139,6 +139,7 @@ automation:
 
   - alias: Camille Sent Medication Actionalbe Notification
     id: fb06daa2-4eef-4aa6-817d-be5e7452131c
+    mode: restart
     trigger:
       - platform: state
         entity_id: input_boolean.camille_med_notification_enabled
