@@ -151,8 +151,8 @@ automation:
         entity_id: input_boolean.camille_med_notification_enabled
         state: "on"
     action:
-      - alias: "Actionable notification to family"
-        service: notify.mobile_app_kashyyyk
+      - alias: "Actionable notification to camille"
+        service: notify.mobile_app_sm_a326u
         data:
           message: "Time for meds"
           data: 
