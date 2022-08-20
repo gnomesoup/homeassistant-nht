@@ -1,4 +1,5 @@
 amcrest:
-  - host: 192.168.40.208:10080
+  - host: 192.168.40.208
     username: !secret amcrestUser
     password: !secret amcrestPassword
+    port: 10080
