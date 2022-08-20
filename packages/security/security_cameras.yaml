@@ -1,5 +1,5 @@
 amcrest:
   - host: 192.168.40.208
     username: admin
-    password: !secret amcrestPassword
+    password: admin
     port: 10080
