@@ -88,7 +88,7 @@ mqtt:
           {% if value_json is defined %}
             {{ value_json.action }}
           {% else %}
-            0
+            Stop
           {% endif %}
         {% else %}
         {{ states("binary_sensor.nvr_camera_7_motion") }}
