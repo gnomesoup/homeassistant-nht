@@ -63,7 +63,6 @@ mqtt:
         - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
           payload_available: "online"
           payload_not_available: "offline"
-      availability_mode: latest
     - name: "NVR Camera 8 Crossline"
       unique_id: nvr_camera_8_crossline
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
@@ -79,19 +78,19 @@ mqtt:
         - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
           payload_available: "online"
           payload_not_available: "offline"
-      availability_mode: latest
-    - name: "NVR Camera 7 Motion"
-      unique_id: nvr_camera_7_motion
+
+    - name: "NVR Camera 8 Sound"
+      unique_id: nvr_camera_8_sound
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
-        {% if value_json.index == "6" and value_json.Code == "VideoMotion" %}
-          {% if value_json is defined %}
-            {{ value_json.action }}
+        {% if value_json is defined %}
+          {% if value_json.index == "7" and value_json.Code == "AudioMutation" %}
+              {{ value_json.action }}
           {% else %}
-            Stop
+          {{ states("binary_sensor.nvr_camera_8_sound") }}
           {% endif %}
         {% else %}
-        {{ states("binary_sensor.nvr_camera_7_motion") }}
+          Stop
         {% endif %}
       payload_on: "Start"
       payload_off: "Stop"
@@ -99,4 +98,43 @@ mqtt:
         - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
           payload_available: "online"
           payload_not_available: "offline"
-      availability_mode: latest
+
+    - name: "NVR Camera 7 Motion"
+      unique_id: nvr_camera_7_motion
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: >-
+        {% if value_json is defined %}
+          {% if value_json.index == "6" and value_json.Code == "VideoMotion" %}
+            {{ value_json.action }}
+          {% else %}
+          {{ states("binary_sensor.nvr_camera_7_motion") }}
+          {% endif %}
+        {% else %}
+          Stop
+        {% endif %}
+      payload_on: "Start"
+      payload_off: "Stop"
+      availability:
+        - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
+          payload_available: "online"
+          payload_not_available: "offline"
+
+    - name: "NVR Camera 7 Sound"
+      unique_id: nvr_camera_7_sound
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: >-
+        {% if value_json is defined %}
+          {% if value_json.index == "6" and value_json.Code == "AudioMutation" %}
+              {{ value_json.action }}
+          {% else %}
+          {{ states("binary_sensor.nvr_camera_7_sound") }}
+          {% endif %}
+        {% else %}
+          Stop
+        {% endif %}
+      payload_on: "Start"
+      payload_off: "Stop"
+      availability:
+        - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
+          payload_available: "online"
+          payload_not_available: "offline"
