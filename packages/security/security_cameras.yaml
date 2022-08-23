@@ -85,7 +85,11 @@ mqtt:
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
         {% if value_json.index == "6" and value_json.Code == "VideoMotion" %}
-        {{ value_json.action }}
+          {% if value_json is defined %}
+            {{ value_json.action }}
+          {% else %}
+            0
+          {% endif %}
         {% else %}
         {{ states("binary_sensor.nvr_camera_7_motion") }}
         {% endif %}
@@ -96,4 +100,3 @@ mqtt:
           payload_available: "online"
           payload_not_available: "offline"
       availability_mode: latest
-
