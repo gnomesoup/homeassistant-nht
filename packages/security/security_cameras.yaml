@@ -52,7 +52,7 @@ mqtt:
       unique_id: nvr_camera_8_motion
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
-        {% if value_json.index == 7 %}
+        {% if value_json.index == "7" and value_json.Code == "VideoMotion" %}
         {{ value_json.action }}
         {% else %}
         {{ states("binary_sensor.nvr_camera_8_motion") }}
@@ -67,7 +67,7 @@ mqtt:
       unique_id: nvr_camera_7_motion
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
-        {% if value_json.index == 6 %}
+        {% if value_json.index == "6" and value_json.Code == "VideoMotion" %}
         {{ value_json.action }}
         {% else %}
         {{ states("binary_sensor.nvr_camera_7_motion") }}
