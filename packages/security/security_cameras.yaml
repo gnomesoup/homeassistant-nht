@@ -1,5 +1,61 @@
-amcrest:
-  - host: 192.168.40.208
-    username: admin
-    password: !secret amcrestPassword
-    # port: 10080
+# Message 14 received on amcrest2mqtt/AMR03225C8B908F530/event at 10:38 AM:
+# {
+#     "Code": "VideoMotion",
+#     "action": "Stop",
+#     "index": "6"
+# }
+
+# QoS: 0 - Retain: false
+# Message 13 received on amcrest2mqtt/AMR03225C8B908F530/motion at 10:38 AM:
+
+# off
+
+# QoS: 0 - Retain: false
+# Message 12 received on amcrest2mqtt/AMR03225C8B908F530/event at 10:37 AM:
+
+# {
+#     "Code": "VideoMotion",
+#     "action": "Stop",
+#     "index": "7"
+# }
+
+# QoS: 0 - Retain: false
+# Message 11 received on amcrest2mqtt/AMR03225C8B908F530/motion at 10:37 AM:
+
+# off
+
+# QoS: 0 - Retain: false
+# Message 10 received on amcrest2mqtt/AMR03225C8B908F530/event at 10:37 AM:
+
+# {
+#     "Code": "VideoMotion",
+#     "action": "Start",
+#     "index": "6"
+# }
+
+# QoS: 0 - Retain: false
+# Message 9 received on amcrest2mqtt/AMR03225C8B908F530/motion at 10:37 AM:
+
+# on
+
+# QoS: 0 - Retain: false
+# Message 8 received on amcrest2mqtt/AMR03225C8B908F530/event at 10:36 AM:
+
+# {
+#     "Code": "VideoMotion",
+#     "action": "Start",
+#     "index": "7"
+# }
+mqtt:
+  binary_sensor:
+    - name: "NVR Camera 8 Motion"
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: "{% if value_json.index == 7 %} {{ value_json.action }} {% endif %}"
+      payload_on: "Start"
+      payload_off: "Stop"
+    - name: "NVR Camera 7 Motion"
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: "{% if value_json.index == 6 %} {{ value_json.action }} {% endif %}"
+      payload_on: "Start"
+      payload_off: "Stop"
+
