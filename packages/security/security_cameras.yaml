@@ -138,3 +138,21 @@ mqtt:
         - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
           payload_available: "online"
           payload_not_available: "offline"
+
+automation:
+  - id: b6d4aa88-52a2-4e29-afc8-4df17f17e212
+    alias: Front Door Crossline Notification
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_8_crossline
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - alias: "Notify Michael"
+        service: notify.mobile_app_kashyyyk
+        data:
+          title: Taliluna Security
+          message: Front Camera Motion
+          data:
+            entity_id: camera.192_168_40_208_channel_8_snapshot
