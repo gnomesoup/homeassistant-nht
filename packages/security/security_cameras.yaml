@@ -1,6 +1,6 @@
 camera:
   - platform: local_file
-    camera_path: /config/www/snapshot.jpg
+    file_path: /config/www/snapshot.jpg
     name: Local Test
 
 mqtt:
