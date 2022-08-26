@@ -240,23 +240,3 @@ script:
             {%- if is_state("input_boolean.alarm_set_camille", "on") %} for{{ " " }}
             {{- states("input_datetime.alarm_time_camille")[0:5] }}
             {%- endif %}.
-
-  camille_meds_notify:
-    alias: Camille notify about meds
-    sequence:
-      - service: tts.google_translate_say
-        data:
-          entity_id:
-            - media_player.living_room_display
-            - media_player.camille_s_speaker
-          message: "Did you take your meds?"
-
-  camille_brush_teeth_notify:
-    alias: Camille remind to brush teeth
-    sequence:
-      - service: tts.google_translate_say
-        data:
-          entity_id:
-            - media_player.living_room_display
-            - media_player.camille_s_speaker
-          message: "Camille, did you brush your teeth?"
