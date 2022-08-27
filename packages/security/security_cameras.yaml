@@ -5,14 +5,14 @@ camera:
 
 mqtt:
   binary_sensor:
-    - name: "NVR Camera 8 Motion"
-      unique_id: nvr_camera_8_motion
+    - name: "NVR Camera 1 Motion"
+      unique_id: nvr_camera_1_motion
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
-        {% if value_json.index == "7" and value_json.Code == "VideoMotion" %}
+        {% if value_json.index == "0" and value_json.Code == "VideoMotion" %}
         {{ value_json.action }}
         {% else %}
-        {{ states("binary_sensor.nvr_camera_8_motion") }}
+        {{ states("binary_sensor.nvr_camera_1_motion") }}
         {% endif %}
       payload_on: "Start"
       payload_off: "Stop"
@@ -20,14 +20,14 @@ mqtt:
         - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
           payload_available: "online"
           payload_not_available: "offline"
-    - name: "NVR Camera 8 Crossline"
-      unique_id: nvr_camera_8_crossline
+    - name: "NVR Camera 1 Crossline"
+      unique_id: nvr_camera_1_crossline
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
-        {% if value_json.index == "7" and value_json.Code == "CrossLineDetection" %}
+        {% if value_json.index == "0" and value_json.Code == "CrossLineDetection" %}
         {{ value_json.action }}
         {% else %}
-        {{ states("binary_sensor.nvr_camera_8_crossline") }}
+        {{ states("binary_sensor.nvr_camera_1_crossline") }}
         {% endif %}
       payload_on: "Start"
       payload_off: "Stop"
@@ -36,15 +36,66 @@ mqtt:
           payload_available: "online"
           payload_not_available: "offline"
 
-    - name: "NVR Camera 8 Sound"
-      unique_id: nvr_camera_8_sound
+    - name: "NVR Camera 1 Sound"
+      unique_id: nvr_camera_1_sound
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
         {% if value_json is defined %}
-          {% if value_json.index == "7" and value_json.Code == "AudioMutation" %}
+          {% if value_json.index == "0" and value_json.Code == "AudioMutation" %}
               {{ value_json.action }}
           {% else %}
-          {{ states("binary_sensor.nvr_camera_8_sound") }}
+          {{ states("binary_sensor.nvr_camera_1_sound") }}
+          {% endif %}
+        {% else %}
+          Stop
+        {% endif %}
+      payload_on: "Start"
+      payload_off: "Stop"
+      availability:
+        - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
+          payload_available: "online"
+          payload_not_available: "offline"
+
+    - name: "NVR Camera 2 Motion"
+      unique_id: nvr_camera_2_motion
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: >-
+        {% if value_json.index == "1" and value_json.Code == "VideoMotion" %}
+        {{ value_json.action }}
+        {% else %}
+        {{ states("binary_sensor.nvr_camera_2_motion") }}
+        {% endif %}
+      payload_on: "Start"
+      payload_off: "Stop"
+      availability:
+        - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
+          payload_available: "online"
+          payload_not_available: "offline"
+    - name: "NVR Camera 2 Crossline"
+      unique_id: nvr_camera_2_crossline
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: >-
+        {% if value_json.index == "1" and value_json.Code == "CrossLineDetection" %}
+        {{ value_json.action }}
+        {% else %}
+        {{ states("binary_sensor.nvr_camera_2_crossline") }}
+        {% endif %}
+      payload_on: "Start"
+      payload_off: "Stop"
+      availability:
+        - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
+          payload_available: "online"
+          payload_not_available: "offline"
+
+    - name: "NVR Camera 2 Sound"
+      unique_id: nvr_camera_2_sound
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: >-
+        {% if value_json is defined %}
+          {% if value_json.index == "1" and value_json.Code == "AudioMutation" %}
+              {{ value_json.action }}
+          {% else %}
+          {{ states("binary_sensor.nvr_camera_2_sound") }}
           {% endif %}
         {% else %}
           Stop
@@ -101,7 +152,7 @@ automation:
     alias: Front Door Crossline Notification
     trigger:
       - platform: state
-        entity_id: binary_sensor.nvr_camera_8_crossline
+        entity_id: binary_sensor.nvr_camera_1_crossline
         from: "off"
         to: "on"
     condition: []
@@ -112,4 +163,4 @@ automation:
           title: Taliluna Security
           message: Front Camera Motion
           data:
-            entity_id: camera.192_168_40_208_channel_8_snapshot
+            entity_id: camera.192_168_40_208_channel_1_snapshot
