@@ -30,7 +30,7 @@ script:
         data:
           message: "command_ringer_mode"
           data:
-            "normal"
+            command: "normal"
   notify_camille_ringer_mode_silent:
     alias: "Set camille's phone ringer to silent"
     sequence:
@@ -39,7 +39,7 @@ script:
         data:
           message: "command_ringer_mode"
           data:
-            "silent"
+            command: "silent"
   notify_camille_with_sound:
     alias: "Notify Camille with sound"
     variables:
