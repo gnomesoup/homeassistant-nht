@@ -35,6 +35,26 @@ group:
 
 automation:
 
+  - id: 87ef214b-46c6-409a-bfcd-9ced215431a2
+    alias: Camille school phone to DND
+    trigger:
+      - platform: calendar
+        entity_id: calendar.west_high_school
+        event: start
+    action:
+      - alias: "Turn on dnd"
+        service: script.notify_camille_dnd_total_silence
+
+  - id: 1fc9e9d0-7689-41a6-8bdb-4deb13a5f66c
+    alias: Camille school phone DND off
+    trigger:
+      - platform: calendar
+        entity_id: calendar.west_high_school
+        event: end
+    action:
+      - alias: "Turn off dnd"
+        service: script.notify_camille_dnd_off
+      
   - alias: "Lights on Motion Camille's Room"
     id: 5f0e3383-0a41-4193-93a6-5fe7cf4403c9
     trigger:

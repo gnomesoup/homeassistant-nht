@@ -16,24 +16,33 @@ input_select:
     icon: mdi:bell-ring
 
 script:
-  notify_camille_ringer_mode_normal:
-    alias: "Set camille's phone ringer to normal"
+  notify_camille_dnd_off:
+    alias: "Set camille's phone DND to off"
     sequence:
       - alias: "Galaxy phone to normal"
         service: notify.mobile_app_sm_a326u
         data:
-          message: "command_ringer_mode"
+          message: "command_dnd"
           data:
-            command: "normal"
-  notify_camille_ringer_mode_silent:
-    alias: "Set camille's phone ringer to silent"
+            command: "off"
+  notify_camille_dnd_alarms_only:
+    alias: "Set camille's phone DND with alarms"
     sequence:
-      - alias: "Galazy phone to silent"
+      - alias: "Galazy phone to alarms only"
         service: notify.mobile_app_sm_a326u
         data:
-          message: "command_ringer_mode"
+          message: "command_dnd"
           data:
-            command: "silent"
+            command: "alarms_only"
+  notify_camille_dnd_total_silence:
+    alias: "Set camille's phone DND total silence"
+    sequence:
+      - alias: "Galazy phone to total silence"
+        service: notify.mobile_app_sm_a326u
+        data:
+          message: "command_dnd"
+          data:
+            command: "total_silence"
   notify_camille_with_sound:
     alias: "Notify Camille with sound"
     variables:
