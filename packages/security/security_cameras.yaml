@@ -206,7 +206,7 @@ automation:
           camera_id: >-
             camera.192_168_40_208_channel_{{ camera_number }}
           snapshot_path: >-
-            '/config/www/camera_snapshot_{{ camera_number }} '.jpg'
+            /config/www/camera_snapshot_{{ camera_number }}.jpg
       - alias: "Take a snapshot"
         service: camera.snapshot
         target:
