@@ -1,48 +1,8 @@
 notify:
-  - name: master_ha_notify
-    platform: rest
-    resource: http://192.168.40.159:8122/api/services/notify/notify
-    method: POST_JSON
-    headers:
-      Authorization: !secret master_ha_header
-    title_param_name: title
-    message_param_name: message
-  - name: master_ha_grown_ups
-    platform: rest
-    resource: http://192.168.40.159:8122/api/services/notify/grown_ups
-    method: POST_JSON
-    headers:
-      Authorization: !secret master_ha_header
-    title_param_name: title
-    message_param_name: message
-  - name: master_ha_michael
-    platform: rest
-    resource: http://192.168.40.159:8122/api/services/notify/michael
-    method: POST_JSON
-    headers:
-      Authorization: !secret master_ha_header
-    title_param_name: title
-    message_param_name: message
-  - name: master_ha_angela
-    platform: rest
-    resource: http://192.168.40.159:8122/api/services/notify/angela
-    method: POST_JSON
-    headers:
-      Authorization: !secret master_ha_header
-    title_param_name: title
-    message_param_name: message
-  - name: master_ha_camille
-    platform: rest
-    resource: http://192.168.40.159:8122/api/services/notify/camille
-    method: POST_JSON
-    headers:
-      Authorization: !secret master_ha_header
-    title_param_name: title
-    message_param_name: message
-  - name: Security_Verbose
-    platform: group
-    services:
-      - service: master_ha_michael
+  camille: []
+  michael: []
+  angela: []
+  parents: []
 
 input_select:
   notify_level_michael:
@@ -62,6 +22,24 @@ input_select:
     icon: mdi:bell-ring
 
 script:
+  notify_camille_ringer_mode_normal:
+    alias: "Set camille's phone ringer to normal"
+    sequence:
+      - alias: "Galaxy phone to normal"
+        service: notify.mobile_app_sm_a326u
+        data:
+          message: "command_ringer_mode"
+          data:
+            "normal"
+  notify_camille_ringer_mode_silent:
+    alias: "Set camille's phone ringer to silent"
+    sequence:
+      - alias: "Galazy phone to silent"
+        service: notify.mobile_app_sm_a326u
+        data:
+          message: "command_ringer_mode"
+          data:
+            "silent"
   notify_camille_with_sound:
     alias: "Notify Camille with sound"
     variables:
