@@ -202,7 +202,7 @@ automation:
     action:
       - variables:
           camera_number: >-
-            {{ 'binary_sensor.nvr_camera_1_motion' | regex_findall('camera_(\d)') }}
+            {{ trigger.entity_id | regex_findall('camera_(\d)') | first }}
           camera_id: >-
             {{ 'camera.192_168_40_208_channel_' {{ camera_number }} }}
           snapshot_path: >-
