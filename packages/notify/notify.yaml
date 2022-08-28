@@ -29,7 +29,7 @@ script:
         service: notify.mobile_app_sm_a326u
         data:
           message: "command_ringer_mode"
-          command: "normal"
+          title: "normal"
   notify_camille_ringer_mode_silent:
     alias: "Set camille's phone ringer to silent"
     sequence:
@@ -37,7 +37,7 @@ script:
         service: notify.mobile_app_sm_a326u
         data:
           message: "command_ringer_mode"
-          command: "silent"
+          title: "silent"
   notify_camille_with_sound:
     alias: "Notify Camille with sound"
     variables:
