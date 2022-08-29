@@ -143,26 +143,64 @@ mqtt:
           payload_available: "online"
           payload_not_available: "offline"
 
+group:
+  camera_notify_sensors_all:
+    name: Camera Sensors Notification All
+    entities:
+      - binary_sensor.nvr_camera_1_crossline
+      - binary_sensor.nvr_camera_1_sound
+      - binary_sensor.nvr_camera_2_crossline
+      - binary_sensor.nvr_camera_2_sound
+      - binary_sensor.nvr_camera_7_motion
+      - binary_sensor.nvr_camera_7_sound
+  camera_notify_sensors_outdoor:
+    name: Camera Sensors Notification Outdoor
+    entities:
+      - binary_sensor.nvr_camera_1_crossline
+      - binary_sensor.nvr_camera_1_sound
+      - binary_sensor.nvr_camera_2_crossline
+      - binary_sensor.nvr_camera_2_sound
+  
+
 automation:
   - id: b6d4aa88-52a2-4e29-afc8-4df17f17e212
     alias: Camera Front Crossline Notification
     mode: single
     trigger:
       - platform: state
-        entity_id: binary_sensor.nvr_camera_1_crossline
+        entity_id:
+          - binary_sensor.nvr_camera_1_crossline
+          - binary_sensor.nvr_camera_1_sound
         from: "off"
         to: "on"
     condition: []
     action:
+      - variables:
+          camera_number: >-
+            {{ trigger.entity_id | regex_findall('camera_(\d)') | first }}
+          alert_type: >-
+            {{ trigger.entity_id | regex_findall("\d_(.*)$") | first}}
+          camera_id: >-
+            camera.192_168_40_208_channel_{{ camera_number }}
+          snapshot_path: >-
+            /config/media/camera_snapshot_{{ camera_number }}.jpg
+          image_path: >-
+            /media/local/camera_snapshot_{{ camera_number }}.jpg
+      - alias: "Take a snapshot"
+        service: camera.snapshot
+        target:
+          entity_id: "{{ camera_id }}"
+        data:
+          filename: "{{ snapshot_path }}"
       - alias: "Notify Michael"
         service: notify.mobile_app_kashyyyk
         data:
           title: Taliluna Security
-          message: Front Camera Motion
+          message: "Front Camera {{ alert_type }}"
           data:
-            entity_id: camera.192_168_40_208_channel_1
+            image: "{{ image_path }}"
       - delay:
-          minutes: 30
+          minutes: 5
 
   - id: 55ecfc8e-fffb-4b80-9ee6-1092ead747aa
     alias: Camera Rear Crossline Notification
@@ -171,19 +209,37 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.nvr_camera_2_crossline
+          - binary_sensor.nvr_camera_2_sound
         from: "off"
         to: "on"
     condition: []
     action:
+      - variables:
+          camera_number: >-
+            {{ trigger.entity_id | regex_findall('camera_(\d)') | first }}
+          alert_type: >-
+            {{ trigger.entity_id | regex_findall("\d_(.*)$") | first}}
+          camera_id: >-
+            camera.192_168_40_208_channel_{{ camera_number }}
+          snapshot_path: >-
+            /config/media/camera_snapshot_{{ camera_number }}.jpg
+          image_path: >-
+            /media/local/camera_snapshot_{{ camera_number }}.jpg
+      - alias: "Take a snapshot"
+        service: camera.snapshot
+        target:
+          entity_id: "{{ camera_id }}"
+        data:
+          filename: "{{ snapshot_path }}"
       - alias: "Notify Michael"
         service: notify.mobile_app_kashyyyk
         data:
           title: Taliluna Security
-          message: Back Camera Motion
+          message: 'Back camera {{ alert_type }}'
           data:
-            entity_id: camera.192_168_40_208_channel_2
+            image: "{{ image_path }}"
       - delay:
-          minutes: 30
+          minutes: 5
     
   - id: 6709971c-5025-4903-a1ba-eb033701e7c3
     alias: Camera Grab Snapshots
@@ -193,8 +249,6 @@ automation:
           - binary_sensor.nvr_camera_1_motion
           - binary_sensor.nvr_camera_2_motion
           - binary_sensor.nvr_camera_7_motion
-          - binary_sensor.nvr_camera_1_sound
-          - binary_sensor.nvr_camera_2_sound
           - binary_sensor.nvr_camera_7_sound
         from: "off"
         to: "on"
@@ -206,10 +260,11 @@ automation:
           camera_id: >-
             camera.192_168_40_208_channel_{{ camera_number }}
           snapshot_path: >-
-            /config/www/camera_snapshot_{{ camera_number }}.jpg
+            /config/media/camera_snapshot_{{ camera_number }}.jpg
       - alias: "Take a snapshot"
         service: camera.snapshot
         target:
           entity_id: "{{ camera_id }}"
         data:
           filename: "{{ snapshot_path }}"
+            
