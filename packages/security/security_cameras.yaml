@@ -198,7 +198,7 @@ automation:
           title: Taliluna Security
           message: "Front Camera {{ alert_type }}"
           data:
-            image: "{{ image_path }}"
+            entity_id: "{{ camera_id }}"
       - delay:
           minutes: 5
 
