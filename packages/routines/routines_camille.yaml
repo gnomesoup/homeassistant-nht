@@ -20,6 +20,10 @@ input_datetime:
     name: "Camille's Evening Med Time"
     has_date: false
     has_time: true
+  camille_school_start_offset:
+    name: "Camille wake-up offset from school start"
+    has_date: false
+    has_time: true
 
 group:
   lights_bedroom_camille:
@@ -87,6 +91,25 @@ automation:
             service: homeassistant.turn_on
             data:
               entity_id: light.ge_appliances_zll_light_1b550600_level_on_off
+
+  - id: 423b7759-8b43-47b1-9cbb-a3940df04a93
+    alias: Camille wakeup before school
+    trigger:
+      - platform: calendar
+        entity_id: calendar.west_high_school
+        event: start
+        offset: "-{{states(input_datetime.camille_school_start_offset)}}"
+    condition:
+      - alias: "Camille is home"
+        condition: state
+        entity_id: person.camille
+        state: "home"
+    action:
+      - alias: "Notify on camille's speaker"
+        service: script.notify_camille_with_sound
+        data:
+          message: >-
+            Good morning, Camille. Today is a {{ trigger.calendar_event.summary }}
 
   - alias: "Minimote Camille Push 1"
     id: 17963bb0-262e-439d-873a-a6b148fd8f84
