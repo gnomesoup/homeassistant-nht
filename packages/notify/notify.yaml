@@ -47,7 +47,8 @@ script:
     alias: "Notify Camille with sound"
     variables:
       volume: >-
-        {{ state_attr("media_player.notify_camille", "volume_level")  | float }}
+        {{ state_attr("media_player.notify_camille", "volume_level")  | float(0.5) }}
+      defaut: 0.5
     fields:
       message:
         description: Message to broadcast to speaker
