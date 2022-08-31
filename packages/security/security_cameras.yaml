@@ -196,7 +196,7 @@ automation:
         service: notify.mobile_app_kashyyyk
         data:
           title: Taliluna Security
-          message: "Front Camera {{ alert_type }}"
+          message: "Front camera {{ alert_type }}"
           data:
             entity_id: "{{ camera_id }}"
       - delay:
@@ -237,7 +237,7 @@ automation:
           title: Taliluna Security
           message: 'Back camera {{ alert_type }}'
           data:
-            image: "{{ image_path }}"
+            entity_id: "{{ camera_id }}"
       - delay:
           minutes: 5
     
