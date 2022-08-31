@@ -2,16 +2,18 @@ input_select:
   notify_level_michael:
     name: Notify Level Michael
     options:
-      - All
-      - Major
+      - Debug
+      - Info
+      - Warn
       - None
     icon: mdi:bell-ring
 
   notify_level_angela:
     name: Notify Level Angela
     options:
-      - All
-      - Major
+      - Debug
+      - Info
+      - Warn
       - None
     icon: mdi:bell-ring
 
@@ -75,3 +77,38 @@ script:
           entity_id: media_player.notify_camille
         data:
           volume_level: "{{ volume }}"
+  notify_michael:
+    alias: "Notifications for Michael"
+    fields:
+      title:
+        description: Notification Title
+        example: Taliluna Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn|None]'
+    variables:
+      set_alert_level: '{{ states("input_select.notify_level_angela")}}'
+      alert_group: >-
+        {% set alert_level = 'None' %}
+        {% if alert_level == 'Debug' %}
+          {{ ['Debug', 'Info', 'Warn'] }}
+        {% elif alert_level == 'Debug' %}
+          {{ ['Info', 'Warn'] }}
+        {% elif alert_level == 'Warn' %}
+          {{ ['Warn'] }}
+        {% else %}
+          {{ [] }}
+        {% endif %}
+    sequence:
+      - alias: "choose alias (name)"
+        choose:
+        - conditions: '{{ set_alert in alert_group }}'
+          sequence:
+            - alias: "Send the notification"
+              service: notify.mobile_app_kashyyyk
+              data:
+                title:  "{{ title }}"
+                message: "{{ message }}"
