@@ -104,7 +104,7 @@ script:
     sequence:
       - alias: "Check if we should send notification"
         choose:
-        - conditions: '{{ set_alert in alert_group }}'
+        - conditions: '{{ set_alert_level in alert_group }}'
           sequence:
             - alias: "Send the notification"
               service: notify.mobile_app_kashyyyk
