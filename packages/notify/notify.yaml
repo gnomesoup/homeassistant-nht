@@ -93,16 +93,16 @@ script:
       set_alert_level: '{{ states("input_select.notify_level_angela")}}'
       alert_group: >-
         {% if alert_level == 'Debug' %}
-          {{ ['Debug', 'Info', 'Warn'] }}
+          {{ ('Debug', 'Info', 'Warn') }}
         {% elif alert_level == 'Info' %}
-          {{ ['Info', 'Warn'] }}
+          {{ ('Info', 'Warn') }}
         {% elif alert_level == 'Warn' %}
-          {{ ['Warn'] }}
+          {{ ('Warn') }}
         {% else %}
-          {{ [] }}
+          {{ () }}
         {% endif %}
     sequence:
-      - alias: "choose alias (name)"
+      - alias: "Check if we should send notification"
         choose:
         - conditions: '{{ set_alert in alert_group }}'
           sequence:
