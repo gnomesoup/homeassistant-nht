@@ -88,7 +88,8 @@ script:
         example: Motion on front camera
       alert_level: 
         description: 'Level of alertness'
-        example: '[Debug|Info|Warn|None]'
+        example: '[Debug|Info|Warn]'
+        default: Warn
     variables:
       set_alert_level: '{{ states("input_select.notify_level_michael")}}'
       alert_group: >-
