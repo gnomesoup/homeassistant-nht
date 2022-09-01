@@ -90,7 +90,7 @@ script:
         description: 'Level of alertness'
         example: '[Debug|Info|Warn|None]'
     variables:
-      set_alert_level: '{{ states("input_select.notify_level_angela")}}'
+      set_alert_level: '{{ states("input_select.notify_level_michael")}}'
       alert_group: >-
         {% if alert_level == 'Debug' %}
           {{ ('Debug') }}
