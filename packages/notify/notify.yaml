@@ -94,7 +94,7 @@ script:
       alert_group: >-
         {% if alert_level == 'Debug' %}
           {{ ['Debug', 'Info', 'Warn'] }}
-        {% elif alert_level == 'Debug' %}
+        {% elif alert_level == 'Info' %}
           {{ ['Info', 'Warn'] }}
         {% elif alert_level == 'Warn' %}
           {{ ['Warn'] }}
