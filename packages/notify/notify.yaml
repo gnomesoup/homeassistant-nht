@@ -93,11 +93,11 @@ script:
       set_alert_level: '{{ states("input_select.notify_level_angela")}}'
       alert_group: >-
         {% if alert_level == 'Debug' %}
-          {{ ('Debug', 'Info', 'Warn') }}
+          {{ ('Debug') }}
         {% elif alert_level == 'Info' %}
-          {{ ('Info', 'Warn') }}
+          {{ ('Debug', 'Info') }}
         {% elif alert_level == 'Warn' %}
-          {{ ('Warn') }}
+          {{ ('Debug', 'Info', 'Warn') }}
         {% else %}
           {{ () }}
         {% endif %}
