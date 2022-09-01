@@ -77,6 +77,7 @@ script:
           entity_id: media_player.notify_camille
         data:
           volume_level: "{{ volume }}"
+
   notify_michael:
     alias: "Notifications for Michael"
     fields:
@@ -97,18 +98,82 @@ script:
           {{ ('Debug') }}
         {% elif alert_level == 'Info' %}
           {{ ('Debug', 'Info') }}
-        {% elif alert_level is None or alert_level == 'Warn' %}
-          {{ ('Debug', 'Info', 'Warn') }}
         {% else %}
-          {{ () }}
+          {{ ('Debug', 'Info', 'Warn') }}
         {% endif %}
     sequence:
       - alias: "Check if we should send notification"
         choose:
         - conditions: '{{ set_alert_level in alert_group }}'
           sequence:
-            - alias: "Send the notification"
+            - alias: "Send the notification to mobile"
               service: notify.mobile_app_kashyyyk
               data:
                 title:  "{{ title }}"
                 message: "{{ message }}"
+            - alias: "Send the notification to computer"
+              service: notify.mobile_app_coruscant
+              data:
+                title: "{{ title }}"
+                message: "{{ message }}"
+
+  notify_angela:
+    alias: "Notifications for Angela"
+    fields:
+      title:
+        description: Notification Title
+        example: Taliluna Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn]'
+        default: Warn
+    variables:
+      set_alert_level: '{{ states("input_select.notify_level_angela")}}'
+      alert_group: >-
+        {% if alert_level == 'Debug' %}
+          {{ ('Debug') }}
+        {% elif alert_level == 'Info' %}
+          {{ ('Debug', 'Info') }}
+        {% else %}
+          {{ ('Debug', 'Info', 'Warn') }}
+        {% endif %}
+    sequence:
+      - alias: "Check if we should send notification"
+        choose:
+        - conditions: '{{ set_alert_level in alert_group }}'
+          sequence:
+            - alias: "Send the notification to mobile"
+              service: notify.mobile_app_iphone_58
+              data:
+                title:  "{{ title }}"
+                message: "{{ message }}"
+
+  notify_parents:
+    alias: "Notifications for Parents"
+    fields:
+      title:
+        description: Notification Title
+        example: Taliluna Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn]'
+        default: Warn
+    sequence:
+      - alias: "Notify Michael"
+        service: script.notify_michael
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          alert_level: "{{ alert_level }}"
+      - alias: "Notify Angela"
+        service: script.notify_angela
+        data:
+          title: "{{ title }}"
+          message: "{{ message }}"
+          alert_level: "{{ alert_level }}"
