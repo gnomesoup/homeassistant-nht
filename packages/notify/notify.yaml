@@ -97,7 +97,7 @@ script:
           {{ ('Debug') }}
         {% elif alert_level == 'Info' %}
           {{ ('Debug', 'Info') }}
-        {% elif alert_level == 'Warn' %}
+        {% elif alert_level is None or alert_level == 'Warn' %}
           {{ ('Debug', 'Info', 'Warn') }}
         {% else %}
           {{ () }}
