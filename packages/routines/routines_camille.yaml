@@ -1,12 +1,7 @@
 input_boolean:
   camille_med_notification_enabled:
     name: Camille Medication Notification On
-    icon: >-
-      {% if is_state("input_boolean.camille_med_notification_enabled", "on") %}
-        mdi:pill-multiple
-      {% else %}
-        mdi:pill-off
-      {% endif %}
+    icon: mdi:pill-multiple
 
 input_select:
   camille_status:
