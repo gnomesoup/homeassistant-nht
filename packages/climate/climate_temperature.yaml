@@ -6,6 +6,7 @@ group:
       - sensor.smartthings_moisture_temperature
       - sensor.multisensor_6_air_temperature
       - sensor.4_in_1_multisensor_air_temperature
+      - sensor.z_wave_plus_thermostat_air_temperature
 
 input_datetime:
   thermostat_time_day:
@@ -69,7 +70,9 @@ sensor:
           {% set temp = namespace(sum=0, count=0) %}
           {% for sensor in [
               'sensor.smartthings_moisture_temperature',
-              'sensor.multisensor_6_air_temperature'
+              'sensor.multisensor_6_air_temperature',
+              'sensor.4_in_1_multisensor_air_temperature',
+              'sensor.z_wave_plus_thermostat_air_temperature'
             ] %}
             {% if states(sensor)|float > 0 %}
               {% set temp.sum = temp.sum + (states(sensor)|float) %}
