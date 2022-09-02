@@ -10,10 +10,6 @@ group:
       - light.ge_appliances_zll_light_3aae1600_level_on_off
       # Camille's closet light
       - light.ge_appliances_zll_light_1b550600_level_on_off
-      # Master closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-      # Laundry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
       # Entry closet light
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
       # Bedroom lamp left
@@ -38,10 +34,6 @@ group:
       - light.ge_appliances_zll_light_3aae1600_level_on_off
       # Camille's closet light
       - light.ge_appliances_zll_light_1b550600_level_on_off
-      # Master closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-      # Laundry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
       # Entry closet light
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
       # Bedroom lamp left
@@ -66,10 +58,6 @@ group:
       - light.ge_appliances_zll_light_3aae1600_level_on_off
       # Camille's closet light
       - light.ge_appliances_zll_light_1b550600_level_on_off
-      # Master closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-      # Laundry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
       # Entry closet light
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
       # Bedroom lamp left
