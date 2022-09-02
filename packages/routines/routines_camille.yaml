@@ -26,6 +26,17 @@ input_datetime:
     has_date: false
     has_time: true
 
+sensor:
+  - platform: template
+    sensors:
+      camille_is_school_day:
+        friendly_name: "School Day"
+        value_template: >-
+          {{ (state_attr("calendar.west_high_school", "start_time")
+             | as_datetime | as_local | as_timestamp)
+             < today_at("12:00") | as_timestamp }}
+        icon_template: "mdi:school"
+
 group:
   lights_bedroom_camille:
     name: Lights in Camille's Room
