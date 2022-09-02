@@ -1,6 +1,10 @@
 input_boolean:
   camille_med_notification_enabled:
     name: Camille Medication Notification On
+    icon: >-
+      {{ "mdi:pill-multiple "
+         if states("input_boolean.camille_med_notification_enabled"
+         else "mdi:pill-off")}}
 
 input_select:
   camille_status:
@@ -180,14 +184,12 @@ automation:
         target:
           entity_id: input_boolean.camille_med_notification_enabled
 
-  - alias: Camille Sent Medication Actionable Notification
+  - alias: Camille medication notify camille
     id: fb06daa2-4eef-4aa6-817d-be5e7452131c
     mode: restart
     trigger:
-      - platform: state
-        entity_id: input_boolean.camille_med_notification_enabled
-        from: "off"
-        to: "on"
+      - platform: time_pattern
+        minutes: "/5"
     condition:
       - alias: "Med notification enabled"
         condition: state
@@ -209,7 +211,7 @@ automation:
             event_data:
               action: "CAMILLE_MED_TAKEN"
         timeout:
-          minutes: 5
+          minutes: 6
       - alias: "Turn off med notifiations"
         choose:
         - conditions: '{{ wait.trigger.event.data.action == "CAMILLE_MED_TAKEN"}}'
@@ -218,15 +220,54 @@ automation:
               service: input_boolean.turn_off
               target:
                 entity_id: input_boolean.camille_med_notification_enabled
-        default:
-          - alias: "turn off med notification"
-            service: input_boolean.turn_off
-            target:
-              entity_id: input_boolean.camille_med_notification_enabled
-          - alias: "turn on med notification to restart automation"
-            service: input_boolean.turn_on
-            target:
-              entity_id: input_boolean.camille_med_notification_enabled
+
+  - id: 9541eb9c-0f70-421b-9f07-a31aaac016d5
+    alias: Camille medication turn off with button
+    trigger:
+      - platform: state
+        entity_id: input_boolean.aqara_button_1_single
+    condition:
+      - alias: "Meds notification on"
+        condition: state
+        entity_id: input_boolean.camille_med_notification_enabled
+        state: "on"
+    action:
+      - alias: "Turn off med notification"
+        service: homeassistant.turn_off
+        target:
+          entity_id: input_boolean.camille_med_notification_enabled
+  
+  - id: e1fb28a8-e855-43d1-a955-f9894df2584b
+    alias: Camille medication turned off actions
+    trigger:
+      - platform: state
+        entity_id: input_boolean.camille_med_notification_enabled
+        from: "on"
+        to: "off"
+    action:
+      - alias: "Notify parents"
+        service: script.notify_parents
+        data:
+          title: Camille Medications
+          message: Meds taken
+          alert_level: Info
+  
+  - id: 49fefe38-bc08-4756-bf7a-33004736691f
+    alias: Camille medication notify parents if not taken
+    trigger:
+      - platform: state
+        entity_id: input_boolean.camille_med_notification_enabled
+        from: "off"
+        to: "on"
+        for:
+          minutes: 20
+    action:
+      - alias: "Notify parents"
+        service: script.notify_parents
+        data:
+          title: Camille Medications
+          message: Not yet taken
+          alert_level: Info
 
 script:
   goodmorning_camille:
