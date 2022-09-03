@@ -30,6 +30,7 @@ sensor:
   - platform: template
     sensors:
       camille_is_school_day:
+        unique_id: camille_is_school_day
         friendly_name: "School Day"
         value_template: >-
           {{ (state_attr("calendar.west_high_school", "start_time")
