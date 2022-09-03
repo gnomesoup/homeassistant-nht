@@ -220,7 +220,7 @@ automation:
         target:
           entity_id: scene.porch_lights_state
 
-  - alias: automation alias (name)
+  - alias: Garage lights on motion
     id: 2d5cea66-1940-4de9-8c3e-cda17b98fae2
     mode: restart
     trigger:
