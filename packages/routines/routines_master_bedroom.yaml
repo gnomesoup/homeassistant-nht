@@ -1,16 +1,14 @@
-group:
-  lights_master_bedroom:
-    name: "Lights Master Bedroom"
-    entities:
-      - light.ge_appliances_zll_light_3aae1600_level_on_off
-      - light.ge_appliances_zll_light_49251600_level_on_off
-      - switch.smart_switch_6_2
+# group:
+#   lights_master_bedroom:
+#     name: "Lights Master Bedroom"
+#     entities:
+#       - light.ge_appliances_zll_light_3aae1600_level_on_off
+#       - light.ge_appliances_zll_light_49251600_level_on_off
+#       - switch.smart_switch_6_2
 
-  lights_master_bedroom_and_closets:
-    name: "Lights in Master Bedroom and Closets"
-    entities:
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
-      - light.ge_appliances_zll_light_3aae1600_level_on_off
-      - light.ge_appliances_zll_light_49251600_level_on_off
-      - switch.smart_switch_6_2
+#   lights_master_bedroom_and_closets:
+#     name: "Lights in Master Bedroom and Closets"
+#     entities:
+#       - light.ge_appliances_zll_light_3aae1600_level_on_off
+#       - light.ge_appliances_zll_light_49251600_level_on_off
+#       - switch.smart_switch_6_2
