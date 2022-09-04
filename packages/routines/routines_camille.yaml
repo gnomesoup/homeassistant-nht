@@ -105,24 +105,23 @@ automation:
             data:
               entity_id: light.ge_appliances_zll_light_1b550600_level_on_off
 
-  - id: 423b7759-8b43-47b1-9cbb-a3940df04a93
-    alias: Camille wakeup before school
-    trigger:
-      - platform: calendar
-        entity_id: calendar.west_high_school
-        event: start
-        offset: "-{{states(input_datetime.camille_school_start_offset)}}"
-    condition:
-      - alias: "Camille is home"
-        condition: state
-        entity_id: person.camille
-        state: "home"
-    action:
-      - alias: "Notify on camille's speaker"
-        service: script.notify_camille_with_sound
-        data:
-          message: >-
-            Good morning, Camille. Today is a {{ trigger.calendar_event.summary }}
+  # - id: 423b7759-8b43-47b1-9cbb-a3940df04a93
+  #   alias: Camille wakeup before school
+  #   trigger:
+  #     - platform: calendar
+  #       entity_id: calendar.west_high_school
+  #       event: start
+  #   condition:
+  #     - alias: "Camille is home"
+  #       condition: state
+  #       entity_id: person.camille
+  #       state: "home"
+  #   action:
+  #     - alias: "Notify on camille's speaker"
+  #       service: script.notify_camille_with_sound
+  #       data:
+  #         message: >-
+  #           Good morning, Camille. Today is a {{ trigger.calendar_event.summary }}
 
   - alias: "Minimote Camille Push 1"
     id: 17963bb0-262e-439d-873a-a6b148fd8f84
