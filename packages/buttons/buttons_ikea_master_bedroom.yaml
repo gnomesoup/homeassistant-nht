@@ -1,28 +1,28 @@
 automation:
-  - alias: "Ikea Remote Master Bedroom Power Button"
-    id: "21c09244-7fb1-41ed-82dd-17ab05d6b0a9"
-    trigger:
-      - platform: event
-        event_type: zha_event
-        event_data:
-          device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
-          command: "toggle"
-    action:
-      - data_template:
-          entity_id: >-
-            group.lights_master_bedroom
-            {%- if is_state("binary_sensor.door_sensor_1", "on") -%}
-            ,light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-            {%- endif %}
-            {%- if is_state("binary_sensor.door_sensor_3", "on") -%}
-            ,light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
-            {%- endif %}          
-        service: >-
-          {% if is_state("group.lights_master_bedroom_and_closets", "off") %}
-          homeassistant.turn_on
-          {% else %}
-          homeassistant.turn_off
-          {% endif %}
+  # - alias: "Ikea Remote Master Bedroom Power Button"
+  #   id: "21c09244-7fb1-41ed-82dd-17ab05d6b0a9"
+  #   trigger:
+  #     - platform: event
+  #       event_type: zha_event
+  #       event_data:
+  #         device_ieee: "00:0d:6f:ff:fe:11:c7:e0"
+  #         command: "toggle"
+  #   action:
+  #     - data_template:
+  #         entity_id: >-
+  #           group.lights_master_bedroom
+  #           {%- if is_state("binary_sensor.door_sensor_1", "on") -%}
+  #           ,light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
+  #           {%- endif %}
+  #           {%- if is_state("binary_sensor.door_sensor_3", "on") -%}
+  #           ,light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
+  #           {%- endif %}          
+  #       service: >-
+  #         {% if is_state("group.lights_master_bedroom_and_closets", "off") %}
+  #         homeassistant.turn_on
+  #         {% else %}
+  #         homeassistant.turn_off
+  #         {% endif %}
 
   - alias: "Ikea Remote 3 Dim Up Step"
     trigger:
