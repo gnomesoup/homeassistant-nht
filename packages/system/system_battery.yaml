@@ -37,12 +37,15 @@ automation:
         entity_id: person.michael
         state: "home"
     action:
-      # - variables:
-      #     entities: >-
-      #       {% for x in en%}
+      - variables:
+          entities: >-
+            {% for sensor in expand("group.low_battery") if sensor.state == "off" -%}
+              {{ state_attr(sensor.entity_id, "friendly_name") }}
+              {%- if not loop.last %}, {% endif -%}
+            {%- endfor %}
       - alias: "Send low battery notification"
         service: script.notify_parents
         data:
           title: Taliluna Alert
-          message: Low battery detected
+          message: Low battery detected on {{ entities }}
           alert_level: Warn
