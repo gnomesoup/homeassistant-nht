@@ -16,6 +16,9 @@ automation:
           - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced_2
           - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected_3
           - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected_3
+          - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life_3
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test_3
+          - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced_3
         from: "off"
         to: "on"
     action:
