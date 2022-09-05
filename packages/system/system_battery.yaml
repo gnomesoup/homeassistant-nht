@@ -1,0 +1,48 @@
+group:
+  low_battery:
+    name: Low Battery Sensors
+    entities:
+      - binary_sensor.node_27_low_battery_level
+      - binary_sensor.multisensor_6_low_battery_level
+      - binary_sensor.4_in_one_multisensor_low_battery_level
+      - binary_sensor.z_wave_plus_thermostat_low_battery_level
+      - binary_sensor.temperature_humidity_xs_sensor_low_battery_level
+      - binary_sensor.touchscreen_electronic_deadbolt_low_battery_level
+      - binary_sensor.touchscreen_electronic_deadbolt_low_battery_level_2
+      - binary_sensor.touchscreen_electronic_deadbolt_low_battery_level_3
+      - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level
+      - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level_2
+      - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level_3
+
+automation:
+  - id: 70ff7438-1eb9-47b0-8121-9cd607cb4a99
+    alias: Battery Low Notification
+    trigger:
+      - platform: state
+        entity_id: person.michael
+        to: "home"
+        for:
+          minutes: 16
+      - platform: state
+        entity_id: group.low_battery
+        from: "off"
+        to: "on"
+    condition:
+      - alias: "There is a low battery"
+        condition: state
+        entity_id: group.low_battery
+        state: "on"
+      - alias: "Michael is home"
+        condition: state
+        entity_id: person.michael
+        state: "home"
+    action:
+      # - variables:
+      #     entities: >-
+      #       {% for x in en%}
+      - alias: "Send low battery notification"
+        service: script.notify_parents
+        data:
+          title: Taliluna Alert
+          message: Low battery detected
+          alert_level: Warn
