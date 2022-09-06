@@ -112,7 +112,7 @@ mqtt:
         {%- elif value_json.index == "6" and value_json.Code == "VideoMotion" %}
           {{ value_json.action }}
         {% else %}
-          {{ states("binary_sensor.nvr_camera_7_motion") }}
+        {{ "Stop" if states("binary_sensor.nvr_camera_7_motion") == "unknown" else states("binary_sensor.nvr_camera_7_motion") }}
         {% endif %}
       payload_on: "Start"
       payload_off: "Stop"
@@ -130,7 +130,7 @@ mqtt:
         {%- elif value_json.index == "6" and value_json.Code == "CrossLineDetection" %}
         {{ value_json.action }}
         {% else %}
-        {{ states("binary_sensor.nvr_camera_7_crossline") }}
+        {{ "Stop" if states("binary_sensor.nvr_camera_7_crossline") == "unknown" else states("binary_sensor.nvr_camera_7_crossline") }}
         {% endif %}
       payload_on: "Start"
       payload_off: "Stop"
@@ -147,7 +147,7 @@ mqtt:
           {% if value_json.index == "6" and value_json.Code == "AudioMutation" %}
               {{ value_json.action }}
           {% else %}
-          {{ states("binary_sensor.nvr_camera_7_sound") }}
+        {{ "Stop" if states("binary_sensor.nvr_camera_7_sound") == "unknown" else states("binary_sensor.nvr_camera_7_sound") }}
           {% endif %}
         {% else %}
           Stop
