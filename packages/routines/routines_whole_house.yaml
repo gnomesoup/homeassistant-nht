@@ -225,7 +225,7 @@ automation:
     mode: restart
     trigger:
       - platform: state
-        entity_id: binary_sensor.nvr_camera_7_motion
+        entity_id: binary_sensor.nvr_camera_7_crossline
         from: "off"
         to: "on"
     condition: []
