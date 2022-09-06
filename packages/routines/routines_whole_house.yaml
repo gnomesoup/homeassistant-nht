@@ -250,7 +250,12 @@ automation:
         to: "on"
         for:
           minutes: 5
-    condition: []
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_7_motion
+        from: "off"
+        to: "on"
+        for:
+          minutes: 90
     action:
       - alias: "Turn off garage lights"
         service: light.turn_off
