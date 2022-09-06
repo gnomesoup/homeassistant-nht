@@ -225,7 +225,7 @@ automation:
     mode: restart
     trigger:
       - platform: state
-        entity_id: binary_sensor.nvr_camera_7_crossline
+        entity_id: binary_sensor.nvr_camera_7_motion
         from: "off"
         to: "on"
     action:
@@ -241,7 +241,7 @@ automation:
     mode: restart
     trigger:
       - platform: state
-        entity_id: binary_sensor.nvr_camera_7_crossline
+        entity_id: binary_sensor.nvr_camera_7_motion
         from: "off"
         to: "on"
         for:
