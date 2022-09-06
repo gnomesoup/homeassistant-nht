@@ -107,14 +107,30 @@ mqtt:
       unique_id: nvr_camera_7_motion
       state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
       value_template: >-
-        {% if value_json is defined %}
-          {% if value_json.index == "6" and value_json.Code == "VideoMotion" %}
-            {{ value_json.action }}
-          {% else %}
-          {{ states("binary_sensor.nvr_camera_7_motion") }}
-          {% endif %}
-        {% else %}
+        {% if not value_json is defined -%}
           Stop
+        {%- elif value_json.index == "6" and value_json.Code == "VideoMotion" %}
+          {{ value_json.action }}
+        {% else %}
+          {{ states("binary_sensor.nvr_camera_7_motion") }}
+        {% endif %}
+      payload_on: "Start"
+      payload_off: "Stop"
+      availability:
+        - topic: "amcrest2mqtt/AMR03225C8B908F530/status"
+          payload_available: "online"
+          payload_not_available: "offline"
+
+    - name: "NVR Camera 7 Crossline"
+      unique_id: nvr_camera_7_crossline
+      state_topic: "amcrest2mqtt/AMR03225C8B908F530/event"
+      value_template: >-
+        {% if not value_json is defined -%}
+          Stop
+        {%- elif value_json.index == "6" and value_json.Code == "CrossLineDetection" %}
+        {{ value_json.action }}
+        {% else %}
+        {{ states("binary_sensor.nvr_camera_7_crossline") }}
         {% endif %}
       payload_on: "Start"
       payload_off: "Stop"
