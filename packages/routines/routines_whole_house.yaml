@@ -232,7 +232,7 @@ automation:
       {{ ( now() | as_timestamp -
          state_attr(
             "automation.garage_lights_motion_off", "last_triggered"
-         ) | as_timestamp) < 2 }}
+         ) | as_timestamp) > 2 }}
     action:
       - alias: "Turn on garage lights"
         service: light.turn_on
