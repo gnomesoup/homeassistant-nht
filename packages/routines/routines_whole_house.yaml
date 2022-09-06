@@ -242,7 +242,7 @@ automation:
 
   - alias: Garage lights motion off
     id: a80a19b7-c91f-43cb-960c-f04a18b6ab75
-    mode: restart
+    mode: single
     trigger:
       - platform: state
         entity_id: binary_sensor.nvr_camera_7_motion
