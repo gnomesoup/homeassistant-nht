@@ -222,32 +222,28 @@ automation:
 
   - alias: Garage lights motion on
     id: 2d5cea66-1940-4de9-8c3e-cda17b98fae2
+    mode: restart
     trigger:
       - platform: state
         entity_id: binary_sensor.nvr_camera_7_crossline
         from: "off"
         to: "on"
-    condition:
-      - alias: "Garage lights motion off for a wee bit"
-        condition: state
-        entity_id: automation.garage_lights_motion_off
-        state: "off"
-        for:
-          seconds: 5
     action:
       - alias: "Turn on garage lights"
         service: light.turn_on
         target:
           entity_id:
             - light.silicon_labs_ezsp_garage_lights_zha_group_0x0004
+      - delay: "00:05:02"
 
   - alias: Garage lights motion off
     id: a80a19b7-c91f-43cb-960c-f04a18b6ab75
+    mode: restart
     trigger:
       - platform: state
         entity_id: binary_sensor.nvr_camera_7_crossline
-        from: "on"
-        to: "off"
+        from: "off"
+        to: "on"
         for:
           minutes: 5
     condition: []
