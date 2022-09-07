@@ -2,6 +2,10 @@ input_boolean:
   camille_med_notification_enabled:
     name: Camille Medication Notification On
     icon: mdi:pill-multiple
+  camille_is_school_day:
+    name: School Day
+    icon: "mdi:school"
+
 
 input_select:
   camille_status:
@@ -11,6 +15,14 @@ input_select:
       - School
       - Away
       - Asleep
+  camille_west_day_type:
+    name: "West Day Type"
+    options:
+      - Blue Day
+      - Red Day
+      - Half Day
+      - No School
+
 
 input_datetime:
   camille_meds_morning:
@@ -26,20 +38,6 @@ input_datetime:
     has_date: false
     has_time: true
 
-sensor:
-  - platform: template
-    sensors:
-      camille_is_school_day:
-        unique_id: camille_is_school_day
-        friendly_name: "School Day"
-        value_template: >-
-          {% set start_time = state_attr("calendar.west_high_school", "start_time")
-             | as_datetime %}
-          {{ start_time.year == now().year
-             and start_time.month == now().month
-             and start_time.day == now().day }}
-
-        icon_template: "mdi:school"
 
 group:
   lights_bedroom_camille:
@@ -74,57 +72,88 @@ automation:
     action:
       - alias: "Turn off dnd"
         service: script.notify_camille_dnd_off
-      
-  - alias: "Lights on Motion Camille's Room"
-    id: 5f0e3383-0a41-4193-93a6-5fe7cf4403c9
+
+  - id: 015584f8-1258-44d0-9c98-f9aa97483546
+    alias: Camille mark if school day
     trigger:
-      - platform: state
-        entity_id: binary_sensor.motion_camille_bedroom
-        from: "off"
-        to: "on"
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("input_select.camille_status") != "Asleep" and
-             states("input_select.camille_status") != "Away" and
-             states("group.lights_bedroom_camille") == "off" and
-             states("alarm_control_panel.home_alarm") == "disarmed" }}
+      - platform: time_pattern
+        hours: "0"
+        minutes: "/15"
+    variables:
+      today: "{{ now().replace(hour=0, minute=0, second=0, microsecond=0) }}"
+      event: >-
+        {{ (state_attr('calendar.west_high_school', 'start_time') | as_datetime)}}
     action:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: group.lights_bedroom_camille
-      - service: homeassistant.turn_off
-        data:
-          entity_id: automation.lights_on_motion_camille_s_room
-      - alias: "Turn on closet light only if door open"
+        
+      - alias: "Check if it is a school day"
         choose:
         - conditions:
-            - alias: "Closet door open"
-              condition: state
-              entity_id: binary_sensor.door_sensor_5
-              state: "off"
+            condition: >-
+              {{ today.year == event.year and today.month == event.month
+                  and today.day == event.day}}
           sequence:
+            - alias: "Turn on school day boolean"
+              service: homeassistant.turn_on
+              target:
+                entity_id: input_boolean.camille_is_school_day
+        default:
+          - alias: "Turn off school day boolean"
             service: homeassistant.turn_on
-            data:
-              entity_id: light.ge_appliances_zll_light_1b550600_level_on_off
+            target:
+              entity_id: input_boolean.camille_is_school_day
 
-  # - id: 423b7759-8b43-47b1-9cbb-a3940df04a93
-  #   alias: Camille wakeup before school
-  #   trigger:
-  #     - platform: calendar
-  #       entity_id: calendar.west_high_school
-  #       event: start
-  #   condition:
-  #     - alias: "Camille is home"
-  #       condition: state
-  #       entity_id: person.camille
-  #       state: "home"
-  #   action:
-  #     - alias: "Notify on camille's speaker"
-  #       service: script.notify_camille_with_sound
-  #       data:
-  #         message: >-
-  #           Good morning, Camille. Today is a {{ trigger.calendar_event.summary }}
+  - id: 40c765da-01e6-47b7-8965-5765a7dd25dc
+    alias: Camille Set West Day Type
+    trigger:
+      - platform: state
+        entity_id: input_boolean.camille_is_school_day
+    variables:
+      event: "{{ state_attr('calendar.west_high_school', 'message')}}"
+    action:
+      - alias: "School day is on"
+        choose:
+        - conditions:
+            - alias: "Is a school day"
+              condition: state
+              entity_id: input_boolean.camille_is_school_day
+              state: "on"
+          sequence:
+            - alias: "Set west day type"
+              service: input_select.select_option
+              target:
+                entity_id: input_select.camille_west_day_type
+              data:
+                option: "{{ event }}"
+        default:
+          - alias: "Set west day type to None"
+            service: input_select.select_option
+            target:
+              entity_id: input_select.camille_west_day_type
+            data:
+              option: "No School"
+
+  - id: 423b7759-8b43-47b1-9cbb-a3940df04a93
+    alias: Camille wakeup before school
+    trigger:
+      - platform: calendar
+        entity_id: calendar.west_high_school
+        event: start
+        offset: "-01:45:00"
+    condition:
+      - alias: "Camille is home"
+        condition: state
+        entity_id: person.camille
+        state: "home"
+      - alias: "Is a school day"
+        condition: state
+        entity_id: input_boolean.camille_is_school_day
+        state: "on"
+    action:
+      - alias: "Notify on camille's speaker"
+        service: script.notify_camille_with_sound
+        data:
+          message: >-
+            Good morning, Camille. Today is a {{ trigger.calendar_event.summary }}.
 
   - alias: "Minimote Camille Push 1"
     id: 17963bb0-262e-439d-873a-a6b148fd8f84
@@ -186,6 +215,20 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.camille_meds_morning 
+    condition:
+      - alias: "Is a school day"
+        condition: state
+        entity_id: input_boolean.camille_is_school_day
+        state: "on"
+    action:
+      - alias: "Turn on med notifications"
+        service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.camille_med_notification_enabled
+
+  - alias: Camille Medication Notifications On Evening
+    id: a1a8617e-9f47-488f-b475-b933aac643b8
+    trigger:
       - platform: time
         at: input_datetime.camille_meds_evening 
     condition: []
@@ -215,6 +258,10 @@ automation:
             actions:
               - action: "CAMILLE_MED_TAKEN"
                 title: "Taken"
+      - alias: "Notify with sound"
+        service: script.notify_camille_with_sound
+        data:
+          message: "It's that time"
       - alias: "Wait for response"
         wait_for_trigger:
           - platform: event
