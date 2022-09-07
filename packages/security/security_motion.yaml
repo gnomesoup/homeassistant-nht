@@ -1,11 +1,6 @@
 binary_sensor:
   - platform: template
     sensors:
-      motion_server_cabinet:
-        device_class: motion
-        friendly_name: "Kitchen Motion"
-        value_template: >-
-          {{ states("binary_sensor.pir_motion_detector_any") == "on" }}
       motion_hallway:
         device_class: motion
         friendly_name: "Hallway Motion"
@@ -31,7 +26,7 @@ group:
   motion_sensors:
     name: All Motion Sensors
     entities:
-      # - binary_sensor.motion_server_cabinet
+      - binary_sensor.pir_motion_detector_any
       - binary_sensor.motion_hallway
       - binary_sensor.motion_camille_bedroom
       # - binary_sensor.motion_living_room
