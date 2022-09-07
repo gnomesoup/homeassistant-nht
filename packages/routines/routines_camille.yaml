@@ -84,7 +84,6 @@ automation:
       event: >-
         {{ (state_attr('calendar.west_high_school', 'start_time') | as_datetime)}}
     action:
-        
       - alias: "Check if it is a school day"
         choose:
         - conditions:
@@ -210,7 +209,7 @@ automation:
           entity_id:
             - light.ge_appliances_zll_light_1b550600_level_on_off
   
-  - alias: Camille Medication Notifications On
+  - alias: Camille Medication Notifications On Morning
     id: a7e85b57-53c2-4aee-94d6-6fa856a4089e
     trigger:
       - platform: time
