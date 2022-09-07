@@ -246,16 +246,19 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.nvr_camera_7_motion
-        from: "off"
-        to: "on"
+        from: "on"
+        to: "off"
         for:
           minutes: 5
-      - platform: state
+      - platform: time_pattern
+        minutes: "/30"
+    condition:
+      - alias: "Motion off for 10 minutes"
+        condition: state
         entity_id: binary_sensor.nvr_camera_7_motion
-        from: "off"
-        to: "on"
+        state: "off"
         for:
-          minutes: 90
+          minutes: 5
     action:
       - alias: "Turn off garage lights"
         service: light.turn_off
