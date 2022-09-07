@@ -87,9 +87,11 @@ automation:
       - alias: "Check if it is a school day"
         choose:
         - conditions:
-            condition: >-
-              {{ today.year == event.year and today.month == event.month
-                  and today.day == event.day}}
+            - alias: "Calendar event date is today"
+              condition: template
+              value_template: >-
+                {{ today.year == event.year and today.month == event.month
+                    and today.day == event.day}}
           sequence:
             - alias: "Turn on school day boolean"
               service: homeassistant.turn_on
