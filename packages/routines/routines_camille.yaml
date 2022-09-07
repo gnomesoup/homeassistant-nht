@@ -33,9 +33,12 @@ sensor:
         unique_id: camille_is_school_day
         friendly_name: "School Day"
         value_template: >-
-          {{ (state_attr("calendar.west_high_school", "start_time")
-             | as_datetime | as_local | as_timestamp)
-             < today_at("12:00") | as_timestamp }}
+          {% set start_time = state_attr("calendar.west_high_school", "start_time")
+             | as_datetime %}
+          {{ start_time.year == now().year
+             and start_time.month == now().month
+             and start_time.day == now().day }}
+
         icon_template: "mdi:school"
 
 group:
