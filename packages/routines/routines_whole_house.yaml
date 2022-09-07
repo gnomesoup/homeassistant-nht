@@ -159,8 +159,8 @@ automation:
         service: light.turn_on
         target:
           entity_id:
-            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
+            - light.ikea_tradfri_bulb_e26_fe5b90
+            - light.tradfri_bulb_e26_ws_opal_1000lm_light
         data:
           brightness: 128
           
@@ -177,8 +177,8 @@ automation:
         service: light.turn_off
         target:
           entity_id:
-            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_62b607fe_level_light_color_on_off
-            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_8c905bfe_level_light_color_on_off
+            - light.ikea_tradfri_bulb_e26_fe5b90
+            - light.tradfri_bulb_e26_ws_opal_1000lm_light
 
   - alias: Porch lights on motion
     id: 901e682a-cdf7-4f31-8026-4b03b9c2b8be
