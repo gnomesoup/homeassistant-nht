@@ -83,10 +83,11 @@ automation:
     condition: []
     action:
       - alias: "Notify on high levels"
-        service: notify.master_ha_grown_ups
+        service: script.notify_parents
         data:
           title: NHT Alert
           message: PM levels above 50 ppm
+          alert_level: Debug
       - delay: "00:30:00"
   - id: f1d0431a-925f-4bef-8696-f4ffccd9dddf
     alias: Alert on PM levels above 200ppm
@@ -102,8 +103,9 @@ automation:
     condition: []
     action:
       - alias: "Notify on high levels"
-        service: notify.master_ha_grown_ups
+        service: script.notify_parents
         data:
           title: NHT Alert
           message: PM levels above 200 ppm
+          alert_level: Debug
       - delay: "00:30:00"

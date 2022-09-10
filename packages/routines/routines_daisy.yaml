@@ -19,51 +19,8 @@ input_datetime:
     has_date: true
     has_time: true
 
-automation:
-  - alias: Daisy mark awake on motion
-    # When Daisy is marked "asleep" set her to home if there is motion in Camille's bedroom
-    trigger:
-      - platform: state
-        entity_id: input_select.camille_status
-        from: "Asleep"
-        to: "Home"
-    condition:
-      - condition: state
-        entity_id: input_select.daisy_status
-        state: "Asleep"
-      - condition: time
-        after: "06:00:00"
-        before: "11:00:00"
-    action:
-      - service: script.daisy_goodmorning
 
-  - alias: Daisy needs to go outside
-    # If "Daisy Walked" is not on, remind us every 5 minutes to take her out
-    trigger:
-      - platform: time_pattern
-        minutes: "/1"
-    condition:
-      - condition: state
-        entity_id: input_boolean.daisy_walked
-        state: "off"
-      - condition: template
-        value_template: >-
-          {{ states.input_select.daisy_state != "Away" }}
-      - condition: template
-        value_template: >-
-          {{ ((as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed)) / 60) > 1 and
-             (((as_timestamp(utcnow()) - as_timestamp(states.input_boolean.daisy_walked.last_changed))/60)|int) % 5 == 0 }}
-    action:
-      - service: tts.google_translate_say
-        data:
-          entity_id:
-            - media_player.living_room_display
-            - media_player.camille_s_speaker
-          message: "Take Daisy outside"
-      - service: notify.master_ha_michael
-        data:
-          title: "Daisy Alert"
-          message: "Daisy needs to go!"
+automation:
 
   - alias: Daisy time to feed
     id: f90b531b-b423-47ee-8722-2068d9338c3f
@@ -79,13 +36,10 @@ automation:
       - service: tts.google_translate_say
         data:
           entity_id:
-            - media_player.living_room_display
-            - media_player.camille_s_speaker
+            - media_player.kitchen_display
           message: "Time to feed Daisy"
-      - service: notify.master_ha_michael
+      - service: script.notify_parents
         data:
           title: "Time to feed Daisy"
           message: "Click to fill log"
-          data:
-            url: "https://docs.google.com/forms/d/e/1FAIpQLSdc1HbpBndlpDK7QokvjB7k6AlDmGeQFAsS1K6cpBP2d-dHwg/viewform?usp=sf_link"
-      - service: script.daisy_go_outside_delay
+          alert_level: Info
