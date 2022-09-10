@@ -99,7 +99,7 @@ automation:
                 entity_id: input_boolean.camille_is_school_day
         default:
           - alias: "Turn off school day boolean"
-            service: homeassistant.turn_on
+            service: homeassistant.turn_off
             target:
               entity_id: input_boolean.camille_is_school_day
 
