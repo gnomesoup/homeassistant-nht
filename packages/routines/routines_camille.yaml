@@ -77,12 +77,8 @@ automation:
     alias: Camille mark if school day
     trigger:
       - platform: time_pattern
-        hours: "0"
+        hours: "1"
         minutes: "/15"
-    variables:
-      today: "{{ now().replace(hour=0, minute=0, second=0, microsecond=0) }}"
-      event: >-
-        {{ (state_attr('calendar.west_high_school', 'start_time') | as_datetime)}}
     action:
       - alias: "Check if it is a school day"
         choose:
@@ -90,6 +86,8 @@ automation:
             - alias: "Calendar event date is today"
               condition: template
               value_template: >-
+                {% set today =  now().replace(hour=0, minute=0, second=0, microsecond=0) %}
+                {% set event =  (state_attr('calendar.west_high_school', 'start_time') | as_datetime) %}
                 {{ today.year == event.year and today.month == event.month
                     and today.day == event.day}}
           sequence:
