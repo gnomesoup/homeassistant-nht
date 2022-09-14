@@ -182,7 +182,7 @@ automation:
 
   - alias: Porch lights on motion
     id: 901e682a-cdf7-4f31-8026-4b03b9c2b8be
-    mode: restart
+    mode: single
     trigger:
       - platform: state
         entity_id: binary_sensor.nvr_camera_1_crossline
@@ -213,8 +213,13 @@ automation:
             - light.tradfri_bulb_e26_ws_opal_1000lm_light
         data:
           brightness: 255
-      - delay:
-          minutes: 16
+      - wait_for_trigger:
+        - platform: state
+          entity_id: binary_sensor.nvr_camera_1_crossline
+          from: "on"
+          to: "off"
+          for: 
+            minutes: 16
       - alias: "Restore state of porch lights"
         service: scene.turn_on
         target:
