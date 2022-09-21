@@ -48,11 +48,11 @@ automation:
     alias: Lock locks when it's late
     trigger:
       - platform: time_pattern
-        minutes: "/30"
+        minutes: "/60"
     condition:
       - alias: "Only when it's late"
         condition: time
-        after: "22:00:00"
+        after: "23:00:00"
         before: "05:00:00"
       - alias: "Not in guest mode"
         condition: state
