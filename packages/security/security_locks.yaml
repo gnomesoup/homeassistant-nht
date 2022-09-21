@@ -48,7 +48,7 @@ automation:
     alias: Lock locks when it's late
     trigger:
       - platform: time_pattern
-        minutes: "/60"
+        minutes: "/0"
     condition:
       - alias: "Only when it's late"
         condition: time
