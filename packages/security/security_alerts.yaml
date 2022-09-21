@@ -87,44 +87,6 @@ automation:
       - service: script.turn_on
         entity_id: script.reset_door_delay
 
-  - alias: Notify All Motion
-    # If the alarm is set, let michael know about motion
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.motion_hallway
-          - binary_sensor.motion_living_room
-          - binary_sensor.motion_office
-        to: "on"
-    condition:
-      - condition: state
-        entity_id: alarm_control_panel.home_alarm
-        state: "armed_night"
-    action:
-      - service: notify.security_verbose
-        data_template:
-          title: "Motion Alert"
-          message: >-
-            {{ state_attr(trigger.entity_id, "friendly_name") }}
-
-  - alias: Notify Alarm State
-    # Notify Michael as the alarm states change
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.home_alarm
-    action:
-      - service: notify.security_verbose
-        data:
-          title: "Alarm"
-          message: >-
-            {% set map = {"disarmed": "Disarmed",
-                          "pending": "Pending",
-                          "armed_away": "Away",
-                          "armed_home": "Home",
-                          "armed_night": "Night",
-                          "triggered": "Triggered"} %}
-            Set to {{ map[states("alarm_control_panel.home_alarm")] }}
-
   - alias: Notify Motion In Bedroom
     # Notify motion in bedroom when caregivers are the only ones here
     trigger:
