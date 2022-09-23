@@ -1,4 +1,4 @@
-seonsor:
+sensor:
   - platform: template
     sensors:
       sunrise: 
