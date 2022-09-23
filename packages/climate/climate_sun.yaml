@@ -1,0 +1,9 @@
+seonsor:
+  - platform: template
+    sensors:
+      sunrise: 
+        friendly_name: "Next Sunrise Time"
+        value_template: "{{ state_attr('sun.sun', 'next_rising') | as_timestamp | timestamp_custom('%H:%M') }}"
+      sunset:
+        friendly_name: "Next Sunset Time"
+        value_template: "{{ state_attr('sun.sun', 'next_setting') | as_timestamp | timestamp_custom('%H:%M') }}"
