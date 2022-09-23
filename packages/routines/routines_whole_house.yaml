@@ -161,14 +161,18 @@ automation:
     condition: []
     action:
       - alias: "Turn porch lights on"
-        service: homeassistant.turn_on
+        service: light.turn_on
         target:
           entity_id:
             - light.ikea_tradfri_bulb_e26_fe5b90
             - light.tradfri_bulb_e26_ws_opal_1000lm_light
-            - input_boolean.porch_lights_default
         data:
           brightness: 128
+      - alias: "Turn default state on"
+        service: input_boolean.turn_on
+        target:
+          entity_id:
+            - input_boolean.porch_lights_default
           
   - alias: Porch lights evening off
     id: 82cdd372-c606-43ba-8e17-97e354234cdb
@@ -185,6 +189,10 @@ automation:
           entity_id:
             - light.ikea_tradfri_bulb_e26_fe5b90
             - light.tradfri_bulb_e26_ws_opal_1000lm_light
+      - alias: "Turn default state on"
+        service: input_boolean.turn_on
+        target:
+          entity_id:
             - input_boolean.porch_lights_default
 
   - alias: Porch lights on motion
