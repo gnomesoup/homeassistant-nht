@@ -60,6 +60,11 @@ input_number:
     max: 80
     mode: box
 
+input_boolean:
+  thermostat_fan_on:
+    name: Thermostat Fan On
+    icon: mdi:fan
+
 sensor:
   - platform: template
     sensors:
