@@ -109,7 +109,6 @@ automation:
     variables:
       fan_mode: >-
         {% if states("input_boolean.thermostat_fan_on") == "on" -%}
-        {% if states("binary_sensor.workday_sensor") == "off" -%}
           Low
         {%- else -%}
           Auto low
@@ -227,7 +226,6 @@ automation:
     variables:
       fan_mode: >-
         {% if states("input_boolean.thermostat_fan_on") == "on" -%}
-        {% if states("binary_sensor.workday_sensor") == "off" -%}
           Low
         {%- else -%}
           Auto low
