@@ -106,14 +106,15 @@ automation:
         condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
-    variables:
-      fan_mode: >-
-        {% if states("input_boolean.thermostat_fan_on") == "on" -%}
-          Low
-        {%- else -%}
-          Auto low
-        {%- endif %}
     action:
+      - alias: "Set fan mode variable"
+        variables:
+          fan_mode: >-
+            {% if states("input_boolean.thermostat_fan_on") == "on" -%}
+              Low
+            {%- else -%}
+              Auto low
+            {%- endif %}
       - alias: "Heat or cool"
         choose:
         - conditions:
@@ -223,14 +224,15 @@ automation:
         condition: state
         entity_id: binary_sensor.workday_sensor
         state: "off"
-    variables:
-      fan_mode: >-
-        {% if states("input_boolean.thermostat_fan_on") == "on" -%}
-          Low
-        {%- else -%}
-          Auto low
-        {%- endif %}
     action:
+      - alias: "Set fan mode variable"
+        variables:
+          fan_mode: >-
+            {% if states("input_boolean.thermostat_fan_on") == "on" -%}
+              Low
+            {%- else -%}
+              Auto low
+            {%- endif %}
       - alias: "Heat or cool"
         choose:
         - conditions:
