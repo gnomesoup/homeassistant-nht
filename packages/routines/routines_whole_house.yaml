@@ -189,8 +189,8 @@ automation:
           entity_id:
             - light.ikea_tradfri_bulb_e26_fe5b90
             - light.tradfri_bulb_e26_ws_opal_1000lm_light
-      - alias: "Turn default state on"
-        service: input_boolean.turn_on
+      - alias: "Turn default state off"
+        service: input_boolean.turn_off
         target:
           entity_id:
             - input_boolean.porch_lights_default
