@@ -228,11 +228,7 @@ automation:
       - alias: "Set fan mode variable"
         variables:
           fan_mode: >-
-            {% if states("input_boolean.thermostat_fan_on") == "on" -%}
-              Low
-            {%- else -%}
-              Auto low
-            {%- endif %}
+            {% if states("input_boolean.thermostat_fan_on") == "on" %}Low{% else %}Auto low{%- endif %}
       - alias: "Heat or cool"
         choose:
         - conditions:
