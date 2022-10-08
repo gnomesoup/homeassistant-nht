@@ -53,8 +53,8 @@ group:
 
 automation:
 
-  - id: 87ef214b-46c6-409a-bfcd-9ced215431a2
-    alias: Camille school phone to DND
+  - alias: Camille school phone to DND
+    id: 87ef214b-46c6-409a-bfcd-9ced215431a2
     trigger:
       - platform: calendar
         entity_id: calendar.west_high_school
@@ -63,8 +63,8 @@ automation:
       - alias: "Turn on dnd"
         service: script.notify_camille_dnd_total_silence
 
-  - id: 1fc9e9d0-7689-41a6-8bdb-4deb13a5f66c
-    alias: Camille school phone DND off
+  - alias: Camille school phone DND off
+    id: 1fc9e9d0-7689-41a6-8bdb-4deb13a5f66c
     trigger:
       - platform: calendar
         entity_id: calendar.west_high_school
@@ -73,8 +73,8 @@ automation:
       - alias: "Turn off dnd"
         service: script.notify_camille_dnd_off
 
-  - id: 015584f8-1258-44d0-9c98-f9aa97483546
-    alias: Camille mark if school day
+  - alias: Camille mark if school day
+    id: 015584f8-1258-44d0-9c98-f9aa97483546
     trigger:
       - platform: time_pattern
         hours: "1"
@@ -101,8 +101,8 @@ automation:
             target:
               entity_id: input_boolean.camille_is_school_day
 
-  - id: 40c765da-01e6-47b7-8965-5765a7dd25dc
-    alias: Camille Set West Day Type
+  - alias: Camille Set West Day Type
+    id: 40c765da-01e6-47b7-8965-5765a7dd25dc
     trigger:
       - platform: state
         entity_id: input_boolean.camille_is_school_day
@@ -131,8 +131,8 @@ automation:
             data:
               option: "No School"
 
-  - id: 423b7759-8b43-47b1-9cbb-a3940df04a93
-    alias: Camille wakeup before school
+  - alias: Camille wakeup before school
+    id: 423b7759-8b43-47b1-9cbb-a3940df04a93
     trigger:
       - platform: calendar
         entity_id: calendar.west_high_school
@@ -257,10 +257,18 @@ automation:
             actions:
               - action: "CAMILLE_MED_TAKEN"
                 title: "Taken"
-      - alias: "Notify with sound"
-        service: script.notify_camille_with_sound
-        data:
-          message: "It's that time"
+      - alias: "Audible notify if home"
+        choose:
+        - conditions:
+            - alias: "Check if Camille is home"
+              condition: state
+              entity_id: person.camille
+              state: "home"
+          sequence:
+            - alias: "Notify with sound"
+              service: script.notify_camille_with_sound
+              data:
+                message: "It's about damn time"
       - alias: "Wait for response"
         wait_for_trigger:
           - platform: event
@@ -278,8 +286,8 @@ automation:
               target:
                 entity_id: input_boolean.camille_med_notification_enabled
 
-  - id: 9541eb9c-0f70-421b-9f07-a31aaac016d5
-    alias: Camille medication turn off with button
+  - alias: Camille medication turn off with button
+    id: 9541eb9c-0f70-421b-9f07-a31aaac016d5
     trigger:
       - platform: state
         entity_id: input_boolean.aqara_button_1_single
@@ -294,8 +302,8 @@ automation:
         target:
           entity_id: input_boolean.camille_med_notification_enabled
   
-  - id: e1fb28a8-e855-43d1-a955-f9894df2584b
-    alias: Camille medication turned off actions
+  - alias: Camille medication turned off actions
+    id: e1fb28a8-e855-43d1-a955-f9894df2584b
     trigger:
       - platform: state
         entity_id: input_boolean.camille_med_notification_enabled
@@ -309,8 +317,8 @@ automation:
           message: Meds taken
           alert_level: Info
   
-  - id: 49fefe38-bc08-4756-bf7a-33004736691f
-    alias: Camille medication notify parents if not taken
+  - alias: Camille medication notify parents if not taken
+    id: 49fefe38-bc08-4756-bf7a-33004736691f
     trigger:
       - platform: state
         entity_id: input_boolean.camille_med_notification_enabled
