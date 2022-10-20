@@ -1,3 +1,7 @@
+binary_sensor:
+  - platform: ping
+    host: 192.168.40.208
+    name: Amcrest NVR
 
 mqtt:
   binary_sensor:
