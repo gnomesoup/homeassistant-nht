@@ -27,6 +27,7 @@ input_boolean:
 
 automation:
   - alias: Minimote Front Door
+    id: a094cac8-9ac3-4161-929e-a904c8ba2ff0
     trigger:
       - platform: event
         event_type: zwave_js_value_notification
@@ -51,6 +52,7 @@ automation:
             {{ map[trigger.event.data.value|int] }}
 
   - alias: Minimote Front Door Guest Mode
+    id: 3f3090b5-6fe8-4a30-9b0e-bd6a37226587
     trigger:
       - platform: event
         event_type: zwave_js_value_notification
@@ -64,12 +66,85 @@ automation:
       - service: homeassistant.toggle
         data_template:
           entity_id: >
-            {% set map = {1: "light.ge_appliances_zll_light_1b550600_level_on_off",
-                          2: "script.guest_lights_off",
-                          3: "light.living_room_lamp",
-                          4: "script.guest_lights_off",
-                          5: "light.aeotec_zw111_nano_dimmer_level_3",
-                          6: "script.guest_lights_dim",
-                          7: "switch.zooz_zen06_switch",
-                          8: "script.guest_lights_on"} %}
-            {{ map[trigger.event.data.scene_id|int] }}
+            {% set map = {1: "input_boolean.minimote_front_door_1",
+                          2: "input_boolean.minimote_front_door_2",
+                          3: "input_boolean.minimote_front_door_3",
+                          4: "input_boolean.minimote_front_door_4",
+                          5: "input_boolean.minimote_front_door_5",
+                          6: "input_boolean.minimote_front_door_6",
+                          7: "input_boolean.minimote_front_door_7",
+                          8: "input_boolean.minimote_front_door_8"} %}
+            {{ map[trigger.event.data.value|int] }}
+
+  - id: 4aed69da-1d4b-4650-81b4-30a4f60e63ee
+    alias: Minimote Garage Door Open Close
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_front_door_3
+    condition: []
+    action:
+      - alias: "Unlock Garage Door"
+        service: homeassistant.turn_on
+        target:
+          entity_id: switch.multirelay_2
+  
+  - alias: Minimote Porch Lights Toggle
+    id: 264ef33e-e6eb-418d-8f85-df77455010de
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_front_door_5
+    condition: []
+    action:
+      - alias: "Toggle Porch Lights"
+        service: homeassistant.toggle
+        target:
+          entity_id:
+            - light.ikea_tradfri_bulb_e26_fe5b90
+            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+  
+  - alias: Minimote Porch Lights Toggle
+    id: 264ef33e-e6eb-418d-8f85-df77455010de
+    trigger:
+      - platform: state
+        entity_id: input_boolean.minimote_front_door_5
+    condition: []
+    action:
+      - alias: "If porch lights are bright, dim them"
+        choose:
+        - conditions:
+            - alias: "Porch light brightness is high"
+              condition: numeric_state
+              entity_id: light.ikea_tradfri_bulb_e26_fe5b90
+              above: 200
+          sequence:
+            - alias: "Dim light to 50%"
+              service: light.turn_on
+              target:
+                entity_id:
+                  - light.ikea_tradfri_bulb_e26_fe5b90
+                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
+              data:
+                brightness: 128
+        - conditions:
+            - alias: "Porch light brightness is low"
+              condition: numeric_state
+              entity_id: light.ikea_tradfri_bulb_e26_fe5b90
+              below: 128
+          sequence:
+            - alias: "Dim light to 100%"
+              service: light.turn_on
+              target:
+                entity_id:
+                  - light.ikea_tradfri_bulb_e26_fe5b90
+                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
+              data:
+                brightness: 255
+        default:
+            - alias: "Dim light to 50%"
+              service: light.turn_on
+              target:
+                entity_id:
+                  - light.ikea_tradfri_bulb_e26_fe5b90
+                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
+              data:
+                brightness: 128
