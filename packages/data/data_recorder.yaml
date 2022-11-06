@@ -175,7 +175,6 @@ recorder:
       - sensor.load_1m
       - sensor.load_5m
       - sensor.memory_free
-      - sensor.season
       - sensor.sim_1
       - sensor.sim_1_2
       - sensor.spruce_sensor_6224_battery

@@ -13,9 +13,6 @@ sensor:
           {{ currentTime.strftime("%A") }}
         icon_template: "mdi:calendar"
 
-  - platform: season
-    type: astronomical
-
 binary_sensor:
   - platform: workday
     country: US
