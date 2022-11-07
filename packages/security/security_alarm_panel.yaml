@@ -18,3 +18,38 @@ input_boolean:
   in_home_services:
     name: "In-Home Services Expected"
     icon: mdi:broom
+
+automation:
+  - alias: Sync Manual and Simplisafe alarms
+    id: 93fc18cb-7c53-45e0-967c-667d864259bf
+    trigger:
+      - platform: state
+        entity_id: 
+          - alarm_control_panel.alarm_control_panel
+          - alarm_control_panel.home_alarm
+    condition:
+      - >-
+        {{states('alarm_control_panel.alarm_control_panel')
+        != states('alarm_control_panel.home_alarm')}}
+    action:
+      - variables:
+          target: >-
+            {{"alarm_control_panel.alarm_control_panel"
+              if trigger.entity_id == "alarm_control_panel.home_alarm" else
+              "alarm_control_panel.home_alarm"
+            }}
+      - alias: "Mimic setting on manual alarm"
+        choose:
+        - conditions:
+            - "{{trigger.state in ['armed_away', 'armed_home', 'disarmed']}}"
+          sequence:
+            - alias: "Set alarm state"
+              service: >- 
+                alarm_control_panel.alarm_{{trigger.state | replace('ed', '')}}
+              target:
+                entity_id: "{{target}}"
+            - alias: "Notify debug"
+              service: script.notify_parents
+              data:
+                title: Taliluna Debug
+                message: "Set {{target}} to {{tigger.state}}"
