@@ -51,12 +51,12 @@ automation:
               service: script.notify_parents
               data:
                 title: Taliluna Debug
-                message: "Set {{target}} to {{tigger.state}}"
+                message: "Set {{target}} to {{trigger.state}}"
                 alert_level: debug
         default:
         - alias: "Notify if nothing happens"
           service: script.notify_parents
           data:
             title: Taliluna Debug
-            message: "Did not set {{target}} to {{tigger.state}}"
+            message: "Did not set {{target}} to {{trigger.state}}"
             alert_level: debug
