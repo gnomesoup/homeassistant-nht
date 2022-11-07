@@ -25,19 +25,18 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - alarm_control_panel.alarm_control_panel
+          - alarm_control_panel.simplisafe
           - alarm_control_panel.home_alarm
-    condition:
-      - >-
-        {{states('alarm_control_panel.alarm_control_panel')
-        != states('alarm_control_panel.home_alarm')}}
+    # condition:
+    #   - >-
+    #     {{states('alarm_control_panel.alarm_control_panel')
+    #     != states('alarm_control_panel.home_alarm')}}
     action:
       - variables:
           target: >-
-            {{"alarm_control_panel.alarm_control_panel"
+            {{"alarm_control_panel.simplisafe"
               if trigger.entity_id == "alarm_control_panel.home_alarm" else
-              "alarm_control_panel.home_alarm"
-            }}
+              "alarm_control_panel.home_alarm"}}
       - alias: "Mimic setting on manual alarm"
         choose:
         - conditions:
