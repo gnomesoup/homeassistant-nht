@@ -40,23 +40,23 @@ automation:
       - alias: "Mimic setting on manual alarm"
         choose:
         - conditions:
-            - "{{trigger.state in ['armed_away', 'armed_home', 'disarmed']}}"
+            - "{{trigger.to_state in ['armed_away', 'armed_home', 'disarmed']}}"
           sequence:
             - alias: "Set alarm state"
               service: >- 
-                alarm_control_panel.alarm_{{trigger.state | replace('ed', '')}}
+                alarm_control_panel.alarm_{{trigger.to_state | replace('ed', '')}}
               target:
                 entity_id: "{{target}}"
             - alias: "Notify debug"
               service: script.notify_parents
               data:
                 title: Taliluna Debug
-                message: "Set {{target}} to {{trigger.state}}"
-                alert_level: debug
+                message: "Set {{target}} to {{trigger.to_state}}"
+                alert_level: Debug
         default:
         - alias: "Notify if nothing happens"
           service: script.notify_parents
           data:
             title: Taliluna Debug
-            message: "Did not set {{target}} to {{trigger.state}}"
-            alert_level: debug
+            message: "Did not set {{target}} to {{trigger.to_state}}"
+            alert_level: Debug
