@@ -23,14 +23,8 @@ automation:
   - alias: Sync Manual and Simplisafe alarms
     id: 93fc18cb-7c53-45e0-967c-667d864259bf
     trigger:
-      - platform: state
-        entity_id: 
-          - alarm_control_panel.simplisafe
-          - alarm_control_panel.home_alarm
-    # condition:
-    #   - >-
-    #     {{states('alarm_control_panel.alarm_control_panel')
-    #     != states('alarm_control_panel.home_alarm')}}
+    - platform: template
+      value_template: "{{ states('alarm_control_panel.simplisafe') == states('alarm_control_panel.home_alarm')}}"
     action:
       - variables:
           target: >-
