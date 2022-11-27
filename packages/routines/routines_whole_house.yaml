@@ -282,7 +282,9 @@ automation:
     id: 2d5cea66-1940-4de9-8c3e-cda17b98fae2
     trigger:
       - platform: state
-        entity_id: binary_sensor.pir_motion_detector_any
+        entity_id: 
+          - binary_sensor.pir_motion_detector_any
+          - binary_sensor.laundry_door_entry
         from: "off"
         to: "on"
       - platform: state
