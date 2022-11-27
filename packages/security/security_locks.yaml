@@ -63,7 +63,53 @@ automation:
         entity_id: lock.all_locks
         state: "unlocked"
     action:
-      - alias: "Lock all locks"
-        service: lock.lock
-        target:
-          entity_id: lock.all_locks
+      - alias: "choose alias (name)"
+        choose:
+        - conditions:
+            - alias: "Check if door with lock is open"
+              condition: state
+              entity_id: group.door_sensors_simply_safe
+              state: "on"
+          sequence:
+            - alias: "Notify if door sensor open"
+              service: script.notify_parents
+              data:
+                alert_level: Info
+                title: Taliluna Security
+                message: >-
+                  Cannot lock {{ expand('group.door_sensors_simply_safe')
+                    | map(attribute='attribues.friendly_name')
+                    | list
+                    | join(", ")}}
+      - alias: "Lock only if door is closed"
+        choose:
+        - conditions:
+            - alias: "Front door closed"
+              condition: state
+              entity_id: binary_sensor.front_door_entry
+              state: "off"
+          sequence:
+            - alias: "Lock front door"
+              service: lock.lock
+              target:
+                entity_id: lock.touchscreen_electronic_deadbolt
+        - conditions:
+            - alias: "Back door closed"
+              condition: state
+              entity_id: binary_sensor.back_door_entry
+              state: "off"
+          sequence:
+            - alias: "Lock back door"
+              service: lock.lock
+              target:
+                entity_id: lock.touchscreen_electronic_deadbolt_2
+        - conditions:
+            - alias: "Laundry door closed"
+              condition: state
+              entity_id: binary_sensor.laundry_door_entry
+              state: "off"
+          sequence:
+            - alias: "Lock laundry door"
+              service: lock.lock
+              target:
+                entity_id: lock.touchscreen_electronic_deadbolt_3
