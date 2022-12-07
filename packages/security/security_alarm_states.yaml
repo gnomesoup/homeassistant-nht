@@ -1,23 +1,43 @@
 automation:
-  # Opening front door or patio door will trigger alarm
-  - alias: Alarm Control Panel Trigger All
+  - alias: "No motion late at night"
     trigger:
       - platform: state
-        entity_id:
-          - input_boolean.alarm_control_panel_trigger
-          - binary_sensor.door_sensor_2
-          # - binary_sensor.door_sensor_3
-          # Now that we have a door we don't want to trigger alarms with patio
-        to: "on"
+        entity_id: group.motion_sensors
+        to: "off"
+        for:
+          minutes: 45
+      - platform: time
+        at: "01:05:00"
     condition:
+      - condition: time
+        after: "01:00:00"
+        before: "05:00:00"
+      - condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "disarmed"
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
       - condition: template
         value_template: >-
-          {{ states("alarm_control_panel.home_alarm") != "disarmed" }}
-      - condition: state
-        entity_id: input_boolean.in_home_services
-        state: "off"
+          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.group.motion_sensors.last_changed) > (44*60)
+             and states("group.motion_sensors") == "off" }}
     action:
-      - service: alarm_control_panel.alarm_trigger
+      - service: alarm_control_panel.alarm_arm_home
+        entity_id: alarm_control_panel.home_alarm
+    
+  - alias: "Alarm disarm home in morning"
+    id: c07fa84f-0615-40d0-8f54-f2871f1993c0 
+    trigger:
+      - platform: time
+        at: "06:30:00"
+    condition:
+      - alias: "Alarm set to home"
+        condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "armed_home"
+    action:
+      - service: alarm_control_panel.alarm_disarm
         entity_id: alarm_control_panel.home_alarm
 
   - alias: Alarm Control Panel Trigger All Service Present
@@ -37,138 +57,6 @@ automation:
     action:
       - service: alarm_control_panel.alarm_disarm
         entity_id: alarm_control_panel.home_alarm
-
-  # Motion in the house will trigger alarm when set to away
-  - alias: Alarm Control Panel Trigger Away
-    id: 05381ef1-f257-43fc-ba6c-2f6bededb419
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.door_sensor_1
-          - binary_sensor.door_sensor_3
-          - binary_sensor.motion_camille_bedroom
-          - binary_sensor.motion_hallway
-          # - binary_sensor.motion_living_room
-          - binary_sensor.motion_office
-          - binary_sensor.motion_master_bedroom
-        to: 'on'
-    condition:
-      - condition: template
-        value_template: >-
-         {{ states("alarm_control_panel.home_alarm") == "armed_away" }}
-    action:
-      - service: alarm_control_panel.alarm_trigger
-        entity_id: alarm_control_panel.home_alarm
-
-  - alias: Alarm Arm Night Buttons
-    id: 5e046c4a-ae02-4392-8f17-461b87dae1e8
-    trigger:
-      - platform: state
-        entity_id:
-          - input_boolean.minimote_master_bedroom_2
-          - input_boolean.flic_button_hold
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.home_alarm") == "disarmed" }}
-    action:
-      - service: alarm_control_panel.alarm_arm_night
-        entity_id: alarm_control_panel.home_alarm
-
-  - alias: Alarm Arm Away Buttons
-    id: 0e909793-df20-434d-8d1f-77d52aa93ac4
-    trigger:
-      - platform: state
-        entity_id:
-         - input_boolean.minimote_front_door_2
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.home_alarm") == "disarmed" }}
-    action:
-      - service: alarm_control_panel.alarm_arm_away
-        entity_id: alarm_control_panel.home_alarm
-
-  - alias: Alarm Disarm Buttons
-    id: 198e118b-9df2-49e7-b0fd-8d2e7ff30e37
-    trigger:
-      - platform: state
-        entity_id:
-          - input_boolean.minimote_master_bedroom_8
-          - input_boolean.minimote_front_door_8
-          - input_boolean.flic_button_single_click
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.home_alarm") != "disarmed" }}
-    action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.home_alarm
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.in_home_services
-      - service: media_player.media_pause
-        data:
-          entity_id:
-            - media_player.bedroom_speaker
-            - media_player.living_room_display
-
-  - alias: Alarm Disarm Morning Routine
-    id: 68b98d1f-ec3e-4eac-82f3-1cbcf738d3b6
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.motion_hallway
-          - binary_sensor.motion_living_room
-          - binary_sensor.pir_motion_detector_any
-          - binary_sensor.motion_master_bedroom
-          - binary_sensor.motion_camille_bedroom
-        from: "off"
-        to: "on"
-    condition:
-      - condition: state
-        alias: "Alarm set to night"
-        entity_id: alarm_control_panel.home_alarm
-        state: "armed_night"
-      - condition: time
-        alias: "Time between 5am and noon"
-        after: "05:00:00"
-        before: "12:00:00"
-    action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.home_alarm
-
-  - alias: Alarm Disarm When Triggered
-    id: 97aa1dbb-8ec3-4162-82f4-a8dd8afb870b
-    trigger:
-      - platform: state
-        entity_id:
-          - input_boolean.minimote_master_bedroom_1
-          - input_boolean.minimote_master_bedroom_2
-          - input_boolean.minimote_master_bedroom_3
-          - input_boolean.minimote_master_bedroom_4
-          - input_boolean.minimote_master_bedroom_5
-          - input_boolean.minimote_master_bedroom_6
-          - input_boolean.minimote_master_bedroom_7
-          - input_boolean.minimote_master_bedroom_8
-          - input_boolean.minimote_front_door_8
-          - input_boolean.flic_button_single_click
-          - input_boolean.flic_button_hold
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.home_alarm") == "triggered" }}
-    action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.home_alarm
-      - service: switch.turn_off
-        entity_id: switch.linear_unknown_type_2005_id_0503_switch
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.in_home_services
-      - service: media_player.media_pause
-        data:
-          entity_id:
-            - media_player.bedroom_speaker
-            - media_player.living_room_display
 
   - alias: In Home Service Over
     id: 4c535958-c183-47c0-8ec4-24b9d41f2483

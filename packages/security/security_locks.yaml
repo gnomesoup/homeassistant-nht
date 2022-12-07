@@ -63,7 +63,14 @@ automation:
         entity_id: lock.all_locks
         state: "unlocked"
     action:
-      - alias: "choose alias (name)"
+      - alias: "Run lock deadbolts scrips"
+        service: script.lock_deadbolts_if_doors_shut
+
+script:
+  lock_deadbolts_if_doors_shut:
+    alias: "Lock locks or notify if open"
+    sequence:
+      - alias: "Notify if doors open"
         choose:
         - conditions:
             - alias: "Check if door with lock is open"
