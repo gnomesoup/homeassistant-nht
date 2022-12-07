@@ -78,9 +78,10 @@ automation:
                 title: Taliluna Security
                 message: >-
                   Cannot lock {{ expand('group.door_sensors_simply_safe')
-                    | map(attribute='attribues.friendly_name')
+                    | selectattr("state", "==", "on")
+                    | map(attribute='attributes.friendly_name')
                     | list
-                    | join(", ")}}
+                    | join(", ") }}
       - alias: "Lock only if door is closed"
         choose:
         - conditions:

@@ -26,46 +26,32 @@ group:
   lights_away:
     name: All lights when away
     entities:
-      # Living Room Lamp Left
-      - light.ge_appliances_zll_light_15cd1400_level_on_off
-      # Metal Lamp
-      - light.ge_appliances_zll_light_49251600_level_on_off
-      # Angela's bedroom lamp
-      - light.ge_appliances_zll_light_3aae1600_level_on_off
-      # Camille's closet light
-      - light.ge_appliances_zll_light_1b550600_level_on_off
-      # Entry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
-      # Bedroom lamp left
+      # Nani's lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
-      # Accordion Lamp
-      # - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
-      # Nani's Lamp
-      - light.philips_lwb006_097e3010_level_on_off
-      # Master Bath lights
-      - light.master_bath_lights_zha_group_0x0002
-      # Front Bathroom Lights
-      - light.bathroom_lights_zha_group_0x0003
-
-  lights_switches_for_flashing:
-    name: All lights that are good for flashing
+      # office closet
+      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
+      # Metal lamp
+      - light.ge_appliances_zll_light_49251600_level_on_off
+      # Bedside lamps
+      - light.smart_switch_6_2
+      - light.ge_appliances_zll_light_15cd1400_level_on_off
+      # Garage
+      - light.master_bath_1_level_light_color_on_off
+      - light.master_bath_4_level_light_color_on_off
+  
+  lights_alarm_home:
+    name: All lights when alarm set to home
     entities:
-      # Living Room Lamp Left
-      - light.ge_appliances_zll_light_15cd1400_level_on_off
-      # Metal Lamp
-      - light.ge_appliances_zll_light_49251600_level_on_off
-      # Angela's bedroom lamp
-      - light.ge_appliances_zll_light_3aae1600_level_on_off
-      # Camille's closet light
-      - light.ge_appliances_zll_light_1b550600_level_on_off
-      # Entry closet light
-      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
-      # Bedroom lamp left
+      # Nani's lamp
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
-      # Accordion Lamp
-      # - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_166ca8fe_level_light_color_on_off
-      # Nani's Lamp
-      - light.philips_lwb006_097e3010_level_on_off
+      # office closet
+      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
+
+  lights_alarm_disabled:
+    name: All lights when alarm is disable
+    entities:
+      # Nani's lamp
+      - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
 
   switches_whole_house:
     name: All switches in the house
@@ -82,14 +68,33 @@ group:
       # - switch.z_wave_plus_power_strip_ver_2_0_3
       # - switch.z_wave_plus_power_strip_ver_2_0_4
       - switch.z_wave_plus_power_strip_ver_2_0_5
-
+  
+  switches_away:
+    name: All switches when away
+    entities:
+      # TV Plug
+      - switch.smart_plug_with_2_usb_ports
+      # HiFi Plug
+      - switch.smart_switch_6
+      # Wooly
+      - switch.z_wave_plus_power_strip_ver_2_0_5
+  
+  switches_alarm_disabled:
+    name: All switches when alarm disabled
+    entities:
+      # TV Plug
+      - switch.smart_plug_with_2_usb_ports
+      # Wooly
+      - switch.z_wave_plus_power_strip_ver_2_0_5
 
   media_whole_house:
     name: All media in the house
     entities:
       - media_player.master_bedroom_speaker
       - media_player.camille_s_room_speaker_2
-      - media_player.living_room_tv
+      # - media_player.living_room_tv
+      - media_player.airplay_hi_fi
+      - media_player.samsung_the_frame_65
       - media_player.kitchen_display
       - media_player.office_speaker
 
@@ -99,58 +104,74 @@ input_boolean:
     icon: mdi:lightbulb
 
 automation:
-  - alias: "Alarm night turn off everything"
+  - alias: "Alarm set to home actions"
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
-        to: "armed_night"
+        to: "armed_home"
     action:
       - service: homeassistant.turn_off
         data:
           entity_id:
-            - group.lights_whole_house
-            - group.switches_whole_house
-      - service: media_player.media_pause
-        data:
-          entity_id:
-            - media_player.bedroom_speaker
-            - media_player.living_room_tv
-            - media_player.living_room_display
+            - group.lights_alarm_home
+            - group.switches_away
+      - alias: "Lock deadbolts"
+        service: script.lock_deadbolts_if_doors_shut
 
-  - alias: "Alarm away turn off everything"
+  - alias: "Alarm set to away actions"
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
         to: "armed_away"
     action:
-      - service: script.turn_everything_off_away
-
-  - alias: "No motion late at night"
+      - alias: Turn things off
+        service: homeassistant.turn_off
+        target:
+          entity_id:
+            - group.lights_away
+            - group.switches_away
+      - alias: "Lock deadbolts"
+        service: script.lock_deadbolts_if_doors_shut
+      - alias: "Pause all media"
+        service: media_player.media_pause
+        target:
+          entity_id: group.media_whole_house
+  
+  - id: 04e624e3-69cf-4a7d-87ac-f6e53ad4db15
+    alias: Alarm disarmed from away
     trigger:
       - platform: state
-        entity_id: group.motion_sensors
-        to: "off"
-        for:
-          minutes: 45
-      - platform: time
-        at: "01:05:00"
-    condition:
-      - condition: time
-        after: "01:00:00"
-        before: "05:00:00"
-      - condition: state
         entity_id: alarm_control_panel.home_alarm
-        state: "disarmed"
-      - condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
-      - condition: template
-        value_template: >-
-          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.group.motion_sensors.last_changed) > (44*60)
-             and states("group.motion_sensors") == "off" }}
+        from: "armed_away"
+        to: "disarmed"
+    condition: []
     action:
-      - service: alarm_control_panel.alarm_arm_night
+      - alias: "Unlock front deadbolt"
+        service: lock.unlock
+        target:
+          entity_id: lock.touchscreen_electronic_deadbolt
+      - alias: "Turn things on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - group.lights_alarm_disabled
+            - group.switches_alarm_disabled
+  
+  - id: a2bb76db-1387-4be0-b939-eb84ecbb7ea1
+    alias: Alarm disarmed from home
+    trigger:
+      - platform: state
         entity_id: alarm_control_panel.home_alarm
+        from: "armed_home"
+        to: "disarmed"
+    condition: []
+    action:
+      - alias: "Turn things on"
+        service: homeassistant.turn_on
+        target:
+          entity_id:
+            - group.lights_alarm_disabled
+            - group.switches_alarm_disabled
 
   - alias: Porch lights evening on
     id: 522b5aed-7204-40a3-9aa0-c04abd04eb12
@@ -350,7 +371,17 @@ script:
           entity_id:
             - group.media_whole_house
 
-  turn_everything_off_away:
+  turn_off_home:
+    alias: "Turn everything off alarm set to home"
+    sequence:
+      - service: homeassistant.turn_off
+        data:
+          entity_id:
+            - group.lights_alarm_home
+            - group.switches_alarm_home
+      - service: script.lock_deadbolts_if_doors_shut
+
+  turn_off_away:
     alias: "Turn everything off away"
     sequence:
       - service: homeassistant.turn_off
@@ -362,55 +393,13 @@ script:
         data:
           entity_id:
             - group.media_whole_house
-  get_dark:
-    alias: "Get dark"
+      - service: script.lock_deadbolts_if_doors_shut
+  
+  return_from_away:
+    alias: "Return from away"
     sequence:
       - service: homeassistant.turn_off
         data:
           entity_id:
-            - light.ge_appliances_zll_light_1b550600_level_on_off
-            - light.living_room_lamp
-            - switch.aeon_labs_zw096_smart_switch_6_switch
-            - switch.aeon_labs_zw096_smart_switch_6_switch_2
-
-  whole_house_lights_pandemic_flash:
-    alias: "Flash all lights for the pandemic party"
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.jasco_products_14284_outdoor_smart_switch_switch
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:00:02"
-      - service: homeassistant.toggle
-        data:
-          entity_id: group.lights_switches_for_flashing
-      - delay: "00:10:00"
-      - service: homeassistant.turn_off                
-        data:
-           entity_id: switch.jasco_products_14284_outdoor_smart_switch_switch
+            - group.lights_away
+            - group.switches_whole_house
