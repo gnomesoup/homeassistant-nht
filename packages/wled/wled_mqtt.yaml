@@ -1,0 +1,13 @@
+mqtt:
+  light:
+    - name: "QuinLED Holiday Lights"
+      unique_id: mqtt_quinled_holiday_lights
+      state_topic: wled/481fa4/g
+      command_topic: wled/481fa4
+      brightness_command_topic: wled/481fa4/g
+      brightness_state_topic: wled/481fa4/g
+      brightness_value_template: "{{ value }}"
+      payload_on: "ON"
+      payload_off: "OFF"
+      optimistic: true
+      retain: true
