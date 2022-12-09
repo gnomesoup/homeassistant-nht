@@ -119,6 +119,7 @@ automation:
         service: script.lock_deadbolts_if_doors_shut
 
   - alias: "Alarm set to away actions"
+    id: b00ba9d7-e3f4-429d-944d-738084944767
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
@@ -132,13 +133,13 @@ automation:
             - group.switches_away
       - alias: "Lock deadbolts"
         service: script.lock_deadbolts_if_doors_shut
-      - alias: "Pause all media"
-        service: media_player.media_pause
-        target:
-          entity_id: group.media_whole_house
+      # - alias: "Pause all media"
+      #   service: media_player.media_pause
+      #   target:
+      #     entity_id: group.media_whole_house
   
-  - id: 04e624e3-69cf-4a7d-87ac-f6e53ad4db15
-    alias: Alarm disarmed from away
+  - alias: Alarm disarmed from away
+    id: 04e624e3-69cf-4a7d-87ac-f6e53ad4db15
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
