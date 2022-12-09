@@ -1,6 +1,9 @@
 mqtt:
   light:
     - name: "QuinLED Holiday Lights"
+      availability_topic: wled/481fa4/status
+      payload_available: online
+      payload_not_available: offline
       unique_id: mqtt_quinled_holiday_lights
       state_topic: wled/481fa4/g
       command_topic: wled/481fa4
