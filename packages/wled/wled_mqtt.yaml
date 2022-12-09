@@ -6,6 +6,7 @@ mqtt:
       payload_not_available: offline
       unique_id: mqtt_quinled_holiday_lights
       state_topic: wled/481fa4/g
+      state_value_template: "{{ 'off' if value == 0 else 'on' }}"
       command_topic: wled/481fa4
       brightness_command_topic: wled/481fa4/g
       brightness_state_topic: wled/481fa4/g

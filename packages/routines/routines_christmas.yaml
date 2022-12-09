@@ -3,7 +3,7 @@ group:
   christmas_lights_outdoor:
     name: Christmas Lights
     entities:
-      - light.wled_master
+      - light.quinled_holiday_lights
 
   christmas_lights_indoor:
     name: Christmas Lights Indoor
