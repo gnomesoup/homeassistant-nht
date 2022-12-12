@@ -127,7 +127,7 @@ automation:
               Auto low
             {%- endif %}
           temperature: >-
-            {% if states("alarm_control_panel.home_alarm") == "armed_away" -%}
+            {% if states("input_boolean.thermostat_away") == "on" -%}
               {{ states("input_number.thermostat_target_away") | float }}
             {%- else -%}
               {{ states("input_number.thermostat_target_home") | float }}
