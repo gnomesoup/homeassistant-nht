@@ -33,7 +33,7 @@ automation:
         offset: "00:10:00"
     condition: []
     action:
-      - service: homeassistant.turn_on
+      - service: homeassistant.turn_off
         target:
           entity_id:
             - group.christmas_lights_outdoor
