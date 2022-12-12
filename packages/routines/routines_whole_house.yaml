@@ -98,11 +98,6 @@ group:
       - media_player.kitchen_display
       - media_player.office_speaker
 
-input_boolean:
-  porch_lights_default:
-    name: Porch Light Default State
-    icon: mdi:lightbulb
-
 automation:
   - alias: "Alarm set to home actions"
     trigger:
