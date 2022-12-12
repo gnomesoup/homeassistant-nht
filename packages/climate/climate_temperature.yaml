@@ -26,13 +26,13 @@ input_number:
   thermostat_target_home:
     name: Thermostat Target Temperature Home
     icon: mdi:home-thermometer
-    min: 65
+    min: 50
     max: 80
     mode: box
   thermostat_target_away:
     name: Thermostat Target Temperature Away
     icon: mdi:home-thermometer
-    min: 65
+    min: 50
     max: 80
     mode: box
   thermostat_setpoint_cool_day:
@@ -118,7 +118,7 @@ automation:
         entity_id: input_boolean.guest_mode
         state: "off"
     action:
-      - alias: "Set fan mode variable"
+      - alias: "Set fan mode and temp variable"
         variables:
           fan_mode: >-
             {% if states("input_boolean.thermostat_fan_on") == "on" -%}
@@ -250,6 +250,10 @@ automation:
       - platform: state
         entity_id: climate.z_wave_plus_thermostat
         to: "cool"
+      - platform: state
+        entity_id: 
+          - input_number.thermostat_setpoint_heat_away
+          - input_number.thermostat_setpoint_cool_away
     condition: []
     action:
       - alias: "Heat or cool"
