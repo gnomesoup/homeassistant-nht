@@ -109,9 +109,9 @@ automation:
     id: ff3a6f1c-8d81-44d9-a074-514f99aaaf0e
     trigger:
       - platform: state
-        entity_id: input_number.thermostat_target_temperature
-      - platform: state
-        entity_id: input_boolean.thermostat_away
+        entity_id: 
+          - input_number.thermostat_target_home
+          - input_number.thermostat_target_away
     condition:
       - alias: "Not in guest mode"
         condition: state
