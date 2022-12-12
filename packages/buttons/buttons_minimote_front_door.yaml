@@ -102,11 +102,11 @@ automation:
             - light.ikea_tradfri_bulb_e26_fe5b90
             - light.tradfri_bulb_e26_ws_opal_1000lm_light
   
-  - alias: Minimote Porch Lights Toggle
-    id: 264ef33e-e6eb-418d-8f85-df77455010de
+  - alias: Minimote Porch Lights Dim
+    id: 9a2144ea-d2f7-40ac-8d40-83658f9c19d1
     trigger:
       - platform: state
-        entity_id: input_boolean.minimote_front_door_5
+        entity_id: input_boolean.minimote_front_door_6
     condition: []
     action:
       - alias: "If porch lights are bright, dim them"
