@@ -112,6 +112,8 @@ automation:
         entity_id: 
           - input_number.thermostat_target_home
           - input_number.thermostat_target_away
+      - platform: state
+        entity_id: input_boolean.thermostat_away
     condition:
       - alias: "Not in guest mode"
         condition: state
