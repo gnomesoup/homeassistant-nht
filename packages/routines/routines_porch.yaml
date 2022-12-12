@@ -1,0 +1,105 @@
+automation:
+
+  - alias: Porch lights evening on
+    id: 522b5aed-7204-40a3-9aa0-c04abd04eb12
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "00:00:00"
+    condition: []
+    action:
+      - alias: "Turn porch lights on"
+        service: light.turn_on
+        target:
+          entity_id:
+            - light.ikea_tradfri_bulb_e26_fe5b90
+            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+        data:
+          brightness: 128
+      - alias: "Turn default state on"
+        service: input_boolean.turn_on
+        target:
+          entity_id:
+            - input_boolean.porch_lights_default
+          
+  - alias: Porch lights evening off
+    id: 82cdd372-c606-43ba-8e17-97e354234cdb
+    trigger:
+      - platform: time
+        at: "22:45:00"
+    condition: []
+    action:
+      - delay:
+          minutes: '{{ range(0, 30) | random | int}}'
+      - alias: "Turn porch lights off"
+        service: light.turn_off
+        target:
+          entity_id:
+            - light.ikea_tradfri_bulb_e26_fe5b90
+            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+      - alias: "Turn default state off"
+        service: input_boolean.turn_off
+        target:
+          entity_id:
+            - input_boolean.porch_lights_default
+
+  - alias: Porch lights on motion
+    id: 901e682a-cdf7-4f31-8026-4b03b9c2b8be
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_1_crossline
+        from: "off"
+        to: "on"
+      - platform: state
+        entity_id: lock.touchscreen_electronic_deadbolt
+        from: "locked"
+        to: "unlocked"
+      - platform: state
+        entity_id: lock.garage_door
+        from: "locked"
+        to: "unlocked"
+    condition:
+      - alias: "Sun is down"
+        condition: state
+        entity_id: sun.sun
+        state: "below_horizon"
+    action:
+      - alias: "Turn porch lights on"
+        service: light.turn_on
+        target:
+          entity_id:
+            - light.ikea_tradfri_bulb_e26_fe5b90
+            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+        data:
+          brightness: 255
+      - wait_for_trigger:
+        - platform: state
+          entity_id: binary_sensor.nvr_camera_1_crossline
+          from: "on"
+          to: "off"
+          for: 
+            minutes: 8
+      - alias: "Turn off or dim"
+        choose:
+        - conditions:
+            - alias: "Porch light defaults to on"
+              condition: state
+              entity_id: input_boolean.porch_lights_default
+              state: "on"
+          sequence:
+            - alias: "Dim porch light"
+              service: light.turn_on
+              target:
+                entity_id:
+                  - light.ikea_tradfri_bulb_e26_fe5b90
+                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
+              data:
+                brightness: 128
+        default:
+            - alias: "Turn off porch lights"
+              service: light.turn_off
+              target:
+                entity_id:
+                  - light.ikea_tradfri_bulb_e26_fe5b90
+                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
