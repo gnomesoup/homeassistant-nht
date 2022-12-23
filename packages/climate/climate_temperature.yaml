@@ -148,6 +148,22 @@ automation:
         data:
           fan_mode: "{{ fan_mode }}"
 
+  - id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
+    alias: Set thermostat away mode from alarm status
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        to: "armed_away"
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        from: "armed_away"
+    condition: []
+    action:
+      - alias: "Set thermostat to away mode"
+        service: input_boolean.turn_on
+        target:
+          entity_id: entity ID
+
   - alias: Set Thermostat Night
     id: eac65317-2910-4553-811a-92795aaa6cc7
     trigger:
@@ -279,6 +295,21 @@ automation:
               entity_id: input_number.thermostat_target_away
             data:
               temperature: "{{states('input_number.thermostat_setpoint_cool_away')}}"
+  - id: eafd6b87-9319-4640-b3c8-befea8eaebea
+    alias: Temperature alert garage
+    trigger:
+      - platform: numeric_state
+        entity_id: 
+          - sensor.pir_motion_detector_air_temperature
+        below: 45
+        for: "00:15:00"
+    action:
+      - alias: "Notify parents"
+        service: script.notify_parents
+        data:
+          title: Taliluna Alert
+          message: Garage Temperature Low
+          alert_level: Warn
 
   # - alias: Fan default by temperature
   #   id: dd58fd8b-ab58-4c26-a574-4429de6a8940
