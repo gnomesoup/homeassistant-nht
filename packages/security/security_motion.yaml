@@ -3,7 +3,7 @@ binary_sensor:
     sensors:
       motion_hallway:
         device_class: motion
-        friendly_name: "Hallway Motion"
+        friendly_name: "Laundry Motion"
         value_template: >-
           {{ states("binary_sensor.pir_motion_detector_any_2") == "on" }}
       motion_camille_bedroom:
@@ -11,11 +11,6 @@ binary_sensor:
         friendly_name: "Camille's Bedroom Motion"
         value_template: >-
           {{ states("binary_sensor.4_in_one_multisensor_any") == "on" }}
-      motion_living_room:
-        device_class: motion
-        friendly_name: "Living Room Motion"
-        value_template: >-
-          {{ states("sensor.linear_wapirz_1_motion_sensor_alarm_level_3")|float > 0 }}
       motion_master_bedroom:
         device_class: motion
         friendly_name: "Master Bedroom Motion"
@@ -27,7 +22,6 @@ group:
     name: All Motion Sensors
     entities:
       - binary_sensor.pir_motion_detector_any
-      - binary_sensor.motion_hallway
+      - binary_sensor.motion_laundry
       - binary_sensor.motion_camille_bedroom
-      # - binary_sensor.motion_living_room
       - binary_sensor.motion_master_bedroom
