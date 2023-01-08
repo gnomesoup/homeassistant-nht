@@ -15,8 +15,8 @@ group:
       - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level_3
 
 automation:
-  - id: 70ff7438-1eb9-47b0-8121-9cd607cb4a99
-    alias: Battery Low Notification
+  - alias: Battery Low Notification
+    id: 70ff7438-1eb9-47b0-8121-9cd607cb4a99
     trigger:
       - platform: state
         entity_id: person.michael
@@ -49,3 +49,18 @@ automation:
           title: Taliluna Alert
           message: Low battery detected on {{ entities }}
           alert_level: Warn
+  - id: f8cdf062-1b0c-416f-8b56-a348d51fffcd
+    alias: Yeti Battery Low
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.yeti_state_of_charge_percent
+        below: 81
+        for: "00:00:00"
+    condition: []
+    action:
+      - alias: "Notify adults"
+        service: script.notify_parents
+        data:
+          title: Taliluna Alert
+          message: Yeti Battery Low
+          alert_level: Info
