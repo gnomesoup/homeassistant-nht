@@ -7,8 +7,8 @@ group:
 
   christmas_lights_indoor:
     name: Christmas Lights Indoor
-    entities:
-      - switch.smart_switch_6_2
+    entities: []
+      # - switch.smart_switch_6_2
 
 automation:
   - alias: Christmas lights on at 6am
