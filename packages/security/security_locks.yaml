@@ -70,54 +70,35 @@ script:
   lock_deadbolts_if_doors_shut:
     alias: "Lock locks or notify if open"
     sequence:
-      - alias: "Notify if doors open"
-        choose:
-        - conditions:
-            - alias: "Check if door with lock is open"
-              condition: state
-              entity_id: group.door_sensors_simply_safe
-              state: "on"
-          sequence:
-            - alias: "Notify if door sensor open"
-              service: script.notify_parents
-              data:
-                alert_level: Info
-                title: Taliluna Security
-                message: >-
-                  Cannot lock {{ expand('group.door_sensors_simply_safe')
-                    | selectattr("state", "==", "on")
-                    | map(attribute='attributes.friendly_name')
-                    | list
-                    | join(", ") }}
-      - alias: "Lock only if door is closed"
-        choose:
-        - conditions:
-            - alias: "Front door closed"
-              condition: state
-              entity_id: binary_sensor.front_door_entry
-              state: "off"
-          sequence:
-            - alias: "Lock front door"
-              service: lock.lock
-              target:
-                entity_id: lock.touchscreen_electronic_deadbolt
-        - conditions:
-            - alias: "Back door closed"
-              condition: state
-              entity_id: binary_sensor.back_door_entry
-              state: "off"
-          sequence:
-            - alias: "Lock back door"
-              service: lock.lock
-              target:
-                entity_id: lock.touchscreen_electronic_deadbolt_2
-        - conditions:
-            - alias: "Laundry door closed"
-              condition: state
-              entity_id: binary_sensor.laundry_door_entry
-              state: "off"
-          sequence:
-            - alias: "Lock laundry door"
-              service: lock.lock
-              target:
-                entity_id: lock.touchscreen_electronic_deadbolt_3
+      - variables:
+          open_door_names: >-
+            {{ expand('group.door_sensors_simply_safe')
+              | selectattr("state", "==", "on")
+              | map(attribute='attributes.friendly_name')
+              | list }}
+          closed_door_ids: >-
+            {{ expand('group.door_sensors_simply_safe')
+              | selectattr("state", "==", "off")
+              | map(attribute='entity_id')
+              | list }}
+      - if:
+        - alias: "Check if door with lock is open"
+          condition: template
+          value_template: "{{ open_door_names | length > 0 }}"
+        then:
+        - alias: "Notify if door sensor open"
+          service: script.notify_parents
+          data:
+            alert_level: Info
+            title: Taliluna Security
+            message: >-
+              Cannot lock {{ open_door_names | join(", ") }}
+      - if:
+        - alias: "Doors are closed"
+          condition: template
+          value_template: "{{ closed_door_ids | length > 0 }}"
+        then:
+        - alias: "Lock closed doors"
+          service: lock.lock
+          target:
+            entity_id: "{{ closed_door_ids }}"
