@@ -76,11 +76,6 @@ script:
               | selectattr("state", "==", "on")
               | map(attribute='attributes.friendly_name')
               | list }}
-          closed_door_ids: >-
-            {{ expand('group.door_sensors_simply_safe')
-              | selectattr("state", "==", "off")
-              | map(attribute='entity_id')
-              | list }}
       - if:
         - alias: "Check if door with lock is open"
           condition: template
@@ -94,11 +89,32 @@ script:
             message: >-
               Cannot lock {{ open_door_names | join(", ") }}
       - if:
-        - alias: "Doors are closed"
-          condition: template
-          value_template: "{{ closed_door_ids | length > 0 }}"
+          - alias: "Front door closed"
+            condition: state
+            entity_id: binary_sensor.front_door_entry
+            state: "off"
         then:
-        - alias: "Lock closed doors"
-          service: lock.lock
-          target:
-            entity_id: "{{ closed_door_ids }}"
+          - alias: "Lock front door"
+            service: lock.lock
+            target:
+              entity_id: lock.touchscreen_electronic_deadbolt
+      - if:
+          - alias: "Back door closed"
+            condition: state
+            entity_id: binary_sensor.back_door_entry
+            state: "off"
+        then:
+          - alias: "Lock back door"
+            service: lock.lock
+            target:
+              entity_id: lock.touchscreen_electronic_deadbolt_2
+      - if:
+          - alias: "Laundry door closed"
+            condition: state
+            entity_id: binary_sensor.laundry_door_entry
+            state: "off"
+        then:
+          - alias: "Lock laundry door"
+            service: lock.lock
+            target:
+              entity_id: lock.touchscreen_electronic_deadbolt_3
