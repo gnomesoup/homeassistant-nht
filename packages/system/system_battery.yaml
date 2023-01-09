@@ -54,8 +54,20 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.yeti_state_of_charge_percent
-        below: 81
-        for: "00:00:00"
+        below: 80
+        for: "00:05:00"
+      - platform: numeric_state
+        entity_id: sensor.yeti_state_of_charge_percent
+        below: 50
+        for: "00:05:00"
+      - platform: numeric_state
+        entity_id: sensor.yeti_state_of_charge_percent
+        below: 25
+        for: "00:05:00"
+      - platform: numeric_state
+        entity_id: sensor.yeti_state_of_charge_percent
+        below: 15
+        for: "00:05:00"
     condition: []
     action:
       - alias: "Notify adults"
@@ -63,4 +75,4 @@ automation:
         data:
           title: Taliluna Alert
           message: Yeti Battery Low
-          alert_level: Info
+          alert_level: Warn
