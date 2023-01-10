@@ -11,7 +11,8 @@ automation:
       - alias: "Turn on laundry counter light"
         service: homeassistant.turn_on
         target:
-          entity_id: light.smart_switch_6_2
+          entity_id: switch.smart_switch_6_2
+
   - alias: Laundry Counter Lights Off
     id: de59dfb7-7e8a-4e5c-bac3-a876e4a09758
     trigger:
@@ -33,4 +34,4 @@ automation:
       - alias: "Turn on laundry counter light"
         service: homeassistant.turn_off
         target:
-          entity_id: light.smart_switch_6_2
+          entity_id: switch.smart_switch_6_2
