@@ -148,15 +148,12 @@ automation:
         data:
           fan_mode: "{{ fan_mode }}"
 
-  - id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
-    alias: Set thermostat away mode from alarm status
+  - alias: Set thermostat away mode from alarm status
+    id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
         to: "armed_away"
-      - platform: state
-        entity_id: alarm_control_panel.home_alarm
-        from: "armed_away"
     condition: []
     action:
       - alias: "Set thermostat to away mode"
@@ -259,8 +256,8 @@ automation:
             data:
               value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
 
-  - id: 70c40727-cc53-4093-a344-e3bad64c212b
-    alias: Set Thermostat Away
+  - alias: Set Thermostat Away
+    id: 70c40727-cc53-4093-a344-e3bad64c212b
     trigger:
       - platform: state
         entity_id: climate.z_wave_plus_thermostat
@@ -295,8 +292,9 @@ automation:
               entity_id: input_number.thermostat_target_away
             data:
               temperature: "{{states('input_number.thermostat_setpoint_cool_away')}}"
-  - id: eafd6b87-9319-4640-b3c8-befea8eaebea
-    alias: Temperature alert garage
+
+  - alias: Temperature alert garage
+    id: eafd6b87-9319-4640-b3c8-befea8eaebea
     trigger:
       - platform: numeric_state
         entity_id: 
