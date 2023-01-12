@@ -22,6 +22,6 @@ group:
     name: All Motion Sensors
     entities:
       - binary_sensor.pir_motion_detector_any
-      - binary_sensor.motion_laundry
+      - binary_sensor.motion_hallway
       - binary_sensor.motion_camille_bedroom
       - binary_sensor.motion_master_bedroom
