@@ -3,10 +3,6 @@ input_boolean:
     name: Guest Mode
     icon: mdi:ferry
 
-group:
-  guest_lights:
-    entities:
-      - light.living_room_lamp
 
 script:
   guest_lights_on:

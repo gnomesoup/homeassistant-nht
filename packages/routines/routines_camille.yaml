@@ -39,18 +39,6 @@ input_datetime:
     has_time: true
 
 
-group:
-  lights_bedroom_camille:
-    name: Lights in Camille's Room
-    entities:
-      # Grandma's Lamp
-      - light.philips_lwb006_097e3010_level_on_off
-      # Canopy lights
-      - switch.z_wave_plus_power_strip_ver_2_0_5
-      - switch.z_wave_plus_power_strip_ver_2_0
-      # Camille's Closet
-      # - light.ge_appliances_zll_light_1b550600_level_on_off
-
 automation:
 
   - alias: Camille school phone to DND
