@@ -1,265 +1,347 @@
-resources:
-  - type: module
-    url: /local/aarlo-glance.js
-title: Home
+title: Taliluna
 views:
   - badges: []
     cards:
-      - entity: alarm_control_panel.home_alarm
+      - type: conditional
+        conditions:
+          - entity: input_boolean.camille_med_notification_enabled
+            state: 'on'
+        card:
+          show_name: true
+          show_icon: true
+          type: button
+          tap_action:
+            action: toggle
+          entity: input_boolean.camille_med_notification_enabled
+          name: Camille's Meds
+          icon: mdi:pill-multiple
+          show_state: false
+      - entity: alarm_control_panel.simplisafe
         states:
           - arm_home
           - arm_away
-          - arm_night
         type: alarm-panel
+      - type: thermostat
+        entity: climate.z_wave_plus_thermostat
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: lock.touchscreen_electronic_deadbolt
+                name: Front
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: lock.touchscreen_electronic_deadbolt_2
+                name: Back
+          - type: horizontal-stack
+            cards:
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: lock.touchscreen_electronic_deadbolt_3
+                name: Laundry
+              - show_name: true
+                show_icon: true
+                type: button
+                tap_action:
+                  action: toggle
+                entity: lock.garage_door
+                name: Garage
+                show_state: false
+                icon: mdi:garage
       - entities:
           - entity: input_boolean.in_home_services
           - entity: input_boolean.guest_mode
+        show_header_toggle: false
         type: entities
       - detail: 6
         entity: sensor.temperature_whole_house
         graph: line
         type: sensor
-      - detail: 6A
-        entity: sensor.humidity_whole_house
-        graph: line
-        type: sensor
+      - type: vertical-stack
+        cards:
+          - camera_view: auto
+            type: picture-glance
+            title: Front
+            entities:
+              - entity: binary_sensor.nvr_camera_1_crossline
+              - entity: binary_sensor.nvr_camera_1_sound
+            camera_image: camera.192_168_40_208_channel_1
+          - camera_view: auto
+            type: picture-glance
+            title: Back
+            entities:
+              - entity: binary_sensor.nvr_camera_2_crossline
+              - entity: binary_sensor.nvr_camera_2_sound
+            camera_image: camera.192_168_40_208_channel_2
+          - camera_view: auto
+            type: picture-glance
+            title: Garage
+            entities:
+              - entity: binary_sensor.nvr_camera_7_crossline
+              - entity: binary_sensor.nvr_camera_7_sound
+            camera_image: camera.192_168_40_208_channel_7
       - cards:
-          - entities:
-              - entity: input_select.michael_status
-              - entity: input_select.angela_status
-              - entity: input_select.camille_status
-            type: glance
           - entities:
               - entity: person.michael
               - entity: person.angela
               - entity: person.camille
-            type: history-graph
+              - entity: input_select.daisy_status
+            type: glance
         type: vertical-stack
-      - card:
-          entities:
-            - entity: switch.linear_unknown_type_2005_id_0503_switch
-          type: entities
-        conditions:
-          - entity: switch.linear_unknown_type_2005_id_0503_switch
-            state: 'on'
-        type: conditional
-      - card:
-          entity: media_player.living_room_tv
-          type: media-control
-        conditions:
-          - entity: media_player.living_room_tv
-            state_not: 'off'
-          - entity: media_player.all_rooms
-            state_not: playing
-          - entity: media_player.some_things
-            state_not: playing
-        type: conditional
-      - card:
-          entity: media_player.living_room_display
-          type: media-control
-        conditions:
-          - entity: media_player.living_room_display
-            state_not: 'off'
-        type: conditional
-      - card:
-          entity: media_player.bedroom_speaker
-          type: media-control
-        conditions:
-          - entity: media_player.bedroom_speaker
-            state_not: 'off'
-          - entity: media_player.all_rooms
-            state_not: playing
-        type: conditional
-      - card:
-          entity: media_player.camille_s_speaker
-          type: media-control
-        conditions:
-          - entity: media_player.camille_s_speaker
-            state_not: 'off'
-          - entity: media_player.all_rooms
-            state_not: playing
-        type: conditional
-      - card:
-          entity: media_player.office_speaker
-          type: media-control
-        conditions:
-          - entity: media_player.office_speaker
-            state_not: 'off'
-        type: conditional
-      - card:
-          entity: media_player.wooly
-          type: media-control
-        conditions:
-          - entity: media_player.wooly
-            state_not: 'off'
-          - entity: media_player.all_rooms
-            state_not: playing
-          - entity: media_player.some_things
-            state_not: playing
-        type: conditional
-      - card:
-          entity: media_player.all_rooms
-          type: media-control
-        conditions:
-          - entity: media_player.all_rooms
-            state_not: 'off'
-        type: conditional
-      - card:
-          entity: media_player.some_things
-          type: media-control
-        conditions:
-          - entity: media_player.some_things
-            state_not: 'off'
-        type: conditional
-      - entity: weather.dark_sky
-        type: weather-forecast
+      - detail: 6A
+        entity: sensor.humidity_whole_house
+        graph: line
+        type: sensor
+      - type: vertical-stack
+        cards:
+          - card:
+              entity: media_player.kitchen_display
+              type: media-control
+            conditions:
+              - entity: media_player.kitchen_display
+                state_not: 'off'
+            type: conditional
+          - card:
+              entity: media_player.master_bedroom_speaker
+              type: media-control
+            conditions:
+              - entity: media_player.master_bedroom_speaker
+                state_not: 'off'
+              - entity: media_player.everything
+                state_not: playing
+              - entity: media_player.some_things
+                state_not: playing
+            type: conditional
+          - card:
+              entity: media_player.camille_s_room_speaker_2
+              type: media-control
+            conditions:
+              - entity: media_player.camille_s_room_speaker_2
+                state_not: 'off'
+              - entity: media_player.everything
+                state_not: playing
+              - entity: media_player.some_things
+                state_not: playing
+            type: conditional
+          - card:
+              entity: media_player.office_speaker
+              type: media-control
+            conditions:
+              - entity: media_player.office_speaker
+                state_not: 'off'
+            type: conditional
+          - card:
+              entity: media_player.everything
+              type: media-control
+            conditions:
+              - entity: media_player.everything
+                state_not: 'off'
+            type: conditional
+          - card:
+              entity: media_player.some_things
+              type: media-control
+            conditions:
+              - entity: media_player.some_things
+                state_not: 'off'
+            type: conditional
+      - type: weather-forecast
+        entity: weather.ktys_daynight
+      - type: vertical-stack
+        cards:
+          - type: conditional
+            conditions:
+              - entity: sun.sun
+                state: above_horizon
+            card:
+              type: entity
+              entity: sensor.sunset
+              icon: mdi:weather-sunset-down
+          - type: conditional
+            conditions:
+              - entity: sun.sun
+                state: below_horizon
+            card:
+              type: entity
+              entity: sensor.sunrise
+              icon: mdi:weather-sunset-up
+      - entities:
+          - entity: switch.smart_plug_with_2_usb_ports
+          - entity: switch.smart_switch_6
+        type: entities
+        state_color: true
+      - type: entities
+        entities:
+          - entity: light.quinled_holiday_lights
+          - entity: switch.smart_switch_6_2
+        title: Christmas Lights
     icon: ''
     title: Home
+    visible:
+      - user: ad9c6376fa8148328655a5a86f6449ea
+      - user: 8757be174ba14236a9e6f8ab45578278
+      - user: bf6f15b41f454adea86e44d887efbaba
   - badges: []
     cards:
-      - entity: alarm_control_panel.home_alarm
-        states:
-          - arm_home
-          - arm_away
-          - arm_night
-        type: alarm-panel
+      - type: vertical-stack
+        cards:
+          - type: alarm-panel
+            states:
+              - arm_home
+              - arm_away
+            entity: alarm_control_panel.simplisafe
+          - type: alarm-panel
+            states:
+              - arm_home
+              - arm_away
+            entity: alarm_control_panel.home_alarm
       - entities:
-          - entity: binary_sensor.door_sensor_1
-          - entity: binary_sensor.door_sensor_2
-          - entity: binary_sensor.door_sensor_3
-          - entity: binary_sensor.door_sensor_4
-        type: glance
-      - entities:
-          - entity: binary_sensor.motion_office
-          - entity: binary_sensor.motion_hallway
-          - entity: binary_sensor.motion_living_room
+          - entity: binary_sensor.pir_motion_detector_any
           - entity: binary_sensor.motion_camille_bedroom
           - entity: binary_sensor.motion_master_bedroom
+          - entity: binary_sensor.pir_motion_detector_any_2
         type: glance
       - entities:
           - entity: input_boolean.door_alert_delay
-          - entity: switch.linear_unknown_type_2005_id_0503_switch
           - entity: input_boolean.in_home_services
         show_header_toggle: false
         type: entities
-      - entity: alarm_control_panel.aarlo_lancaster
-        states:
-          - arm_home
-          - arm_away
-        type: alarm-panel
-      - camera: front_door
-        name: Front Door
-        show:
-          - motion
-          - sound
-          - snapshot
-          - battery
-          - signal_strength
-          - captured
-        type: 'custom:aarlo-glance'
-      - camera: bedroom
-        name: Bedroom
-        show:
-          - motion
-          - sound
-          - snapshot
-          - battery
-          - signal_strength
-          - captured
-        type: 'custom:aarlo-glance'
-      - camera: living_room
-        name: Living Room
-        show:
-          - motion
-          - sound
-          - snapshot
-          - battery
-          - signal_strength
-          - captured
-        type: 'custom:aarlo-glance'
-      - camera: aquarium
-        name: Aquarium
-        show:
-          - motion
-          - sound
-          - snapshot
-          - battery
-          - signal_strength
-          - captured
-        type: 'custom:aarlo-glance'
-    title: Security
-  - badges: []
-    cards:
-      - entity: media_player.camille_s_speaker
-        type: media-control
-      - entities:
-          - entity: input_select.camille_status
-          - entity: input_datetime.alarm_time_camille
-          - entity: input_boolean.alarm_set_camille
-          - entity: automation.wakeup_alarm_repeat_camille
-          - entity: automation.lights_on_motion_camille_s_room
-        type: entities
-      - entities:
-          - entity: binary_sensor.motion_camille_bedroom
-          - entity: sensor.aeotec_dsb05_multisensor_temperature
-          - entity: sensor.aeotec_dsb05_multisensor_relative_humidity
-        type: glance
-      - entities:
-          - entity: light.grandma_s_lamp
-          - entity: switch.aeotec_dsc06106_smart_energy_switch_switch_2
-          - entity: switch.bedroom_canopy
-        title: Lights
-        type: entities
-    title: Camille
-  - cards:
-      - entities:
-          - entity: switch.zooz_zen06_switch
-          - entity: script.tv_time
-          - entity: script.radio_time
-        type: entities
-      - entity: media_player.living_room_tv
-        type: media-control
-      - entity: media_player.living_room_display
-        type: media-control
-      - entity: media_player.bedroom_speaker
-        type: media-control
-      - entity: media_player.camille_s_speaker
-        type: media-control
-      - entity: media_player.office_speaker
-        type: media-control
-      - entity: media_player.wooly
-        type: media-control
-      - entity: media_player.all_rooms
-        type: media-control
-      - entity: media_player.some_things
-        type: media-control
-    title: Media
-  - badges: []
-    cards:
-      - entities:
-          - entity: light.accordion_lamp
-          - entity: light.aeotec_zw111_nano_dimmer_level
-          - entity: light.aeotec_zw111_nano_dimmer_level_3
-          - entity: light.living_room_lamp
+      - type: entities
+        entities:
+          - entity: binary_sensor.smartthings_moisture_ias_zone
+            name: Moisture
+          - entity: sensor.smartthings_moisture_temperature
+            name: Air Temperature
         title: Living Room
-        type: entities
-      - entities:
-          - entity: light.aeotec_zw111_nano_dimmer_level_2
-        title: Office
-        type: entities
-      - entities:
-          - entity: light.grandma_s_lamp
-          - entity: switch.aeotec_dsc06106_smart_energy_switch_switch_2
-          - entity: switch.bedroom_canopy
-        title: Camille's Room
-        type: entities
-      - entities:
-          - entity: light.bedroom_lamp
-          - entity: light.metal_lamp
-        title: Master Bedroom
-        type: entities
-    title: Lights
-  - cards:
+      - type: entities
+        entities:
+          - entity: lock.touchscreen_electronic_deadbolt
+          - entity: sensor.touchscreen_electronic_deadbolt_battery_level
+            name: Battery Level
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_home_security_tampering_product_cover_removed
+            name: Cover Tampered
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_access_control_lock_jammed
+            name: Lock Jammed
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_the_current_status_of_the_door
+            name: Door Status
+        title: Front Door Deadbolt
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: lock.touchscreen_electronic_deadbolt_2
+          - entity: sensor.touchscreen_electronic_deadbolt_battery_level_2
+            name: Battery Level
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_home_security_tampering_product_cover_removed_2
+            name: Cover Tampered
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_access_control_lock_jammed_2
+            name: Lock Jammed
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_the_current_status_of_the_door_2
+            name: Door Status
+        title: Back Door Deadbolt
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: lock.touchscreen_electronic_deadbolt_3
+          - entity: sensor.touchscreen_electronic_deadbolt_battery_level_3
+            name: Battery Level
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_home_security_tampering_product_cover_removed_3
+            name: Cover Tampered
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_access_control_lock_jammed_3
+            name: Lock Jammed
+          - entity: >-
+              binary_sensor.touchscreen_electronic_deadbolt_the_current_status_of_the_door_3
+            name: Door Status
+        title: Garage Door Deadbolt
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: lock.garage_door
+          - entity: switch.multirelay_2
+            name: Garage Door Relay
+          - entity: >-
+              binary_sensor.tilt_shock_xs_sensor_access_control_window_door_is_open
+            name: Garage Door Open/Close
+      - type: entities
+        entities:
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected
+            name: Smoke Alarm - Smoke detected
+          - entity: >-
+              binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected
+            name: CO Alarm - Carbon monoxide detected
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_alarm_silenced
+            name: CO Alarm - Alarm silenced
+          - entity: >-
+              binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life
+            name: CO Alarm - Replacement required, End-of-life
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced
+            name: Smoke Alarm - Alarm silenced
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test
+            name: Smoke Alarm - Smoke alarm test
+        title: Living Room Smoke/CO
+      - type: entities
+        entities:
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected_3
+            name: Smoke Alarm - Smoke detected
+          - entity: >-
+              binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected_3
+            name: CO Alarm - Carbon monoxide detected
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_alarm_silenced_2
+            name: CO Alarm - Alarm silenced
+          - entity: >-
+              binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life_2
+            name: CO Alarm - Replacement required, End-of-life
+          - entity: binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced_2
+            name: Smoke Alarm - Alarm silenced
+          - entity: >-
+              binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test_2
+            name: Smoke Alarm - Smoke alarm test
+        title: Master Bedroom Smoke/CO
+      - type: entities
+        entities:
+          - entity: binary_sensor.front_door_entry
+          - entity: binary_sensor.back_door_entry
+          - entity: binary_sensor.living_room_1_entry
+          - entity: binary_sensor.living_room_2_glass_break
+          - entity: binary_sensor.living_room_motion
+          - entity: binary_sensor.garage_entry
+          - entity: binary_sensor.garage_motion
+          - entity: binary_sensor.laundry_entry
+          - entity: binary_sensor.laundry_door_entry
+          - entity: binary_sensor.kitchen_entry
+          - entity: binary_sensor.kitchen_1_entry
+          - entity: binary_sensor.bedroom_1_entry
+          - entity: binary_sensor.bedroom_2_entry
+          - entity: binary_sensor.master_1_entry
+          - entity: binary_sensor.master_2_entry
+          - entity: binary_sensor.office_1_entry
+          - entity: binary_sensor.office_2_entry
+          - entity: binary_sensor.office_glass_break
+          - entity: binary_sensor.bedroom_glass_break
+        title: Simply Safe
+    title: Security
+    visible:
+      - user: bf6f15b41f454adea86e44d887efbaba
+      - user: ad9c6376fa8148328655a5a86f6449ea
+  - badges: []
+    cards:
       - detail: 6
         entity: sensor.temperature_whole_house
         graph: line
@@ -268,65 +350,236 @@ views:
         entity: sensor.humidity_whole_house
         graph: line
         type: sensor
-      - entities:
-          - entity: sensor.linear_wapirz_1_motion_sensor_temperature_3
-          - entity: sensor.linear_wapirz_1_motion_sensor_temperature_2
-        show_name: false
-        title: Living Room
-        type: glance
-      - entities:
-          - entity: sensor.linear_wapirz_1_motion_sensor_temperature
-        show_name: false
-        title: Office
-        type: glance
-      - entities:
-          - entity: sensor.aeotec_zw100_multisensor_6_temperature
-          - entity: sensor.aeotec_zw100_multisensor_6_relative_humidity
-        show_name: false
-        title: Master Bedroom
-        type: glance
-      - entities:
-          - entity: sensor.aeotec_dsb05_multisensor_temperature
-          - entity: sensor.aeotec_dsb05_multisensor_relative_humidity
-        show_name: false
-        title: Camille's Bedroom
-        type: glance
+      - type: entities
+        entities:
+          - entity: sensor.multisensor_6_air_temperature
+          - entity: sensor.multisensor_6_exhaust_temperature
+          - entity: sensor.multisensor_6_humidity
+          - entity: sensor.multisensor_6_illuminance
+          - entity: sensor.multisensor_6_ultraviolet
+        title: Master Bedroom MultiSensor
+      - type: entities
+        entities:
+          - sensor.4_in_1_multisensor_air_temperature
+          - sensor.4_in_1_multisensor_humidity
+          - sensor.4_in_1_multisensor_illuminance
+          - binary_sensor.4_in_one_multisensor_any
+          - binary_sensor.4_in_one_multisensor_low_battery_level
+        title: Camille's MulitSensor
+      - type: entities
+        entities:
+          - entity: sensor.pir_motion_detector_air_temperature_2
+        title: Hallway Motion Sensor
+      - type: entities
+        entities:
+          - entity: sensor.pir_motion_detector_air_temperature
+            name: Air Temperature
+        title: Garage
+      - type: statistics-graph
+        entities:
+          - sensor.4_in_1_multisensor_air_temperature
+          - sensor.multisensor_6_air_temperature
+        days_to_show: 30
+        stat_types:
+          - mean
+      - type: history-graph
+        entities:
+          - entity: sensor.air_quality_temperature
+          - entity: sensor.4_in_1_multisensor_air_temperature
+          - entity: sensor.multisensor_6_air_temperature
+          - entity: sensor.temperature_whole_house
+          - entity: sensor.z_wave_plus_thermostat_air_temperature
+          - entity: sensor.smartthings_moisture_temperature
+        hours_to_show: 24
+        refresh_interval: 0
+      - type: history-graph
+        entities:
+          - entity: sensor.smart_energy_switch_power
+          - entity: sensor.smart_energy_switch_power_2
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Humidifier Power
+      - type: entities
+        entities:
+          - entity: sensor.temperature_humidity_xs_sensor_air_temperature
+            name: Air temperature
+          - entity: sensor.temperature_humidity_xs_sensor_humidity
+            name: Humidity
+        title: Attic Sensor
+      - type: entities
+        entities:
+          - entity: sensor.temperature_humidity_xs_sensor_air_temperature_2
+            name: Air temperature
+          - entity: sensor.temperature_humidity_xs_sensor_humidity_2
+            name: Humidity
+        title: Crawl Space Sensor
     title: Climate
+    visible:
+      - user: ad9c6376fa8148328655a5a86f6449ea
+      - user: 8757be174ba14236a9e6f8ab45578278
+      - user: bf6f15b41f454adea86e44d887efbaba
   - badges: []
     cards:
       - entities:
-          - entity: sensor.aarlo_battery_level_aquarium
-          - entity: sensor.aarlo_battery_level_front_door
-          - entity: sensor.aarlo_battery_level_living_room
-          - entity: sensor.aarlo_battery_level_bedroom
-        show_header_toggle: false
-        title: Arlo
+          - entity: switch.smart_plug_with_2_usb_ports
+        title: Living Room
         type: entities
       - entities:
-          - entity: sensor.aeotec_dsb05_multisensor_battery_level
-          - entity: sensor.aeotec_zw100_multisensor_6_battery_level
-          - entity: sensor.linear_wadwaz_1_door_window_sensor_2_battery_level
-          - entity: sensor.linear_wadwaz_1_door_window_sensor_3_battery_level
-          - entity: sensor.linear_wadwaz_1_door_window_sensor_4_battery_level
-          - entity: sensor.linear_wadwaz_1_door_window_sensor_battery_level
-          - entity: sensor.linear_wapirz_1_motion_sensor_2_battery_level
-          - entity: sensor.linear_wapirz_1_motion_sensor_3_battery_level
-          - entity: sensor.linear_wapirz_1_motion_sensor_battery_level
+          - entity: script.get_dark
+          - entity: script.get_mellowed
+          - entity: script.goodmorning_living_room
+          - entity: script.tv_time
+          - entity: script.radio_time
         show_header_toggle: false
-        title: Sensors
+        title: Scenes
+        type: entities
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: light.master_bath_1_level_light_color_on_off
+              - entity: light.master_bath_4_level_light_color_on_off
+            title: Garage Lights
+          - type: entities
+            entities:
+              - entity: automation.automation_alias_name
+              - entity: automation.garage_lights_motion_off
+            title: Garage Automations
+            show_header_toggle: false
+      - type: vertical-stack
+        cards:
+          - type: entities
+            entities:
+              - entity: light.ikea_tradfri_bulb_e26_fe5b90
+              - entity: light.tradfri_bulb_e26_ws_opal_1000lm_light
+            title: Porch Lights
+          - type: entities
+            entities:
+              - entity: automation.porch_lights_evening_on
+              - entity: automation.porch_lights_evening_off
+              - entity: automation.porch_lights_on_motion
+              - entity: input_boolean.porch_lights_default
+            title: Garage Automations
+            show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: >-
+              light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
+        title: Office
+      - type: entities
+        entities:
+          - entity: light.ge_appliances_zll_light_3aae1600_level_on_off
+          - entity: light.ge_appliances_zll_light_49251600_level_on_off
+          - entity: light.ge_appliances_zll_light_15cd1400_level_on_off
+        title: Master Bedroom
+      - type: entities
+        entities:
+          - entity: switch.smart_switch_6_2
+        title: Laundry Lights
+        state_color: true
+      - type: entities
+        entities:
+          - entity: automation.laundry_counter_lights_on_motion
+          - entity: automation.laundry_counter_lights_off
+        title: Laundry Automations
+        show_header_toggle: false
+        state_color: false
+    title: Lights
+    visible:
+      - user: bf6f15b41f454adea86e44d887efbaba
+      - user: 8757be174ba14236a9e6f8ab45578278
+      - user: ad9c6376fa8148328655a5a86f6449ea
+  - badges: []
+    cards:
+      - entity: media_player.camille_s_room_speaker_2
+        type: media-control
+      - entities:
+          - entity: input_select.camille_status
+          - entity: automation.lights_on_motion_camille_s_room
+          - entity: input_boolean.camille_med_notification_enabled
+          - entity: person.camille
+          - entity: input_datetime.camille_meds_morning
+          - entity: input_datetime.camille_meds_evening
+          - entity: input_boolean.camille_is_school_day
+          - entity: automation.camille_sent_medication_actionalbe_notification
+          - entity: automation.camille_school_phone_to_dnd
+          - entity: automation.camille_school_phone_dnd_off
+          - entity: automation.camille_wakeup_before_school
+          - entity: automation.camille_mark_if_school_day
         type: entities
       - entities:
-          - entity: sensor.angela_pfammatters_iphone_battery_level
-          - entity: sensor.ergisch_battery_level
-        show_header_toggle: false
-        title: Phones
+          - entity: binary_sensor.4_in_one_multisensor_any
+          - entity: binary_sensor.door_sensor_5
+        type: glance
+      - entities:
+          - entity: light.philips_lwb006_097e3010_level_on_off
+          - entity: light.ge_appliances_zll_light_1b550600_level_on_off
+          - entity: switch.z_wave_plus_power_strip_ver_2_0_5
+          - entity: switch.z_wave_plus_power_strip_ver_2_0
+          - entity: switch.z_wave_plus_power_strip_ver_2_0_2
+          - entity: switch.z_wave_plus_power_strip_ver_2_0_3
+          - entity: switch.z_wave_plus_power_strip_ver_2_0_4
+        title: Lights
+        type: entities
+      - type: entity
+        entity: input_select.camille_west_day_type
+        state_color: true
+      - type: entity
+        entity: input_number.camille_reward_points
+    title: Camille
+    visible:
+      - user: ad9c6376fa8148328655a5a86f6449ea
+      - user: 8757be174ba14236a9e6f8ab45578278
+      - user: bf6f15b41f454adea86e44d887efbaba
+  - badges: []
+    cards:
+      - entities:
+          - entity: switch.smart_plug_with_2_usb_ports
+          - entity: switch.smart_switch_6
+          - entity: switch.z_wave_plus_power_strip_ver_2_0_5
+        type: entities
+      - entity: media_player.living_room_tv
+        type: media-control
+      - entity: media_player.kitchen_display
+        type: media-control
+      - entity: media_player.master_bedroom_speaker
+        type: media-control
+      - entity: media_player.camille_s_room_speaker_2
+        type: media-control
+      - entity: media_player.office_speaker
+        type: media-control
+      - entity: media_player.everything
+        type: media-control
+      - entity: media_player.some_things
+        type: media-control
+      - type: media-control
+        entity: media_player.samsung_the_frame_65
+      - type: media-control
+        entity: media_player.notify_camille
+      - type: media-control
+        entity: media_player.samsung_the_frame_65_2
+    title: Media
+    visible:
+      - user: ad9c6376fa8148328655a5a86f6449ea
+      - user: 8757be174ba14236a9e6f8ab45578278
+      - user: bf6f15b41f454adea86e44d887efbaba
+  - badges: []
+    cards:
+      - entities:
+          - entity: binary_sensor.sleepnumber_michael_michael_is_in_bed
+          - entity: sensor.sleepnumber_michael_michael_sleepnumber
+          - entity: binary_sensor.sleepnumber_michael_angela_is_in_bed
+          - entity: sensor.sleepnumber_michael_angela_sleepnumber
         type: entities
       - entities:
-          - entity: sensor.date
-          - entity: sensor.time
-          - entity: sensor.weekday
-          - entity: binary_sensor.workday_sensor
-        show_header_toggle: false
-        type: entities
-    icon: ''
-    title: System
+          - entity: sensor.withings_weight_lb_camille
+          - entity: sensor.withings_weight_lb_michael
+          - entity: sensor.withings_weight_lb_angela
+        hours_to_show: 168
+        refresh_interval: 0
+        type: history-graph
+    path: health
+    title: Health
+    visible:
+      - user: ad9c6376fa8148328655a5a86f6449ea
+      - user: bf6f15b41f454adea86e44d887efbaba
