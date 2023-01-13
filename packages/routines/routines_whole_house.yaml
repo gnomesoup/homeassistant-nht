@@ -86,7 +86,6 @@ group:
     entities:
       - media_player.master_bedroom_speaker
       - media_player.camille_s_room_speaker_2
-      # - media_player.living_room_tv
       - media_player.airplay_hi_fi
       - media_player.samsung_the_frame_65
       - media_player.kitchen_display
