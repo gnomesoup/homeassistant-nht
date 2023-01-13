@@ -16,9 +16,6 @@ discovery:
   ignore:
     - google_cast
 
-remote_homeassistant:
-  instances:
-
 # Text to speech
 tts:
   - platform: google_translate
