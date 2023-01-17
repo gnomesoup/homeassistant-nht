@@ -326,6 +326,18 @@ automation:
         value_template: >-
           {{ trigger.to_state.state < trigger.from_state.state }}
     action:
+      - alias: "turn heat of"
+        service: climate.set_hvac_mode
+        target:
+          entity_id: climate.z_wave_plus_thermostat
+        data:
+          hvac_mode: "off"
+      - alias: "turn heat on"
+        service: climate.set_hvac_mode
+        target:
+          entity_id: climate.z_wave_plus_thermostat
+        data:
+          hvac_mode: heat
       - alias: "Warn adults"
         service: script.notify_parents
         data:
