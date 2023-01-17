@@ -318,6 +318,7 @@ automation:
       - alias: "Thermostat set to heating"
         condition: state
         entity_id: climate.z_wave_plus_thermostat
+        attribute: hvac_action
         state: "heating"
         for: "00:02:00"
       - alias: "check if temp is lower than before"
@@ -341,6 +342,7 @@ automation:
       - alias: "Thermostat set to cooling"
         condition: state
         entity_id: climate.z_wave_plus_thermostat
+        attribute: hvac_action
         state: "cooling"
         for: "00:02:00"
       - alias: "check if temp is higher than before"
@@ -354,6 +356,7 @@ automation:
           title: Taliluna Alert
           message: Temperature drop while heating
           alert_level: Warn
+
   # - alias: Fan default by temperature
   #   id: dd58fd8b-ab58-4c26-a574-4429de6a8940
   #   trigger:
