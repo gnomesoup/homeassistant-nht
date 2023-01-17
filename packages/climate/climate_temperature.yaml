@@ -321,7 +321,7 @@ automation:
     condition: []
     action:
       - alias: "Warn adults"
-        service: script.notify_michale
+        service: script.notify_michael
         data:
           title: Taliluna Alert
           message: Vent Check Test
@@ -357,7 +357,7 @@ automation:
       #   data:
       #     hvac_mode: heat
       - alias: "Warn adults"
-        service: script.notify_michale
+        service: script.notify_michael
         data:
           title: Taliluna Alert
           message: Temperature drop while heating
