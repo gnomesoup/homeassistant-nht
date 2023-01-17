@@ -309,6 +309,24 @@ automation:
           message: Garage Temperature Low
           alert_level: Warn
 
+  - id: 95e3f418-ed53-4377-a9de-7c1bcb92bf09
+    alias: Thermostat heat vent check
+    trigger:
+      - platform: state
+        entity_id: climate.z_wave_plus_thermostat
+        attribute: hvac_action
+        from: idle
+        to: heating
+        for: "00:01:00"
+    condition: []
+    action:
+      - alias: "Warn adults"
+        service: script.notify_michale
+        data:
+          title: Taliluna Alert
+          message: Vent Check Test
+          alert_level: Warn
+
   - id: 7244608a-f75d-4976-9ea5-6b33b9509d19
     alias: Thermostat not heating alert
     trigger:
