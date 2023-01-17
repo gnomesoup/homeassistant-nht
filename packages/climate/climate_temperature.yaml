@@ -339,7 +339,7 @@ automation:
       #   data:
       #     hvac_mode: heat
       - alias: "Warn adults"
-        service: script.notify_parents
+        service: script.notify_michale
         data:
           title: Taliluna Alert
           message: Temperature drop while heating
