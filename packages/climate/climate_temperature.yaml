@@ -316,7 +316,7 @@ automation:
         attribute: hvac_action
         from: idle
         to: heating
-        for: "00:01:00"
+        for: "00:05:00"
       - platform: numeric_state
         entity_id: sensor.vent_temperature
         below: 100
