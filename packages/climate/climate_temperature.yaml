@@ -357,29 +357,17 @@ automation:
       - platform: state
         entity_id: sensor.z_wave_plus_thermostat_air_temperature
     condition:
-      # - alias: "Thermostat set to heating"
-      #   condition: state
-      #   entity_id: climate.z_wave_plus_thermostat
-      #   attribute: hvac_action
-      #   state: "heating"
-      #   for: "00:02:00"
+      - alias: "Thermostat set to heating"
+        condition: state
+        entity_id: climate.z_wave_plus_thermostat
+        attribute: hvac_action
+        state: "heating"
+        for: "00:02:00"
       - alias: "check if temp is lower than before"
         condition: template
         value_template: >-
           {{ trigger.to_state.state < trigger.from_state.state }}
     action:
-      # - alias: "turn heat off"
-      #   service: climate.set_hvac_mode
-      #   target:
-      #     entity_id: climate.z_wave_plus_thermostat
-      #   data:
-      #     hvac_mode: "off"
-      # - alias: "turn heat on"
-      #   service: climate.set_hvac_mode
-      #   target:
-      #     entity_id: climate.z_wave_plus_thermostat
-      #   data:
-      #     hvac_mode: heat
       - alias: "Warn adults"
         service: script.notify_michael
         data:
