@@ -319,7 +319,7 @@ automation:
         for: "00:05:00"
       - platform: numeric_state
         entity_id: sensor.vent_temperature
-        below: 100
+        below: 90
         for: "00:00:15"
     condition:
       - alias: "Thermostat is heating"
@@ -330,7 +330,7 @@ automation:
       - alias: "Vent check is not hot enough"
         condition: numeric_state
         entity_id: sensor.vent_temperature
-        below: 95
+        below: 90
     action:
       - alias: "turn heat off"
         service: climate.set_hvac_mode
