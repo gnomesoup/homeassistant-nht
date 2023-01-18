@@ -327,6 +327,10 @@ automation:
         entity_id: climate.z_wave_plus_thermostat
         attribute: hvac_action
         state: "heating"
+      - alias: "Vent check is not hot enough"
+        condition: numeric_state
+        entity_id: sensor.vent_temperature
+        below: 95
     action:
       - alias: "turn heat off"
         service: climate.set_hvac_mode
