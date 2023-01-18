@@ -318,13 +318,34 @@ automation:
         from: idle
         to: heating
         for: "00:01:00"
-    condition: []
+      - platform: numeric_state
+        entity_id: sensor.vent_temperature
+        below: 100
+        for: "00:00:15"
+    condition:
+      - alias: "Thermostat is heating"
+        condition: state
+        entity_id: climate.z_wave_plus_thermostat
+        attribute: hvac_action
+        state: "heating"
     action:
+      - alias: "turn heat off"
+        service: climate.set_hvac_mode
+        target:
+          entity_id: climate.z_wave_plus_thermostat
+        data:
+          hvac_mode: "off"
+      - alias: "turn heat on"
+        service: climate.set_hvac_mode
+        target:
+          entity_id: climate.z_wave_plus_thermostat
+        data:
+          hvac_mode: heat
       - alias: "Warn adults"
         service: script.notify_michael
         data:
           title: Taliluna Alert
-          message: Vent Check Test
+          message: Vent Check Heat Reset
           alert_level: Warn
 
   - id: 7244608a-f75d-4976-9ea5-6b33b9509d19
@@ -332,17 +353,17 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.z_wave_plus_thermostat_air_temperature
-    condition: []
+    condition:
       # - alias: "Thermostat set to heating"
       #   condition: state
       #   entity_id: climate.z_wave_plus_thermostat
       #   attribute: hvac_action
       #   state: "heating"
       #   for: "00:02:00"
-      # - alias: "check if temp is lower than before"
-      #   condition: template
-      #   value_template: >-
-      #     {{ trigger.to_state.state < trigger.from_state.state }}
+      - alias: "check if temp is lower than before"
+        condition: template
+        value_template: >-
+          {{ trigger.to_state.state < trigger.from_state.state }}
     action:
       # - alias: "turn heat off"
       #   service: climate.set_hvac_mode
