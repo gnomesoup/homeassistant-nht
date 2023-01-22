@@ -102,6 +102,50 @@ sensor:
             {% set temp.count = 1 %}
           {% endif %}
           {{ (temp.sum / temp.count)|round(1) }}
+  - platform:  history_stats
+    name:  "hvac_heating_run_time_1d"
+    entity_id:  binary_sensor.hvac_heating
+    state:  "on"
+    type:  time
+    end:  "{{ now() }}"
+    duration:
+      hours: 24
+  - platform:  history_stats
+    name:  "hvac_heating_run_time_7d"
+    entity_id:  binary_sensor.hvac_heating
+    state:  "on"
+    type:  time
+    end:  "{{ now() }}"
+    duration:
+      hours: 168
+  - platform:  history_stats
+    name:  "hvac_cooling_run_time_1d"
+    entity_id:  binary_sensor.hvac_cooling
+    state:  "on"
+    type:  time
+    end:  "{{ now() }}"
+    duration:
+      hours: 24
+  - platform:  history_stats
+    name:  "hvac_cooling_run_time_7d"
+    entity_id:  binary_sensor.hvac_cooling
+    state:  "on"
+    type:  time
+    end:  "{{ now() }}"
+    duration:
+      hours: 168
+
+binary_sensor:
+  - platform: template
+    sensors:
+      hvac_heating:
+        friendly_name: HVAC Heating
+        value_template: >-
+          {{ state_attr("climate.z_wave_plus_thermostat", "heating")}}
+      hvac_cooling:
+        friendly_name: HVAC Cooling
+        value_template: >-
+          {{ state_attr("climate.z_wave_plus_thermostat", "cooling")}}
 
 automation:
   - alias: Set thermostat to target temperature
