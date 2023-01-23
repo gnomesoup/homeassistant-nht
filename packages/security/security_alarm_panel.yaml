@@ -2,8 +2,8 @@
 alarm_control_panel:
   - platform: manual
     name: Home Alarm
-    arming_time: 15
-    delay_time: 5
+    arming_time: 0
+    delay_time: 0
     trigger_time: 60
     disarmed:
       trigger_time: 0
@@ -22,6 +22,7 @@ input_boolean:
 automation:
   - alias: Sync Manual and Simplisafe alarms
     id: 93fc18cb-7c53-45e0-967c-667d864259bf
+    mode: single
     trigger:
     - platform: state
       entity_id:
@@ -53,6 +54,7 @@ automation:
                 title: Taliluna Debug
                 message: "Set {{target}} to {{trigger.to_state.state}}"
                 alert_level: Debug
+            - delay: "00:00:05"
         default:
         - alias: "Notify if nothing happens"
           service: script.notify_parents
