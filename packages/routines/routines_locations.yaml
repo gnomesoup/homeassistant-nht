@@ -1,0 +1,22 @@
+template:
+  - trigger:
+    - platform: state
+      entity_id: 
+        - person.michael
+        - person.angela
+        - person.camille
+    binary_sensor:
+      - name: Location Someone Home
+        state: >-
+          {{ "home" in expand(states.person) | map(attribute="state") | list }}
+    sensor:
+      - name: Location Closest Person
+        state: >-
+          {{ closest(states.person).attributes.friendly_name }}
+      - name: Location Closest Distance
+        state: >-
+          {{ distance(closest(states.person)) }}
+      - name: Location Michael Home Alone
+        state: >-
+          {{ expand(states.person) | selectattr("state", "==", "home") |
+          map(attribute="attributes.friendly_name") | list == ["Michael"]}}
