@@ -141,11 +141,11 @@ binary_sensor:
       hvac_heating:
         friendly_name: HVAC Heating
         value_template: >-
-          {{ state_attr("climate.z_wave_plus_thermostat", "heating")}}
+          {{ state_attr("climate.z_wave_plus_thermostat", "hvac_action") == "heating"}}
       hvac_cooling:
         friendly_name: HVAC Cooling
         value_template: >-
-          {{ state_attr("climate.z_wave_plus_thermostat", "cooling")}}
+          {{ state_attr("climate.z_wave_plus_thermostat", "hvac_action") == "cooling"}}
 
 automation:
   - alias: Set thermostat to target temperature
@@ -191,7 +191,7 @@ automation:
         data:
           fan_mode: "{{ fan_mode }}"
 
-  - alias: Set thermostat away mode from alarm status
+  - alias: Thermostat away mode on alarm away
     id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
     trigger:
       - platform: state
@@ -201,6 +201,23 @@ automation:
     action:
       - alias: "Set thermostat to away mode"
         service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.thermostat_away
+  
+  - id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
+    alias: Thermostat away mode off on disarm
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        to: "disarmed"
+    condition:
+      - alias: "Home in away mode"
+        condition: state
+        entity_id: input_boolean.thermostat_away
+        state: "on"
+    action:
+      - alias: "Set thermostat to home mode"
+        service: input_boolean.turn_off
         target:
           entity_id: input_boolean.thermostat_away
 
@@ -352,8 +369,8 @@ automation:
           message: Garage Temperature Low
           alert_level: Warn
 
-  - id: 95e3f418-ed53-4377-a9de-7c1bcb92bf09
-    alias: Thermostat heat vent check
+  - alias: Thermostat heat vent check
+    id: 95e3f418-ed53-4377-a9de-7c1bcb92bf09
     trigger:
       - platform: state
         entity_id: climate.z_wave_plus_thermostat
@@ -395,8 +412,8 @@ automation:
           message: Vent Check Heat Reset
           alert_level: Warn
 
-  - id: 7244608a-f75d-4976-9ea5-6b33b9509d19
-    alias: Thermostat not heating alert
+  - alias: Thermostat not heating alert
+    id: 7244608a-f75d-4976-9ea5-6b33b9509d19
     trigger:
       - platform: state
         entity_id: sensor.z_wave_plus_thermostat_air_temperature
@@ -419,8 +436,8 @@ automation:
           message: Temperature drop while heating
           alert_level: Warn
 
-  - id: 1f2150d2-1a4e-4208-b41d-f64015978299
-    alias: Thermostat not cooling alert
+  - alias: Thermostat not cooling alert
+    id: 1f2150d2-1a4e-4208-b41d-f64015978299
     trigger:
       - platform: state
         entity_id: sensor.z_wave_plus_thermostat_air_temperature
