@@ -344,14 +344,14 @@ automation:
               target:
                 entity_id: input_number.thermostat_target_away
               data:
-                temperature: "{{ states('input_number.thermostat_setpoint_heat_away')}}"
+                value: "{{ states('input_number.thermostat_setpoint_heat_away')}}"
         default:
           - alias: "Set thremostat target away"
             service: input_number.set_value
             target:
               entity_id: input_number.thermostat_target_away
             data:
-              temperature: "{{states('input_number.thermostat_setpoint_cool_away')}}"
+              value: "{{states('input_number.thermostat_setpoint_cool_away')}}"
 
   - alias: Temperature alert garage
     id: eafd6b87-9319-4640-b3c8-befea8eaebea
