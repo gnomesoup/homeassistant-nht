@@ -6,6 +6,8 @@ template:
           {{ closest(states.person).attributes.friendly_name }}
       - name: Location Closest Distance
         unique_id: location_closest_distant
+        device_class: distance
+        unit_of_measurement: mi
         state: >-
           {{ distance(closest(states.person)) }}
       - name: Location Michael Home Alone
