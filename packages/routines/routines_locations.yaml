@@ -1,16 +1,20 @@
 template:
   - sensor:
       - name: Location Closest Person
+        unique_id: location_closest_person
         state: >-
           {{ closest(states.person).attributes.friendly_name }}
       - name: Location Closest Distance
+        unique_id: location_closest_distant
         state: >-
           {{ distance(closest(states.person)) }}
       - name: Location Michael Home Alone
+        unique_id: location_michael_home_alone
         state: >-
           {{ expand(states.person) | selectattr("state", "==", "home") |
           map(attribute="attributes.friendly_name") | list == ["Michael"]}}
   - binary_sensor:
       - name: Location Someone Home
+        unique_id: location_someon_home
         state: >-
           {{ "home" in expand(states.person) | map(attribute="state") | list }}
