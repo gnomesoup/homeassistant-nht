@@ -259,7 +259,7 @@ automation:
             - alias: "Notify with sound"
               service: script.notify_camille_with_sound
               data:
-                message: "{{ states('camille_meds_notification') }}"
+                message: "{{ states('input_text.camille_meds_notification') }}"
       - alias: "Wait for response"
         wait_for_trigger:
           - platform: event
