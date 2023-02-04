@@ -38,6 +38,9 @@ input_datetime:
     has_date: false
     has_time: true
 
+input_text:
+  camille_meds_notification:
+    name: "Camille Medication Notification"
 
 automation:
 
@@ -256,7 +259,7 @@ automation:
             - alias: "Notify with sound"
               service: script.notify_camille_with_sound
               data:
-                message: "It's about damn time"
+                message: "{{ states('camille_meds_notification') }}"
       - alias: "Wait for response"
         wait_for_trigger:
           - platform: event
