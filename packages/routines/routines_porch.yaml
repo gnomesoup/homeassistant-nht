@@ -17,8 +17,8 @@ automation:
         service: light.turn_on
         target:
           entity_id:
-            - light.ikea_tradfri_bulb_e26_fe5b90
-            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
         data:
           brightness: 128
       - alias: "Turn default state on"
@@ -40,8 +40,8 @@ automation:
         service: light.turn_off
         target:
           entity_id:
-            - light.ikea_tradfri_bulb_e26_fe5b90
-            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
       - alias: "Turn default state off"
         service: input_boolean.turn_off
         target:
@@ -74,8 +74,8 @@ automation:
         service: light.turn_on
         target:
           entity_id:
-            - light.ikea_tradfri_bulb_e26_fe5b90
-            - light.tradfri_bulb_e26_ws_opal_1000lm_light
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
         data:
           brightness: 255
       - wait_for_trigger:
@@ -97,8 +97,8 @@ automation:
               service: light.turn_on
               target:
                 entity_id:
-                  - light.ikea_tradfri_bulb_e26_fe5b90
-                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
+                  - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+                  - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
               data:
                 brightness: 128
         default:
@@ -106,5 +106,5 @@ automation:
               service: light.turn_off
               target:
                 entity_id:
-                  - light.ikea_tradfri_bulb_e26_fe5b90
-                  - light.tradfri_bulb_e26_ws_opal_1000lm_light
+                  - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+                  - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
