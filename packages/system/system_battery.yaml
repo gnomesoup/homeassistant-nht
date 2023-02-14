@@ -49,8 +49,9 @@ automation:
           title: Taliluna Alert
           message: Low battery detected on {{ entities }}
           alert_level: Warn
-  - id: f8cdf062-1b0c-416f-8b56-a348d51fffcd
-    alias: Yeti Battery Low
+
+  - alias: Yeti Battery Low
+    id: f8cdf062-1b0c-416f-8b56-a348d51fffcd
     trigger:
       - platform: numeric_state
         entity_id: sensor.yeti_state_of_charge_percent
@@ -76,3 +77,18 @@ automation:
           title: Taliluna Alert
           message: Yeti Battery Low
           alert_level: Warn
+
+  - alias: Taliluna Lab UPS Alert
+    id: 0767aa78-3c36-40f1-9ce0-32c7431e7e17
+    trigger:
+      - platform: state
+        entity_id: sensor.talilunalab_status
+    condition: []
+    action:
+      - alias: "Notify michael"
+        service: script.notify_parents
+        data:
+          alert_level: Info
+          titile: Taliluna Alert
+          message: >-
+            UPS state: {{ states("sensor.talilunalab_status")}}
