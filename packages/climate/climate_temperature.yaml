@@ -5,7 +5,7 @@ group:
       - sensor.smartthings_moisture_temperature
       - sensor.multisensor_6_air_temperature
       - sensor.4_in_1_multisensor_air_temperature
-      - sensor.z_wave_plus_thermostat_air_temperature
+      - sensor.node_34_air_temperature
       - sensor.pir_motion_detector_air_temperature_2
 
 input_datetime:
@@ -91,7 +91,7 @@ sensor:
           {% for sensor in [
               'sensor.multisensor_6_air_temperature',
               'sensor.4_in_1_multisensor_air_temperature',
-              'sensor.z_wave_plus_thermostat_air_temperature'
+              'sensor.node_34_air_temperature'
             ] %}
             {% if states(sensor)|float > 0 %}
               {% set temp.sum = temp.sum + (states(sensor)|float) %}
@@ -141,11 +141,11 @@ binary_sensor:
       hvac_heating:
         friendly_name: HVAC Heating
         value_template: >-
-          {{ state_attr("climate.z_wave_plus_thermostat", "hvac_action") == "heating"}}
+          {{ state_attr("climate.node_34", "hvac_action") == "heating"}}
       hvac_cooling:
         friendly_name: HVAC Cooling
         value_template: >-
-          {{ state_attr("climate.z_wave_plus_thermostat", "hvac_action") == "cooling"}}
+          {{ state_attr("climate.node_34", "hvac_action") == "cooling"}}
 
 automation:
   - alias: Set thermostat to target temperature
@@ -181,13 +181,13 @@ automation:
         ## TODO This should only run if setpoint is different than target
         service: climate.set_temperature
         target:
-          entity_id: climate.z_wave_plus_thermostat
+          entity_id: climate.node_34
         data:
           temperature: "{{ temperature | int }}"
       - alias: "Set fan"
         service: climate.set_fan_mode
         target:
-          entity_id: climate.z_wave_plus_thermostat
+          entity_id: climate.node_34
         data:
           fan_mode: "{{ fan_mode }}"
 
@@ -233,7 +233,7 @@ automation:
         - conditions:
             - alias: "Heat is on"
               condition: state
-              entity_id: climate.z_wave_plus_thermostat
+              entity_id: climate.node_34
               state: "heat"
           sequence:
             - alias: "Set thremostat target"
@@ -266,7 +266,7 @@ automation:
         - conditions:
             - alias: "Heat is on"
               condition: state
-              entity_id: climate.z_wave_plus_thermostat
+              entity_id: climate.node_34
               state: "heat"
           sequence:
             - alias: "Set thremostat target"
@@ -299,7 +299,7 @@ automation:
         - conditions:
             - alias: "Heat is on"
               condition: state
-              entity_id: climate.z_wave_plus_thermostat
+              entity_id: climate.node_34
               state: "heat"
           sequence:
             - alias: "Set thremostat target"
@@ -320,10 +320,10 @@ automation:
     id: 70c40727-cc53-4093-a344-e3bad64c212b
     trigger:
       - platform: state
-        entity_id: climate.z_wave_plus_thermostat
+        entity_id: climate.node_34
         to: "heat"
       - platform: state
-        entity_id: climate.z_wave_plus_thermostat
+        entity_id: climate.node_34
         to: "cool"
       - platform: state
         entity_id: 
@@ -336,7 +336,7 @@ automation:
         - conditions:
             - alias: "Heat is on"
               condition: state
-              entity_id: climate.z_wave_plus_thermostat
+              entity_id: climate.node_34
               state: "heat"
           sequence:
             - alias: "Set thremostat target away"
@@ -373,7 +373,7 @@ automation:
     id: 95e3f418-ed53-4377-a9de-7c1bcb92bf09
     trigger:
       - platform: state
-        entity_id: climate.z_wave_plus_thermostat
+        entity_id: climate.node_34
         attribute: hvac_action
         from: idle
         to: heating
@@ -385,7 +385,7 @@ automation:
     condition:
       - alias: "Thermostat is heating"
         condition: state
-        entity_id: climate.z_wave_plus_thermostat
+        entity_id: climate.node_34
         attribute: hvac_action
         state: "heating"
       - alias: "Vent check is not hot enough"
@@ -396,13 +396,13 @@ automation:
       - alias: "turn heat off"
         service: climate.set_hvac_mode
         target:
-          entity_id: climate.z_wave_plus_thermostat
+          entity_id: climate.node_34
         data:
           hvac_mode: "off"
       - alias: "turn heat on"
         service: climate.set_hvac_mode
         target:
-          entity_id: climate.z_wave_plus_thermostat
+          entity_id: climate.node_34
         data:
           hvac_mode: heat
       - alias: "Warn adults"
@@ -416,11 +416,11 @@ automation:
     id: 7244608a-f75d-4976-9ea5-6b33b9509d19
     trigger:
       - platform: state
-        entity_id: sensor.z_wave_plus_thermostat_air_temperature
+        entity_id: sensor.node_34_air_temperature
     condition:
       - alias: "Thermostat set to heating"
         condition: state
-        entity_id: climate.z_wave_plus_thermostat
+        entity_id: climate.node_34
         attribute: hvac_action
         state: "heating"
         for: "00:02:00"
@@ -440,11 +440,11 @@ automation:
     id: 1f2150d2-1a4e-4208-b41d-f64015978299
     trigger:
       - platform: state
-        entity_id: sensor.z_wave_plus_thermostat_air_temperature
+        entity_id: sensor.node_34_air_temperature
     condition: 
       - alias: "Thermostat set to cooling"
         condition: state
-        entity_id: climate.z_wave_plus_thermostat
+        entity_id: climate.node_34
         attribute: hvac_action
         state: "cooling"
         for: "00:02:00"
@@ -464,9 +464,9 @@ automation:
   #   id: dd58fd8b-ab58-4c26-a574-4429de6a8940
   #   trigger:
   #     - platform: numeric_state
-  #       entity_id: sensor.z_wave_plus_thermostat_air_temperature
+  #       entity_id: sensor.node_34_air_temperature
   #     - platform: numeric_state
-  #       entity_id: sensor.z_wave_plus_thermostat_air_temperature
+  #       entity_id: sensor.node_34_air_temperature
   #       attribute: temperature
   #   condition: []
   #   action:
