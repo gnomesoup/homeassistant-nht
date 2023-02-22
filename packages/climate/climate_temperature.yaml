@@ -308,11 +308,19 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.thermostat_time_day
+      - platform: state
+        entity_id: sensor.location_michael_home_alone
+        from: True
+        to: False
     condition:
       - alias: "Is a workday"
         condition: state
         entity_id: binary_sensor.workday_sensor
         state: "on"
+      - alias: "Not in night routine"
+        condition: time
+        after: input_datetime.thermostat_time_day
+        before: input_datetime.thermostat_time_night
     action:
       - alias: "Set thremostat target"
         service: input_number.set_value
@@ -332,11 +340,19 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.thermostat_time_weekend_day
+      - platform: state
+        entity_id: sensor.location_michael_home_alone
+        from: True
+        to: False
     condition:
       - alias: "Is a workday"
         condition: state
         entity_id: binary_sensor.workday_sensor
         state: "off"
+      - alias: "Not in night routine"
+        condition: time
+        after: input_datetime.thermostat_time_weekend_day
+        before: input_datetime.thermostat_time_night
     action:
       - alias: "Set thremostat target"
         service: input_number.set_value
