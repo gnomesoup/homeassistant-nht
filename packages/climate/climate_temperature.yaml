@@ -23,14 +23,26 @@ input_datetime:
     has_time: true
 
 input_number:
-  thermostat_target_home:
-    name: Thermostat Target Temperature Home
+  thermostat_target_home_low:
+    name: Target Temperature Home Low
     icon: mdi:home-thermometer
     min: 50
     max: 80
     mode: box
-  thermostat_target_away:
-    name: Thermostat Target Temperature Away
+  thermostat_target_home_high:
+    name: Target Temperature Home High
+    icon: mdi:home-thermometer
+    min: 50
+    max: 80
+    mode: box
+  thermostat_target_away_low:
+    name: Target Temperature Away Low
+    icon: mdi:home-thermometer
+    min: 50
+    max: 80
+    mode: box
+  thermostat_target_away_high:
+    name: Target Temperature Away High
     icon: mdi:home-thermometer
     min: 50
     max: 80
@@ -153,8 +165,10 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-          - input_number.thermostat_target_home
-          - input_number.thermostat_target_away
+          - input_number.thermostat_target_home_low
+          - input_number.thermostat_target_home_high
+          - input_number.thermostat_target_away_low
+          - input_number.thermostat_target_away_high
       - platform: state
         entity_id: input_boolean.thermostat_away
     condition:
@@ -163,7 +177,7 @@ automation:
         entity_id: input_boolean.guest_mode
         state: "off"
     action:
-      - alias: "Set fan mode and temp variable"
+      - alias: "Set fan mode and temp variables"
         variables:
           fan_mode: >-
             {% if states("input_boolean.thermostat_fan_on") == "on" -%}
@@ -171,19 +185,58 @@ automation:
             {%- else -%}
               Auto low
             {%- endif %}
-          temperature: >-
+          temperature_low: >-
             {% if states("input_boolean.thermostat_away") == "on" -%}
-              {{ states("input_number.thermostat_target_away") }}
+              {{ states("input_number.thermostat_target_away_low") }}
             {%- else -%}
-              {{ states("input_number.thermostat_target_home") }}
+              {{ states("input_number.thermostat_target_home_low") }}
             {%- endif %}
-      - alias: "Set thremostat setpoint"
-        ## TODO This should only run if setpoint is different than target
-        service: climate.set_temperature
-        target:
-          entity_id: climate.node_34
-        data:
-          temperature: "{{ temperature | int }}"
+          temperature_high: >-
+            {% if states("input_boolean.thermostat_away") == "on" -%}
+              {{ states("input_number.thermostat_target_away_high") }}
+            {%- else -%}
+              {{ states("input_number.thermostat_target_home_high") }}
+            {%- endif %}
+      - alias: "Set temps based on mode"
+        choose:
+        - conditions:
+            - alias: "Thermostat set to heat/cool"
+              condition: state
+              entity_id: climate.node_34
+              state: "heat_cool"
+          sequence:
+            - alias: "Set thremostat setpoint"
+              ## TODO This should only run if setpoint is different than target
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                target_temp_low: "{{ temperature_low | int }}"
+                target_temp_high: "{{ temperature_high | int }}"
+        - conditions:
+            - alias: "Thermostat set to heat"
+              condition: state
+              entity_id: climate.node_34
+              state: "heat"
+          sequence:
+            - alias: "Set thremostat setpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                temperature: "{{ temperature_low | int }}"
+        - conditions:
+            - alias: "Thermostat set to heat"
+              condition: state
+              entity_id: climate.node_34
+              state: "heat"
+          sequence:
+            - alias: "Set thremostat setpoint"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                temperature: "{{ temperature_high | int }}"
       - alias: "Set fan"
         service: climate.set_fan_mode
         target:
@@ -204,8 +257,8 @@ automation:
         target:
           entity_id: input_boolean.thermostat_away
   
-  - id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
-    alias: Thermostat away mode off on disarm
+  - alias: Thermostat away mode off on disarm
+    id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home_alarm
@@ -221,36 +274,27 @@ automation:
         target:
           entity_id: input_boolean.thermostat_away
 
-  - alias: Set Thermostat Night
+  - alias: Thermostat Set Target Night
     id: eac65317-2910-4553-811a-92795aaa6cc7
     trigger:
       - platform: time
         at: input_datetime.thermostat_time_night
     condition: []
     action:
-      - alias: "Heat or cool"
-        choose:
-        - conditions:
-            - alias: "Heat is on"
-              condition: state
-              entity_id: climate.node_34
-              state: "heat"
-          sequence:
-            - alias: "Set thremostat target"
-              service: input_number.set_value
-              target:
-                entity_id: input_number.thermostat_target_home
-              data:
-                value: "{{ states('input_number.thermostat_setpoint_heat_night')}}"
-        default:
-          - alias: "Set thrermostat target temperature"
-            service: input_number.set_value
-            target:
-              entity_id: input_number.thermostat_target_temperature
-            data:
-              value: "{{states('input_number.thermostat_setpoint_cool_night')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_low
+        data:
+          value: "{{ states('input_number.thermostat_setpoint_heat_night')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_high
+        data:
+          value: "{{ states('input_number.thermostat_setpoint_cool_night')}}"
 
-  - alias: Set Thermostat Workday
+  - alias: Thermostat Set Target Workday
     id: 1dd4b108-62d8-4a37-bc79-db7401a53565
     trigger:
       - platform: time
@@ -261,29 +305,20 @@ automation:
         entity_id: binary_sensor.workday_sensor
         state: "on"
     action:
-      - alias: "Heat or cool"
-        choose:
-        - conditions:
-            - alias: "Heat is on"
-              condition: state
-              entity_id: climate.node_34
-              state: "heat"
-          sequence:
-            - alias: "Set thremostat target"
-              service: input_number.set_value
-              target:
-                entity_id: input_number.thermostat_target_home
-              data:
-                value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
-        default:
-          - alias: "Set thremostat target"
-            service: input_number.set_value
-            target:
-              entity_id: input_number.thermostat_target_home
-            data:
-              value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_low
+        data:
+          value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_high
+        data:
+          value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
 
-  - alias: Set Thermostat Non Workday
+  - alias: Thermostat Set Target Non Workday
     id: f4b02269-3f4b-48df-9748-f5dc3399fd46
     trigger:
       - platform: time
@@ -294,64 +329,40 @@ automation:
         entity_id: binary_sensor.workday_sensor
         state: "off"
     action:
-      - alias: "Heat or cool"
-        choose:
-        - conditions:
-            - alias: "Heat is on"
-              condition: state
-              entity_id: climate.node_34
-              state: "heat"
-          sequence:
-            - alias: "Set thremostat target"
-              service: input_number.set_value
-              target:
-                entity_id: input_number.thermostat_target_home
-              data:
-                value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
-        default:
-          - alias: "Set thremostat target"
-            service: input_number.set_value
-            target:
-              entity_id: input_number.thermostat_target_home
-            data:
-              value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_low
+        data:
+          value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_high
+        data:
+          value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
 
-  - alias: Set Thermostat Away
+  - alias: Thermostat Set Target Away
     id: 70c40727-cc53-4093-a344-e3bad64c212b
     trigger:
       - platform: state
-        entity_id: climate.node_34
-        to: "heat"
-      - platform: state
-        entity_id: climate.node_34
-        to: "cool"
-      - platform: state
-        entity_id: 
-          - input_number.thermostat_setpoint_heat_away
-          - input_number.thermostat_setpoint_cool_away
+        entity_id: input_boolean.thermostat_away
+        from: "off"
+        to: "on"
     condition: []
     action:
-      - alias: "Heat or cool"
-        choose:
-        - conditions:
-            - alias: "Heat is on"
-              condition: state
-              entity_id: climate.node_34
-              state: "heat"
-          sequence:
-            - alias: "Set thremostat target away"
-              service: input_number.set_value
-              target:
-                entity_id: input_number.thermostat_target_away
-              data:
-                value: "{{ states('input_number.thermostat_setpoint_heat_away')}}"
-        default:
-          - alias: "Set thremostat target away"
-            service: input_number.set_value
-            target:
-              entity_id: input_number.thermostat_target_away
-            data:
-              value: "{{states('input_number.thermostat_setpoint_cool_away')}}"
+      - alias: "Set thremostat target away"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_away_low
+        data:
+          value: "{{ states('input_number.thermostat_setpoint_heat_away')}}"
+      - alias: "Set thremostat target away"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_away_high
+        data:
+          value: "{{states('input_number.thermostat_setpoint_cool_away')}}"
 
   - alias: Temperature alert garage
     id: eafd6b87-9319-4640-b3c8-befea8eaebea
