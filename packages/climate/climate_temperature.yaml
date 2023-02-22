@@ -83,6 +83,18 @@ input_number:
     min: 50
     max: 80
     mode: box
+  thermostat_setpoint_heat_michael_only:
+    name: Thermostat Setpoint Heat Michael Only
+    icon: mdi:thermostat
+    min: 50
+    max: 80
+    mode: box
+  thermostat_setpoint_oool_michael_only:
+    name: Thermostat Setpoint Cool Michael Only
+    icon: mdi:thermostat
+    min: 50
+    max: 80
+    mode: box
 
 input_boolean:
   thermostat_fan_on:
@@ -209,13 +221,10 @@ automation:
               state: "heat_cool"
           sequence:
             - alias: "Set thremostat setpoint"
-              ## TODO This should only run if setpoint is different than target
-              service: climate.set_temperature
-              target:
-                entity_id: climate.node_34
+              service: script.thermostat_set_if_not_equal
               data:
-                target_temp_low: "{{ temperature_low | int }}"
-                target_temp_high: "{{ temperature_high | int }}"
+                temperature_low: "{{ temperature_low | int }}"
+                temperature_high: "{{ temperature_high | int }}"
         - conditions:
             - alias: "Thermostat set to heat"
               condition: state
@@ -223,9 +232,7 @@ automation:
               state: "heat"
           sequence:
             - alias: "Set thremostat setpoint"
-              service: climate.set_temperature
-              target:
-                entity_id: climate.node_34
+              service: script.thermostat_set_if_not_equal
               data:
                 temperature: "{{ temperature_low | int }}"
         - conditions:
@@ -235,9 +242,7 @@ automation:
               state: "heat"
           sequence:
             - alias: "Set thremostat setpoint"
-              service: climate.set_temperature
-              target:
-                entity_id: climate.node_34
+              service: script.thermostat_set_if_not_equal
               data:
                 temperature: "{{ temperature_high | int }}"
       - alias: "Set fan"
@@ -332,6 +337,36 @@ automation:
         condition: state
         entity_id: binary_sensor.workday_sensor
         state: "off"
+    action:
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_low
+        data:
+          value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+      - alias: "Set thremostat target"
+        service: input_number.set_value
+        target:
+          entity_id: input_number.thermostat_target_home_high
+        data:
+          value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+
+  - alias: Thermostat Set Target Michael Only
+    id: 72d7cd8e-59bc-4afa-af29-24e30e8b7f9e
+    trigger:
+      - platform: state
+        entity_id: sensor.location_michael_home_alone
+        from: False
+        to: True
+    condition:
+      - alias: "Is a workday"
+        condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: "off"
+      - alias: "Not in night routine"
+        condition: time
+        after: input_datetime.thermostat_time_day
+        before: input_datetime.thermostat_time_night
     action:
       - alias: "Set thremostat target"
         service: input_number.set_value
@@ -475,13 +510,54 @@ automation:
           message: Temperature drop while heating
           alert_level: Warn
 
-  # - alias: Fan default by temperature
-  #   id: dd58fd8b-ab58-4c26-a574-4429de6a8940
-  #   trigger:
-  #     - platform: numeric_state
-  #       entity_id: sensor.node_34_air_temperature
-  #     - platform: numeric_state
-  #       entity_id: sensor.node_34_air_temperature
-  #       attribute: temperature
-  #   condition: []
-  #   action:
+script:
+  thermostat_set_if_not_equal:
+    alias: "Thermostat Set If Not Equal"
+    fields:
+      temperature:
+        description: Thermostat Temp in Heat or Cool Mode
+        example: "70"
+        default: null
+      temperature_low:
+        description: Thermostat Low Setpoint
+        example: "68"
+        default: null
+      temperature_high:
+        description: Thermostat High Setpoint
+        example: "72"
+        default: null
+    sequence:
+      - alias: "Set Temp if not already set"
+        choose:
+        - conditions:
+            - alias: "temperature provided"
+              condition: template
+              value_template: "{{ temperature != none }}"
+            - alias: "Thermostat Temperature Not Equal To"
+              condition: template
+              value_template: >-
+                {{ state_attr("climate.node_34", "temperature") != temperature}}
+          sequence:
+            - alias: "Set thermostat temp"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                temperature: '{{ temperature | int }}'
+        - conditions:
+            - alias: "temperatures provided"
+              condition: template
+              value_template: "{{ temperature_low != none and temperature_high != none}}"
+            - alias: "Thermostat Low Setpoint Not Equal To"
+              condition: template
+              value_template: >-
+                {{ state_attr("climate.node_34", "target_temp_low") != temperature_low or 
+                   state_attr("climate.node_34", "target_temp_high") != temperature_high }}
+          sequence:
+            - alias: "Set thermostat target temp"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                target_temp_low: '{{ temperature_low | int }}'
+                target_temp_high: '{{ temperature_high | int }}'
