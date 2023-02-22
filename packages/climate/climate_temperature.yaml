@@ -162,6 +162,7 @@ binary_sensor:
 automation:
   - alias: Set thermostat to target temperature
     id: ff3a6f1c-8d81-44d9-a074-514f99aaaf0e
+    mode: single
     trigger:
       - platform: state
         entity_id: 
@@ -169,8 +170,10 @@ automation:
           - input_number.thermostat_target_home_high
           - input_number.thermostat_target_away_low
           - input_number.thermostat_target_away_high
+        for: "00:00:05"
       - platform: state
         entity_id: input_boolean.thermostat_away
+        for: "00:00:05"
     condition:
       - alias: "Not in guest mode"
         condition: state
@@ -243,6 +246,7 @@ automation:
           entity_id: climate.node_34
         data:
           fan_mode: "{{ fan_mode }}"
+      - delay: "00:00:10"
 
   - alias: Thermostat away mode on alarm away
     id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
