@@ -310,8 +310,8 @@ automation:
         at: input_datetime.thermostat_time_day
       - platform: state
         entity_id: sensor.location_michael_home_alone
-        from: True
-        to: False
+        from: "True"
+        to: "False"
     condition:
       - alias: "Is a workday"
         condition: state
@@ -342,8 +342,8 @@ automation:
         at: input_datetime.thermostat_time_weekend_day
       - platform: state
         entity_id: sensor.location_michael_home_alone
-        from: True
-        to: False
+        from: "True"
+        to: "False"
     condition:
       - alias: "Is a workday"
         condition: state
@@ -372,8 +372,8 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.location_michael_home_alone
-        from: False
-        to: True
+        from: "False"
+        to: "True"
     condition:
       - alias: "Is a workday"
         condition: state
