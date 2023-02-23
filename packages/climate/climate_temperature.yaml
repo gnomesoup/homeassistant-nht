@@ -223,6 +223,7 @@ automation:
             - alias: "Set thremostat setpoint"
               service: script.thermostat_set_if_not_equal
               data:
+                temperature: 0
                 temperature_low: "{{ temperature_low | int }}"
                 temperature_high: "{{ temperature_high | int }}"
         - conditions:
@@ -235,16 +236,20 @@ automation:
               service: script.thermostat_set_if_not_equal
               data:
                 temperature: "{{ temperature_low | int }}"
+                temperature_low: 0
+                temperature_high: 0
         - conditions:
-            - alias: "Thermostat set to heat"
+            - alias: "Thermostat set to cool"
               condition: state
               entity_id: climate.node_34
-              state: "heat"
+              state: "cool"
           sequence:
             - alias: "Set thremostat setpoint"
               service: script.thermostat_set_if_not_equal
               data:
                 temperature: "{{ temperature_high | int }}"
+                temperature_low: 0
+                temperature_high: 0
       - alias: "Set fan"
         service: climate.set_fan_mode
         target:
