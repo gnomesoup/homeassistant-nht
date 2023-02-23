@@ -533,22 +533,22 @@ script:
       temperature:
         description: Thermostat Temp in Heat or Cool Mode
         example: "70"
-        default: null
+        default: 0
       temperature_low:
         description: Thermostat Low Setpoint
         example: "68"
-        default: null
+        default: 0
       temperature_high:
         description: Thermostat High Setpoint
         example: "72"
-        default: null
+        default: 0
     sequence:
       - alias: "Set Temp if not already set"
         choose:
         - conditions:
             - alias: "temperature provided"
               condition: template
-              value_template: "{{ temperature != none }}"
+              value_template: "{{ temperature != 0 }}"
             - alias: "Thermostat Temperature Not Equal To"
               condition: template
               value_template: >-
@@ -563,7 +563,7 @@ script:
         - conditions:
             - alias: "temperatures provided"
               condition: template
-              value_template: "{{ temperature_low != none and temperature_high != none}}"
+              value_template: "{{ temperature_low != 0 and temperature_high != 0}}"
             - alias: "Thermostat Low Setpoint Not Equal To"
               condition: template
               value_template: >-
