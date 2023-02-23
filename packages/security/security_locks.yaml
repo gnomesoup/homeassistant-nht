@@ -43,9 +43,38 @@ lock:
       target:
         entity_id: switch.multirelay_2
 
+input_select:
+  front_door_access_label:
+    name: Front Door Access Label
+    options:
+      - RF unlock operation
+      - RF lock operation
+      - Keypad unlock operation
+      - Keypad lock operation
+      - Manual unlock operation
+      - Manual lock operation
+  back_door_access_label:
+    name: Front Door Access Label
+    options:
+      - RF unlock operation
+      - RF lock operation
+      - Keypad unlock operation
+      - Keypad lock operation
+      - Manual unlock operation
+      - Manual lock operation
+  laundry_door_access_label:
+    name: Front Door Access Label
+    options:
+      - RF unlock operation
+      - RF lock operation
+      - Keypad unlock operation
+      - Keypad lock operation
+      - Manual unlock operation
+      - Manual lock operation
+
 automation:
-  - id: 74ffe94e-c2e3-43c3-9eef-395ae0e81a38
-    alias: Lock locks when it's late
+  - alias: Lock locks when it's late
+    id: 74ffe94e-c2e3-43c3-9eef-395ae0e81a38
     trigger:
       - platform: time_pattern
         minutes: "0"
@@ -65,6 +94,40 @@ automation:
     action:
       - alias: "Run lock deadbolts scrips"
         service: script.lock_deadbolts_if_doors_shut
+
+  - alias: Lock Status Report
+    id: b237632a-cd0b-42b5-9d35-de1104b7e526
+    trigger:
+      - platform: event
+        event_type: zwave_js_value_notification
+        event_data:
+          label: Access Control
+    action:
+      - alias: "notify test"
+        service: script.notify_michael
+        data:
+          title: Taliluna Debug
+          message: >-
+            {{ trigger.event_data.node_id }}: {{ trigger.event_data.event_label }}
+          alert_level: Debug
+# data:
+#   domain: zwave_js
+#   node_id: 21
+#   home_id: 3996165589
+#   device_id: f97eb7a98930b402d3de72dd6116780e
+#   command_class: 113
+#   command_class_name: Notification
+#   label: Access Control
+#   type: 6
+#   event: 3
+#   event_label: RF lock operation
+#   parameters: {}
+# origin: LOCAL
+# time_fired: "2023-02-18T02:15:20.396741+00:00"
+# context:
+#   id: 01GSH4VW2CW1RFXA7G76JHRRCQ
+#   parent_id: null
+#   user_id: null
 
 script:
   lock_deadbolts_if_doors_shut:
