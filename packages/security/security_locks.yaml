@@ -101,7 +101,7 @@ automation:
       - platform: event
         event_type: zwave_js_value_notification
         event_data:
-          label: Access Control
+          node_id: 20
     action:
       - alias: "notify test"
         service: script.notify_michael
