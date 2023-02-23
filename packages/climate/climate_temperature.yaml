@@ -546,13 +546,11 @@ script:
       - alias: "Set Temp if not already set"
         choose:
         - conditions:
-            - alias: "temperature provided"
-              condition: template
-              value_template: "{{ temperature != 0 }}"
-            - alias: "Thermostat Temperature Not Equal To"
+            - alias: "temperature provided and not already set"
               condition: template
               value_template: >-
-                {{ state_attr("climate.node_34", "temperature") != temperature}}
+                {{ temperature != 0 and 
+                   state_attr("climate.node_34", "temperature") != temperature }}
           sequence:
             - alias: "Set thermostat temp"
               service: climate.set_temperature
@@ -561,14 +559,12 @@ script:
               data:
                 temperature: '{{ temperature | int }}'
         - conditions:
-            - alias: "temperatures provided"
-              condition: template
-              value_template: "{{ temperature_low != 0 and temperature_high != 0}}"
-            - alias: "Thermostat Low Setpoint Not Equal To"
+            - alias: "high/low targets provided and not already set"
               condition: template
               value_template: >-
-                {{ state_attr("climate.node_34", "target_temp_low") != temperature_low or 
-                   state_attr("climate.node_34", "target_temp_high") != temperature_high }}
+                {{ temperature_low != 0 and temperature_high != 0 and
+                   ( state_attr("climate.node_34", "target_temp_low") != temperature_low or 
+                     state_attr("climate.node_34", "target_temp_high") != temperature_high ) }}
           sequence:
             - alias: "Set thermostat target temp"
               service: climate.set_temperature
