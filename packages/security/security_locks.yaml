@@ -44,7 +44,7 @@ lock:
         entity_id: switch.multirelay_2
 
 input_select:
-  front_door_access_label:
+  node_20_access_label:
     name: Front Door Access Label
     options:
       - RF unlock operation
@@ -53,8 +53,8 @@ input_select:
       - Keypad lock operation
       - Manual unlock operation
       - Manual lock operation
-  back_door_access_label:
-    name: Front Door Access Label
+  node_21_access_label:
+    name: Back Door Access Label
     options:
       - RF unlock operation
       - RF lock operation
@@ -62,8 +62,8 @@ input_select:
       - Keypad lock operation
       - Manual unlock operation
       - Manual lock operation
-  laundry_door_access_label:
-    name: Front Door Access Label
+  node_22_access_label:
+    name: Laundry Door Access Label
     options:
       - RF unlock operation
       - RF lock operation
@@ -71,6 +71,20 @@ input_select:
       - Keypad lock operation
       - Manual unlock operation
       - Manual lock operation
+
+input_number:
+  node_20_user_code:
+    name: Front Door User Code
+    min: 0
+    max: 30
+  node_21_user_code:
+    name: Back Door User Code
+    min: 0
+    max: 30
+  node_22_user_code:
+    name: Laundry Door User Code
+    min: 0
+    max: 30
 
 automation:
   - alias: Lock locks when it's late
