@@ -99,9 +99,9 @@ automation:
     id: b237632a-cd0b-42b5-9d35-de1104b7e526
     trigger:
       - platform: event
-        event_type: zwave_js_value_notification
+        event_type: zwave_js_notification
         event_data:
-          node_id: 20
+          label: Access Control
     action:
       - alias: "notify test"
         service: script.notify_michael
