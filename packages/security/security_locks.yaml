@@ -124,6 +124,13 @@ automation:
           message: >-
             {{ trigger.event.data.node_id }}: {{ trigger.event.data.event_label }}
           alert_level: Debug
+      - alias: "Set access label"
+        service: input_select.select_option
+        target:
+          entity_id: "input_select.node_{{trigger.event.data.node_id}}_access_label"
+        data:
+          option: "{{trigger.event.data.event_label}}"
+        
 # data:
 #   domain: zwave_js
 #   node_id: 21
