@@ -108,7 +108,7 @@ automation:
         data:
           title: Taliluna Debug
           message: >-
-            {{ trigger.event_data.node_id }}: {{ trigger.event_data.event_label }}
+            {{ trigger.event.data.node_id }}: {{ trigger.event.data.event_label }}
           alert_level: Debug
 # data:
 #   domain: zwave_js
