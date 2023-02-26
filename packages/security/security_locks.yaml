@@ -130,25 +130,37 @@ automation:
           entity_id: "input_select.node_{{trigger.event.data.node_id}}_access_label"
         data:
           option: "{{trigger.event.data.event_label}}"
-        
-# data:
-#   domain: zwave_js
-#   node_id: 21
-#   home_id: 3996165589
-#   device_id: f97eb7a98930b402d3de72dd6116780e
-#   command_class: 113
-#   command_class_name: Notification
-#   label: Access Control
-#   type: 6
-#   event: 3
-#   event_label: RF lock operation
-#   parameters: {}
-# origin: LOCAL
-# time_fired: "2023-02-18T02:15:20.396741+00:00"
-# context:
-#   id: 01GSH4VW2CW1RFXA7G76JHRRCQ
-#   parent_id: null
-#   user_id: null
+      - alias: "Set user code"
+        service: input_number.set_value
+        target:
+          entity_id: "input_number.node_{{trigger.event.data.node_id}}_user_code"
+        data:
+          value: >-
+            {% if "userId" in trigger.event.data.parameters -%}
+            {{ trigger.event.data.paramters.userId}}
+            {%- else -%}
+            0
+            {%- endif %}
+        # event_type: zwave_js_notification
+        # data:
+        #   domain: zwave_js
+        #   node_id: 20
+        #   home_id: 3996165589
+        #   device_id: 78ef68f06b91d579cf2e9c55119ffe5d
+        #   command_class: 113
+        #   command_class_name: Notification
+        #   label: Access Control
+        #   type: 6
+        #   event: 6
+        #   event_label: Keypad unlock operation
+        #   parameters:
+        #     userId: 1
+        # origin: LOCAL
+        # time_fired: "2023-02-25T14:52:17.621607+00:00"
+        # context:
+        #   id: 01GT4GYXTN94SX7ZXZA5ENFHAH
+        #   parent_id: null
+        #   user_id: null
 
 script:
   lock_deadbolts_if_doors_shut:
