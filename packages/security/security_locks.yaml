@@ -137,7 +137,7 @@ automation:
         data:
           value: >-
             {% if "userId" in trigger.event.data.parameters -%}
-            {{ trigger.event.data.paramters.userId}}
+            {{ trigger.event.data.parameters.userId}}
             {%- else -%}
             0
             {%- endif %}
