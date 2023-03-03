@@ -1,3 +1,7 @@
+input_boolean:
+  camera_front_motion_toggle:
+    name: Front Camera Motion Toggle
+
 binary_sensor:
   - platform: ping
     host: 192.168.40.208
@@ -261,30 +265,18 @@ automation:
       - delay:
           minutes: 5
     
-  - id: 6709971c-5025-4903-a1ba-eb033701e7c3
-    alias: Camera Grab Snapshots
+# "http://192.168.40.208/cgi-bin/snapshot.cgi?channel=1&time={{now()|as_timestamp|round(0)}}"
+
+  - alias: Camera Front Motion Toggle
+    id: a428671d-7cac-4f45-8efa-377f91e1c2f2
     trigger:
       - platform: state
-        entity_id:
-          - binary_sensor.nvr_camera_1_motion
-          - binary_sensor.nvr_camera_2_motion
-          - binary_sensor.nvr_camera_7_motion
-          - binary_sensor.nvr_camera_7_sound
+        entity_id: binary_sensor.nvr_camera_1_motion
         from: "off"
         to: "on"
     condition: []
     action:
-      - variables:
-          camera_number: >-
-            {{ trigger.entity_id | regex_findall('camera_(\d)') | first }}
-          camera_id: >-
-            camera.192_168_40_208_channel_{{ camera_number }}
-          snapshot_path: >-
-            /config/media/camera_snapshot_{{ camera_number }}.jpg
-      - alias: "Take a snapshot"
-        service: camera.snapshot
+      - alias: "Toggle motion toggle"
+        service: homeassistant.toggle
         target:
-          entity_id: "{{ camera_id }}"
-        data:
-          filename: "{{ snapshot_path }}"
-            
+          entity_id: input_boolean.camera_front_motion_toggle
