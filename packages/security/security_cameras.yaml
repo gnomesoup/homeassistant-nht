@@ -1,6 +1,10 @@
 input_boolean:
   camera_front_motion_toggle:
     name: Front Camera Motion Toggle
+  camera_back_motion_toggle:
+    name: Back Camera Motion Toggle
+  camera_back_garage_toggle:
+    name: Garage Camera Motion Toggle
 
 binary_sensor:
   - platform: ping
@@ -274,9 +278,49 @@ automation:
         entity_id: binary_sensor.nvr_camera_1_motion
         from: "off"
         to: "on"
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_1_crossline
+        from: "off"
+        to: "on"
     condition: []
     action:
       - alias: "Toggle motion toggle"
         service: homeassistant.toggle
         target:
           entity_id: input_boolean.camera_front_motion_toggle
+
+  - alias: Camera Back Motion Toggle
+    id: 6e0d5dd8-d092-432b-a20f-7262d594f823
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_2_motion
+        from: "off"
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_2_crossline
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - alias: "Toggle motion toggle"
+        service: homeassistant.toggle
+        target:
+          entity_id: input_boolean.camera_back_motion_toggle
+
+  - alias: Camera Garage Motion Toggle
+    id: 6e0d5dd8-d092-432b-a20f-7262d594f823
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_7_motion
+        from: "off"
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_7_crossline
+        from: "off"
+        to: "on"
+    condition: []
+    action:
+      - alias: "Toggle motion toggle"
+        service: homeassistant.toggle
+        target:
+          entity_id: input_boolean.camera_garage_motion_toggle
