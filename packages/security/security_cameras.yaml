@@ -3,7 +3,7 @@ input_boolean:
     name: Front Camera Motion Toggle
   camera_back_motion_toggle:
     name: Back Camera Motion Toggle
-  camera_back_garage_toggle:
+  camera_garage_motion_toggle:
     name: Garage Camera Motion Toggle
 
 binary_sensor:
