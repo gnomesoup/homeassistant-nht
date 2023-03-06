@@ -3,6 +3,10 @@ input_datetime:
     name: House Wake-up Time
     has_date: false
     has_time: true
+  house_sleep_time:
+    name: House Sleep Time
+    has_date: false
+    has_time: true
 
 automation:
   - alias: "No motion late at night"
