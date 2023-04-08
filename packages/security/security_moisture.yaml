@@ -4,6 +4,7 @@ group:
     entities:
       - binary_sensor.laundry_water_leak_sensor_water_leak_detected
       - binary_sensor.smartthings_moisture_ias_zone
+
 automation:
   - alias: Water Leak Alert
     id: 6de6cef3-2d81-4ce1-a555-4e800c9c3867

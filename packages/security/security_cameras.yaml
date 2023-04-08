@@ -308,7 +308,7 @@ automation:
           entity_id: input_boolean.camera_back_motion_toggle
 
   - alias: Camera Garage Motion Toggle
-    id: 6e0d5dd8-d092-432b-a20f-7262d594f823
+    id: 86a4183d-bd56-430c-a6bf-71c2303662d6
     trigger:
       - platform: state
         entity_id: binary_sensor.nvr_camera_7_motion
