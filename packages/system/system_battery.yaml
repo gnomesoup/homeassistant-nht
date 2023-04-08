@@ -20,6 +20,8 @@ group:
       - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level
       - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level_2
       - binary_sensor.zcombo_g_smoke_co_alarm_low_battery_level_3
+      - binary_sensor.water_leak_xs_sensor_low_battery_level
+      - binary_sensor.temperature_humidity_xs_sensor_low_battery_level_3
 
 automation:
   - alias: Battery Low Notification
@@ -55,7 +57,7 @@ automation:
         data:
           title: Taliluna Alert
           message: Low battery detected on {{ entities }}
-          alert_level: Warn
+          alert_level: Info
 
   - alias: Yeti Battery Low
     id: f8cdf062-1b0c-416f-8b56-a348d51fffcd
