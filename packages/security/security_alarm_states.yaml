@@ -104,3 +104,95 @@ automation:
         data:
           title: Alarm
           message: "There has been no motion for 45 minutes. The alarm is set to Armed Away"
+
+  - alias: 277d896a-aa62-4d17-a62b-f78e179e1592
+    id: Alarm set mode to home
+    trigger:
+      - platform: time
+        at: 
+          - "00:30:00"
+          - "01:30:00"
+          - "02:30:00"
+    condition:
+      - alias: "Someone is home"
+        condition: state
+        entity_id: binary_sensor.location_someone_home
+        state: "on"
+      - alias: "Alarm not set"
+        condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "disarmed"
+      - alias: "Not in guest mode"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+    action:
+      - alias: "Notify Michael"
+        service: notify.mobile_app_kashyyyk
+        data:
+          title: "Taliluna Alert"
+          message: "Alarm set to Home in 5 minutes"
+          data:
+            actions:
+              - action: "DO_NOT_ARM_ALARM"
+                title: "Snooze Alarm"
+      - alias: "Wait for response"
+        wait_for_trigger:
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: "DO_NOT_ARM_ALARM"
+        timeout:
+          minutes: 5
+      - alias: "Turn on alarm if no action"
+        choose:
+        - conditions: '{{ wait.trigger.event.data.action == "DO_NOT_ARM_ALARM"}}'
+          sequence:
+            - alias: "Turn on alarm"
+              service: alarm_control_panel.alarm_arm_home
+              target:
+                entity_id: alarm_control_panel.simplisafe
+
+  - alias: 51884c97-27ca-4634-885f-27478a6b30b6
+    id: Alarm set mode to away
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.location_someone_home
+        from: "on"
+        to: "off"
+        for: "00:15:00"
+    condition:
+      - alias: "Alarm not set"
+        condition: state
+        entity_id: alarm_control_panel.home_alarm
+        state: "disarmed"
+      - alias: "Not in guest mode"
+        condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
+    action:
+      - alias: "Notify Michael"
+        service: notify.mobile_app_kashyyyk
+        data:
+          title: "Taliluna Alert"
+          message: "Alarm set to Away in 5 minutes"
+          data:
+            actions:
+              - action: "DO_NOT_ARM_ALARM"
+                title: "Do not arm"
+      - alias: "Wait for response"
+        wait_for_trigger:
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: "DO_NOT_ARM_ALARM"
+        timeout:
+          minutes: 5
+      - alias: "Turn on alarm if no action"
+        choose:
+        - conditions: '{{ wait.trigger.event.data.action == "DO_NOT_ARM_ALARM"}}'
+          sequence:
+            - alias: "Turn on alarm"
+              service: alarm_control_panel.alarm_arm_away
+              target:
+                entity_id: alarm_control_panel.simplisafe
