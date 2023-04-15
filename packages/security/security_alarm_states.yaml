@@ -105,8 +105,8 @@ automation:
           title: Alarm
           message: "There has been no motion for 45 minutes. The alarm is set to Armed Away"
 
-  - alias: 277d896a-aa62-4d17-a62b-f78e179e1592
-    id: Alarm set mode to home
+  - alias: Alarm set mode to home
+    id: 277d896a-aa62-4d17-a62b-f78e179e1592
     trigger:
       - platform: time
         at: 
@@ -153,8 +153,8 @@ automation:
               target:
                 entity_id: alarm_control_panel.simplisafe
 
-  - alias: 51884c97-27ca-4634-885f-27478a6b30b6
-    id: Alarm set mode to away
+  - alias: Alarm set mode to away
+    id: 51884c97-27ca-4634-885f-27478a6b30b6
     trigger:
       - platform: state
         entity_id: binary_sensor.location_someone_home
