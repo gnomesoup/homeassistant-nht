@@ -34,7 +34,7 @@ automation:
   - alias: Wakeup Living Room Setup
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "disarmed"
     action:
       - service: homeassistant.turn_on

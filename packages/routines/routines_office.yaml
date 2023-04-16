@@ -24,7 +24,7 @@ automation:
       - platform: state
         entity_id: binary_sensor.door_windows_sensor_any_3
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "disarmed"
     condition: []
     action:

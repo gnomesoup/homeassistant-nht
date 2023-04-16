@@ -272,14 +272,13 @@ automation:
               action: "CAMILLE_MED_TAKEN"
         timeout:
           minutes: 6
-      - alias: "Turn off med notifiations"
-        choose:
-        - conditions: '{{ wait.trigger.event.data.action == "CAMILLE_MED_TAKEN"}}'
-          sequence:
-            - alias: "Turn off med notification input"
-              service: input_boolean.turn_off
-              target:
-                entity_id: input_boolean.camille_med_notification_enabled
+      - if:
+          - "{{ not wait.completed }}"
+        the:
+          - alias: "Turn off med notification input"
+            service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.camille_med_notification_enabled
 
   - alias: Camille medication turn off with button
     id: 9541eb9c-0f70-421b-9f07-a31aaac016d5
@@ -328,59 +327,3 @@ automation:
           title: Camille Medications
           message: Not yet taken
           alert_level: Info
-
-script:
-  goodmorning_camille:
-    alias: Goodmorning Camille
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id:
-            - group.lights_bedroom_camille
-      - service: homeassistant.turn_off
-        data:
-          entity_id: automation.wakeup_alarm_repeat_camille
-      - service: media_player.volume_set
-        data:
-          entity_id: media_player.camille_s_speaker
-          volume_level: 0.7
-
-  goodnight_camille:
-    alias: Good Night Camille
-    sequence:
-      - service: homeassistant.turn_off
-        data:
-          entity_id:
-            - group.lights_bedroom_camille
-            - light.ge_appliances_zll_light_1b550600_level_on_off
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.camille_status
-          option: "Asleep"
-      - service: homeassistant.turn_on
-        data:
-          entity_id: automation.wakeup_camille
-      - service: media_player.volume_set
-        data:
-          entity_id: media_player.camille_s_speaker
-          volume_level: 0.5
-      # - entity_id:
-      #     - input_boolean.alarm_set_camille
-      #     - input_boolean.school_day
-      #   service_template: >-
-      #     {% if states("sensor.weekday") == "Friday" or
-      #        states("sensor.weekday") == "Saturday" %}
-      #     homeassistant.turn_off
-      #     {% else %}
-      #     homeassistant.turn_on
-      #     {% endif %}
-      - service: script.daisy_goodnight
-      - service: notify.notify
-        data_template:
-          title: "Camille"
-          message: >-
-            Bedtime!
-            Morning alarm is {{ states("input_boolean.alarm_set_camille") }}
-            {%- if is_state("input_boolean.alarm_set_camille", "on") %} for{{ " " }}
-            {{- states("input_datetime.alarm_time_camille")[0:5] }}
-            {%- endif %}.

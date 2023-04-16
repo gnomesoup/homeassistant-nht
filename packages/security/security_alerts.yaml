@@ -14,7 +14,7 @@ automation:
         state: "off"
       - condition: template
         value_template: >-
-          {{ not is_state("alarm_control_panel.home_alarm", "disarmed") or
+          {{ not is_state("alarm_control_panel.simplisafe", "disarmed") or
              is_state("input_boolean.in_home_services", "on") }}
     action:
       - service: notify.notify
@@ -29,7 +29,7 @@ automation:
     # have google get noisy
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "triggered"
     condition:
       - condition: state
@@ -53,7 +53,7 @@ automation:
   - alias: "Notify Alarm Triggered Services Expected"
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         from: "armed_away"
         to: "disarmed"
     condition:
@@ -113,7 +113,7 @@ automation:
   - alias: Notify Pending Trigger
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         from: "armed_away"
         to: "pending"
     action:
@@ -175,7 +175,7 @@ automation:
              states("input_select.michael_status") != "Asleep" and
              states("input_select.angela_status") != "Asleep" and
              states("input_select.camille_status") != "Asleep" and
-             states("alarm_control_panel.home_alarm") == "disarmed"}}
+             states("alarm_control_panel.simplisafe") == "disarmed"}}
     action:
       - service: script.notify_parents
         data:

@@ -23,7 +23,7 @@ automation:
         after: "01:00:00"
         before: "05:00:00"
       - condition: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         state: "disarmed"
       - condition: state
         entity_id: input_boolean.guest_mode
@@ -34,7 +34,7 @@ automation:
              and states("group.motion_sensors") == "off" }}
     action:
       - service: alarm_control_panel.alarm_arm_home
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
     
   - alias: "Alarm disarm home in morning"
     id: c07fa84f-0615-40d0-8f54-f2871f1993c0 
@@ -44,11 +44,11 @@ automation:
     condition:
       - alias: "Alarm set to home"
         condition: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         state: "armed_home"
     action:
       - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
 
   - alias: Alarm Control Panel Trigger All Service Present
     trigger:
@@ -60,13 +60,13 @@ automation:
     condition:
       - condition: template
         value_template: >-
-          {{ states("alarm_control_panel.home_alarm") != "disarmed" }}
+          {{ states("alarm_control_panel.simplisafe") != "disarmed" }}
       - condition: state
         entity_id: input_boolean.in_home_services
         state: "on"
     action:
       - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
 
   - alias: In Home Service Over
     id: 4c535958-c183-47c0-8ec4-24b9d41f2483
@@ -83,7 +83,7 @@ automation:
         entity_id: input_boolean.in_home_services
         state: "on"
       - condition: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         state: "disarmed"
       - condition: state
         entity_id: group.motion_sensors
@@ -99,7 +99,7 @@ automation:
         data:
           entity_id: input_boolean.in_home_services
       - service: alarm_control_panel.alarm_arm_away
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
       - service: notify.notify
         data:
           title: Alarm
@@ -120,44 +120,17 @@ automation:
         state: "on"
       - alias: "Alarm not set"
         condition: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         state: "disarmed"
       - alias: "Not in guest mode"
         condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
     action:
-      - alias: "Notify Michael"
-        service: notify.mobile_app_kashyyyk
+      - alias: "Call alarm set after notify script"
+        service: script.alarm_set_after_notify
         data:
-          title: "Taliluna Alert"
-          message: "Alarm set to Home in 5 minutes"
-          data:
-            actions:
-              - action: "DO_NOT_ARM_ALARM"
-                title: "Snooze Alarm"
-      - alias: "Wait for response"
-        wait_for_trigger:
-          - platform: event
-            event_type: mobile_app_notification_action
-            event_data:
-              action: "DO_NOT_ARM_ALARM"
-        timeout:
-          minutes: 5
-      - if:
-        - "{{ wait.completed }}"
-        then:
-          - alias: "Turn on alarm"
-            service: alarm_control_panel.alarm_arm_home
-            target:
-              entity_id: alarm_control_panel.simplisafe
-        else:
-          - alias: "notify that not set"
-            service: script.notify_michael
-            data:
-              title: Taliluna Security
-              alert_level: Info
-              message: Home alarm delayed
+          alarm_type: away
 
   - alias: Alarm set mode to away
     id: 51884c97-27ca-4634-885f-27478a6b30b6
@@ -170,18 +143,31 @@ automation:
     condition:
       - alias: "Alarm not set"
         condition: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         state: "disarmed"
       - alias: "Not in guest mode"
         condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
     action:
+      - alias: "Call alarm set after notify script"
+        service: script.alarm_set_after_notify
+        data:
+          alarm_type: away
+
+script:
+  alarm_set_after_notify:
+    alias: "Alarm Set After Notify"
+    fields:
+      alarm_type:
+        description: Type of alarm to set (away or home)
+        example: home
+    sequence:
       - alias: "Notify Michael"
         service: notify.mobile_app_kashyyyk
         data:
           title: "Taliluna Alert"
-          message: "Alarm set to Away in 5 minutes"
+          message: "Alarm set to {{ alarm_type }} in 5 minutes"
           data:
             actions:
               - action: "DO_NOT_ARM_ALARM"
@@ -194,11 +180,10 @@ automation:
               action: "DO_NOT_ARM_ALARM"
         timeout:
           minutes: 5
-      - alias: "Turn on alarm if no action"
-        choose:
-        - conditions: '{{ wait.trigger.event.data.action == "DO_NOT_ARM_ALARM"}}'
-          sequence:
-            - alias: "Turn on alarm"
-              service: alarm_control_panel.alarm_arm_away
-              target:
-                entity_id: alarm_control_panel.simplisafe
+      - if:
+          - "{{ wait.completed }}"
+        then:
+          - alias: "Turn on alarm"
+            service: alarm_control_panel.alarm_arm_{{ alarm_type }}
+            target:
+              entity_id: alarm_control_panel.simplisafe

@@ -22,11 +22,11 @@ automation:
         to: "off"
         for: "00:30:00"
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         from: "armed_away"
         to: "to state"
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         from: "armed_home"
         to: "to state"
     condition: []

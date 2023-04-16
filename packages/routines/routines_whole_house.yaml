@@ -91,11 +91,22 @@ group:
       - media_player.kitchen_display
       - media_player.office_speaker
 
+input_select:
+  home_status:
+    name: Home Status
+    options:
+      - Normal
+      - Secure
+      - Guest
+      - Sleep
+      - Away
+    icon: mdi:home
+
 automation:
   - alias: "Alarm set to home actions"
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "armed_home"
     action:
       - service: homeassistant.turn_off
@@ -110,7 +121,7 @@ automation:
     id: b00ba9d7-e3f4-429d-944d-738084944767
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "armed_away"
     action:
       - alias: Turn things off
@@ -130,7 +141,7 @@ automation:
     id: 04e624e3-69cf-4a7d-87ac-f6e53ad4db15
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         from: "armed_away"
         to: "disarmed"
     condition: []
@@ -150,7 +161,7 @@ automation:
     alias: Alarm disarmed from home
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         from: "armed_home"
         to: "disarmed"
     condition: []

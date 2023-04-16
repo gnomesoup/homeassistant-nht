@@ -1,18 +1,3 @@
-# alarm panel setup
-alarm_control_panel:
-  - platform: manual
-    name: Home Alarm
-    arming_time: 0
-    delay_time: 0
-    trigger_time: 60
-    disarmed:
-      trigger_time: 0
-    armed_home:
-      arming_time: 0
-      delay_time: 0
-    armed_night:
-      arming_time: 0
-      delay_time: 0
 
 input_boolean:
   in_home_services:
@@ -20,45 +5,3 @@ input_boolean:
     icon: mdi:broom
 
 automation:
-  - alias: Sync Manual and Simplisafe alarms
-    id: 93fc18cb-7c53-45e0-967c-667d864259bf
-    mode: single
-    trigger:
-    - platform: state
-      entity_id:
-        - alarm_control_panel.home_alarm
-        - alarm_control_panel.simplisafe
-    condition:
-    - >-
-      {{ trigger.from_state.state != states('alarm_control_panel.home_alarm') or
-         trigger.from_state.state != states('alarm_control_panel.simplisafe')}}
-    action:
-      - variables:
-          target: >-
-            {{"alarm_control_panel.simplisafe"
-              if trigger.entity_id == "alarm_control_panel.home_alarm" else
-              "alarm_control_panel.home_alarm"}}
-      - alias: "Mimic setting on manual alarm"
-        choose:
-        - conditions:
-            - "{{trigger.to_state.state in ['armed_away', 'armed_home', 'disarmed']}}"
-          sequence:
-            - alias: "Set alarm state"
-              service: >- 
-                alarm_control_panel.alarm_{{trigger.to_state.state | replace('ed', '')}}
-              target:
-                entity_id: "{{target}}"
-            - alias: "Notify debug"
-              service: script.notify_parents
-              data:
-                title: Taliluna Debug
-                message: "Set {{target}} to {{trigger.to_state.state}}"
-                alert_level: Debug
-            - delay: "00:00:05"
-        default:
-        - alias: "Notify if nothing happens"
-          service: script.notify_parents
-          data:
-            title: Taliluna Debug
-            message: "Did not set {{target}} to {{trigger.to_state.state}}"
-            alert_level: Debug

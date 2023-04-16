@@ -262,7 +262,7 @@ automation:
     id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "armed_away"
     condition: []
     action:
@@ -275,7 +275,7 @@ automation:
     id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home_alarm
+        entity_id: alarm_control_panel.simplisafe
         to: "disarmed"
     condition:
       - alias: "Home in away mode"
