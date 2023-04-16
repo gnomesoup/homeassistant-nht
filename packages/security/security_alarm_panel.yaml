@@ -1,7 +1,4 @@
-
 input_boolean:
   in_home_services:
     name: "In-Home Services Expected"
     icon: mdi:broom
-
-automation:

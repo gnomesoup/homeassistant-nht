@@ -274,7 +274,7 @@ automation:
           minutes: 6
       - if:
           - "{{ not wait.completed }}"
-        the:
+        then:
           - alias: "Turn off med notification input"
             service: input_boolean.turn_off
             target:
