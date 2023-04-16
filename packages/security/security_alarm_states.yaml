@@ -110,6 +110,7 @@ automation:
     trigger:
       - platform: time
         at: 
+          - "09:36:00"
           - "00:30:00"
           - "01:30:00"
           - "02:30:00"
@@ -144,14 +145,20 @@ automation:
               action: "DO_NOT_ARM_ALARM"
         timeout:
           minutes: 5
-      - alias: "Turn on alarm if no action"
-        choose:
-        - conditions: '{{ wait.trigger.event.data.action == "DO_NOT_ARM_ALARM"}}'
-          sequence:
-            - alias: "Turn on alarm"
-              service: alarm_control_panel.alarm_arm_home
-              target:
-                entity_id: alarm_control_panel.simplisafe
+      - if:
+        - "{{ wait.completed}}"
+      - then:
+        - alias: "Turn on alarm"
+          service: alarm_control_panel.alarm_arm_home
+          target:
+            entity_id: alarm_control_panel.simplisafe
+      - else:
+        - alias: "notify that not set"
+          service: script.notify_michael
+          data:
+            title: Taliluna Security
+            alert_level: Info
+            message: Home alarm delayed
 
   - alias: Alarm set mode to away
     id: 51884c97-27ca-4634-885f-27478a6b30b6
