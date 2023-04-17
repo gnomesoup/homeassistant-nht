@@ -130,7 +130,7 @@ automation:
       - alias: "Call alarm set after notify script"
         service: script.alarm_set_after_notify
         data:
-          alarm_type: away
+          alarm_type: home
 
   - alias: Alarm set mode to away
     id: 51884c97-27ca-4634-885f-27478a6b30b6
