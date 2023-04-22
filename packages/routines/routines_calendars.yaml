@@ -2,4 +2,4 @@ calendar:
   - platform: caldav
     username: !secret caldavUser
     password: !secret caldavPassword
-    url: https://yonder.mmjo.com/remote.php/dav/calendars/pfammatter@gmail.com/West%20High%20School%20(Google%20Calendar%20import)/
+    url: https://yonder.mmjo.com/remote.php/dav/calendars/homeassistant/West%20High%20School%20(Google%20Calendar%20import)_shared_by_pfammatter@gmail.com/
