@@ -52,7 +52,7 @@ automation:
                   {{ trigger.to_state.state in ["Normal", "Service", "Guest"]}}
                 sequence:
                   - alias: "Set alarm home"
-                    service: alarm_control_panel.alarm_arm_home
+                    service: alarm_control_panel.alarm_disarm
                     target:
                       entity_id: alarm_control_panel.test
         default:
