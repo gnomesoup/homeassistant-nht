@@ -58,8 +58,9 @@ automation:
         default:
             - alias: "Set home status based on alarm"
               choose:
-              - conditions: >-
-                  {{ trigger.to_state.state == 'disarmed' }}
+              - conditions:
+                  - "{{ trigger.to_state.state == 'disarmed' }}"
+                  - "{{ states('input_select.home_status') not in ['Guest', 'Alert'] }}"
                 sequence:
                   - alias: "set home status in disarmed state"
                     service: input_select.select_option
@@ -105,7 +106,7 @@ automation:
                           Secure
                         {%- endif -%}
               - conditions:
-                  - "{{ trigger.to_state.state == 'armed_home' }}"
+                  - "{{ trigger.to_state.state == 'triggered' }}"
                 sequence:
                   - alias: "set home status in triggered state"
                     service: input_select.select_option
