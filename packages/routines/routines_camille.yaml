@@ -48,7 +48,7 @@ automation:
     id: 87ef214b-46c6-409a-bfcd-9ced215431a2
     trigger:
       - platform: calendar
-        entity_id: calendar.west_high_school
+        entity_id: calendar.west_high_school_michael_pfammatter
         event: start
     action:
       - alias: "Turn on dnd"
@@ -58,7 +58,7 @@ automation:
     id: 1fc9e9d0-7689-41a6-8bdb-4deb13a5f66c
     trigger:
       - platform: calendar
-        entity_id: calendar.west_high_school
+        entity_id: calendar.west_high_school_michael_pfammatter
         event: end
     action:
       - alias: "Turn off dnd"
@@ -78,7 +78,7 @@ automation:
               condition: template
               value_template: >-
                 {% set today =  now().replace(hour=0, minute=0, second=0, microsecond=0) %}
-                {% set event =  (state_attr('calendar.west_high_school', 'start_time') | as_datetime) %}
+                {% set event =  (state_attr('calendar.west_high_school_michael_pfammatter', 'start_time') | as_datetime) %}
                 {{ today.year == event.year and today.month == event.month
                     and today.day == event.day}}
           sequence:
@@ -98,7 +98,7 @@ automation:
       - platform: state
         entity_id: input_boolean.camille_is_school_day
     variables:
-      event: "{{ state_attr('calendar.west_high_school', 'message')}}"
+      event: "{{ state_attr('calendar.west_high_school_michael_pfammatter', 'message')}}"
     action:
       - alias: "School day is on"
         choose:
@@ -126,11 +126,11 @@ automation:
     id: 423b7759-8b43-47b1-9cbb-a3940df04a93
     trigger:
       - platform: calendar
-        entity_id: calendar.west_high_school
+        entity_id: calendar.west_high_school_michael_pfammatter
         event: start
         offset: "-01:45:00"
       - platform: calendar
-        entity_id: calendar.west_high_school
+        entity_id: calendar.west_high_school_michael_pfammatter
         event: start
         offset: "-01:30:00"
     condition:

@@ -3,5 +3,3 @@ calendar:
     username: !secret caldavUser
     password: !secret caldavPassword
     url: !secret caldavUrl
-    calendars:
-      - GetAwaFrame
