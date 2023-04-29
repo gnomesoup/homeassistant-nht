@@ -97,9 +97,13 @@ input_select:
     options:
       - Normal
       - Secure
+      - Service Expected
+      - Service
+      - Guest Expected
       - Guest
       - Sleep
       - Away
+      - Alert
     icon: mdi:home
 
 automation:

@@ -2,3 +2,15 @@ input_boolean:
   in_home_services:
     name: "In-Home Services Expected"
     icon: mdi:broom
+
+alarm_control_panel:
+  - platform: manual
+    name: Test
+    arming_time: 4
+    delay_time: 4
+    trigger_time: 60
+    disarmed:
+      trigger_time: 0
+    armed_home:
+      arming_time: 0
+      delay_time: 0
