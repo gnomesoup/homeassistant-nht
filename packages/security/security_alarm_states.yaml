@@ -20,8 +20,8 @@ automation:
           - alarm_control_panel.test
     condition:
       condition: >-
-        {{ trigger.to_state.context.parent_id is none or 
-            (trigger.to_state.context.id != this.context.id and 
+        {{ trigger.to_state.context.parent_id is None or 
+            (trigger.to_state.context.context_id != this.context.context_id and 
              trigger.to_state.context.parent_id != this.context.id) }}
     action:
       - alias: "Pick action based on trigger"
