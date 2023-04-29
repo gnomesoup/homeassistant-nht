@@ -17,7 +17,7 @@ automation:
       - platform: state
         entity_id: 
           - input_select.home_status
-          - alarm_control_panel.test
+          - alarm_control_panel.simplisafe
     condition:
       condition:
         - alias: "Verify that this automation didn't trigger"
@@ -40,21 +40,21 @@ automation:
                   - alias: "Set alarm away"
                     service: alarm_control_panel.alarm_arm_away
                     target:
-                      entity_id: alarm_control_panel.test
+                      entity_id: alarm_control_panel.simplisafe
               - conditions: >-
                   {{ trigger.to_state.state in ["Secure", "Sleep"]}}
                 sequence:
                   - alias: "Set alarm home"
                     service: alarm_control_panel.alarm_arm_home
                     target:
-                      entity_id: alarm_control_panel.test
+                      entity_id: alarm_control_panel.simplisafe
               - conditions: >-
                   {{ trigger.to_state.state in ["Normal", "Service", "Guest"]}}
                 sequence:
                   - alias: "Set alarm home"
                     service: alarm_control_panel.alarm_disarm
                     target:
-                      entity_id: alarm_control_panel.test
+                      entity_id: alarm_control_panel.simplisafe
         default:
             - alias: "Set home status based on alarm"
               choose:
