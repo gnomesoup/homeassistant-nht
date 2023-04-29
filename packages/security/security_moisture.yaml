@@ -4,6 +4,7 @@ group:
     entities:
       - binary_sensor.laundry_water_leak_sensor_water_leak_detected
       - binary_sensor.smartthings_moisture_ias_zone
+      - binary_sensor.water_leak_xs_sensor_water_leak_detected
 
 automation:
   - alias: Water Leak Alert
@@ -14,7 +15,7 @@ automation:
         from: "off"
         to: "on"
       - platform: time_pattern
-        minutes: "/15"
+        minutes: "/10"
     condition:
       - alias: "Water leak detected"
         condition: state
