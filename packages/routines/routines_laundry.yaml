@@ -21,14 +21,10 @@ automation:
         from: "on"
         to: "off"
         for: "00:30:00"
-      - platform: state
-        entity_id: alarm_control_panel.simplisafe
-        from: "armed_away"
-        to: "to state"
-      - platform: state
-        entity_id: alarm_control_panel.simplisafe
-        from: "armed_home"
-        to: "to state"
+      - platform: template
+        template_value: >-
+          {{ states('input_select.home_status') in
+             ['Away', 'Sleep', 'Vacation'] }}
     condition: []
     action:
       - alias: "Turn on laundry counter light"

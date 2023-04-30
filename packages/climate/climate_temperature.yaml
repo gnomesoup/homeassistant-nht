@@ -258,12 +258,13 @@ automation:
           fan_mode: "{{ fan_mode }}"
       - delay: "00:00:10"
 
-  - alias: Thermostat away mode on alarm away
+  - alias: Thermostat away mode on vacation
     id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
     trigger:
-      - platform: state
-        entity_id: alarm_control_panel.simplisafe
-        to: "armed_away"
+      - platform: template
+        template_value: >-
+          {{ states('input_select.home_status') in
+             ['Vacation'] }}
     condition: []
     action:
       - alias: "Set thermostat to away mode"
@@ -271,12 +272,13 @@ automation:
         target:
           entity_id: input_boolean.thermostat_away
   
-  - alias: Thermostat away mode off on disarm
+  - alias: Thermostat away mode off on status change
     id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
     trigger:
-      - platform: state
-        entity_id: alarm_control_panel.simplisafe
-        to: "disarmed"
+      - platform: template
+        template_value: >-
+          {{ states('input_select.home_status') not in
+             ['Vacation', 'Alert'] }}
     condition:
       - alias: "Home in away mode"
         condition: state

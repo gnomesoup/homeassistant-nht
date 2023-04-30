@@ -34,3 +34,19 @@ automation:
         service: homeassistant.turn_on
         target:
           entity_id: group.switches_living_room
+
+  - alias: Front Door Open Too Long
+    id: ade1de77-60e2-468d-96e8-15d146f3e7ff
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.front_door_entry
+        to: "on"
+        for:
+          minutes: 5
+    action:
+      - alias: "Notify house"
+        service: script.notify_parents
+        data:
+          title: Taliluna Alert
+          message: Front door is open
+          alert_level: Warn
