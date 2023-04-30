@@ -149,7 +149,7 @@ automation:
       - alias: "Home status is normal or secure"
         condition: template
         value_template: >-
-           {{ states(input_select.home_status) in 
+           {{ states('input_select.home_status') in 
               ['Normal', 'Secure']}}
     action:
       - alias: "Call alarm set after notify script"
