@@ -3,7 +3,7 @@ input_boolean:
     name: Service Mode
     icon: mdi:broom
 
-automations:
+automation:
   - id: 42222902-9b85-45fc-b0fd-1106768424c1
     alias: Service mode set home status
     trigger:

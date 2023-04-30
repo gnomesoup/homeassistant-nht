@@ -3,7 +3,7 @@ input_boolean:
     name: Guest Mode
     icon: mdi:ferry
 
-automations:
+automation:
   - id: 31acd602-6a65-4d19-bdab-29a5f3e19e45
     alias: Guest mode set home status
     trigger:
