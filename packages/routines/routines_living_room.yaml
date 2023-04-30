@@ -16,26 +16,3 @@ group:
       - switch.smart_switch_6
 
 automation:
-  - alias: Wakeup Living Room
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.motion_living_room
-          - binary_sensor.motion_hallway
-        to: 'on'
-    condition:
-      - condition: time
-        after: '05:00:00'
-        before: '23:30:00'
-    action:
-      - service: homeassistant.turn_on
-        entity_id: script.goodmorning_living_room
-
-  - alias: Wakeup Living Room Setup
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.simplisafe
-        to: "disarmed"
-    action:
-      - service: homeassistant.turn_on
-        entity_id: automation.wakeup_living_room

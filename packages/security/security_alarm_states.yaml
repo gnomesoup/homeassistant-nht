@@ -115,104 +115,25 @@ automation:
                     data:
                       option: Alert
 
-
-  - alias: "No motion late at night"
-    trigger:
-      - platform: state
-        entity_id: group.motion_sensors
-        to: "off"
-        for:
-          minutes: 45
-      - platform: time
-        at: "01:05:00"
-    condition:
-      - condition: time
-        after: "01:00:00"
-        before: "05:00:00"
-      - condition: state
-        entity_id: alarm_control_panel.simplisafe
-        state: "disarmed"
-      - condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
-      - condition: template
-        value_template: >-
-          {{ as_timestamp(states.sensor.time.last_changed) - as_timestamp(states.group.motion_sensors.last_changed) > (44*60)
-             and states("group.motion_sensors") == "off" }}
-    action:
-      - service: alarm_control_panel.alarm_arm_home
-        entity_id: alarm_control_panel.simplisafe
-    
   - alias: "Alarm disarm home in morning"
     id: c07fa84f-0615-40d0-8f54-f2871f1993c0 
     trigger:
       - platform: time
         at: input_datetime.house_wakeup_time
     condition:
-      - alias: "Alarm set to home"
+      - alias: "Home status is sleep"
         condition: state
-        entity_id: alarm_control_panel.simplisafe
-        state: "armed_home"
+        entity_id: input_select.home_status
+        state: "sleep"
     action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.simplisafe
-
-  - alias: Alarm Control Panel Trigger All Service Present
-    trigger:
-      - platform: state
-        entity_id:
-          - input_boolean.alarm_control_panel_trigger
-          - binary_sensor.door_sensor_2
-        to: "on"
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states("alarm_control_panel.simplisafe") != "disarmed" }}
-      - condition: state
-        entity_id: input_boolean.in_home_services
-        state: "on"
-    action:
-      - service: alarm_control_panel.alarm_disarm
-        entity_id: alarm_control_panel.simplisafe
-
-  - alias: In Home Service Over
-    id: 4c535958-c183-47c0-8ec4-24b9d41f2483
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.door_sensor_2
-        from: "on"
-        to: "off"
-        for:
-          minutes: 45
-    condition:
-      - condition: state
-        entity_id: input_boolean.in_home_services
-        state: "on"
-      - condition: state
-        entity_id: alarm_control_panel.simplisafe
-        state: "disarmed"
-      - condition: state
-        entity_id: group.motion_sensors
-        state: "off"
-        for:
-          minutes: 40
-      - condition: template
-        value_template: >-
-          {{ states("input_select.michael_status") != "Home" and
-             states("input_select.angela_status") != "Home" }}
-    action:
-      - service: homeassistant.turn_off
+      - alias: "Set home status to normal"
+        service: input_select.set_options
+        target:
+          entity_id: input_select.home_status
         data:
-          entity_id: input_boolean.in_home_services
-      - service: alarm_control_panel.alarm_arm_away
-        entity_id: alarm_control_panel.simplisafe
-      - service: notify.notify
-        data:
-          title: Alarm
-          message: "There has been no motion for 45 minutes. The alarm is set to Armed Away"
+          option: Normal
 
-  - alias: Alarm set mode to home
+  - alias: Alarm set mode to sleep
     id: 277d896a-aa62-4d17-a62b-f78e179e1592
     trigger:
       - platform: time
@@ -225,19 +146,16 @@ automation:
         condition: state
         entity_id: binary_sensor.location_someone_home
         state: "on"
-      - alias: "Alarm not set"
-        condition: state
-        entity_id: alarm_control_panel.simplisafe
-        state: "disarmed"
-      - alias: "Not in guest mode"
-        condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
+      - alias: "Home status is normal or secure"
+        condition: template
+        value_template: >-
+           {{ states(input_select.home_status) in 
+              ['Normal', 'Secure']}}
     action:
       - alias: "Call alarm set after notify script"
         service: script.alarm_set_after_notify
         data:
-          alarm_type: home
+          status_option: Normal
 
   - alias: Alarm set mode to away
     id: 51884c97-27ca-4634-885f-27478a6b30b6
@@ -248,33 +166,30 @@ automation:
         to: "off"
         for: "00:15:00"
     condition:
-      - alias: "Alarm not set"
-        condition: state
-        entity_id: alarm_control_panel.simplisafe
-        state: "disarmed"
-      - alias: "Not in guest mode"
-        condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
+      - alias: "Home status not secure"
+        condition: template
+        value_template: >-
+          {{ states('input_select.home_status') in 
+             ['Normal', 'Secure']}}
     action:
       - alias: "Call alarm set after notify script"
         service: script.alarm_set_after_notify
         data:
-          alarm_type: away
+          status_option: Away
 
 script:
   alarm_set_after_notify:
     alias: "Alarm Set After Notify"
     fields:
-      alarm_type:
-        description: Type of alarm to set (away or home)
-        example: home
+      status_option:
+        description: Option to set home status
+        example: Away
     sequence:
       - alias: "Notify Michael"
         service: notify.mobile_app_kashyyyk
         data:
           title: "Taliluna Alert"
-          message: "Alarm set to {{ alarm_type }} in 5 minutes"
+          message: "Home set to {{ status_option }} in 5 minutes"
           data:
             actions:
               - action: "DO_NOT_ARM_ALARM"
@@ -290,7 +205,9 @@ script:
       - if:
           - "{{ wait.completed }}"
         then:
-          - alias: "Turn on alarm"
-            service: alarm_control_panel.alarm_arm_{{ alarm_type }}
+          - alias: "Secure home"
+            service: input_select.select_option
             target:
-              entity_id: alarm_control_panel.simplisafe
+              entity_id: input_select.home_status
+            data:
+              option: "{{ status_option }}"

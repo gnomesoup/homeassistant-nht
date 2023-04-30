@@ -162,6 +162,36 @@ automation:
         #   parent_id: null
         #   user_id: null
 
+  - alias: Lock all locks when away
+    id: 34ca7909-e859-4786-b6b3-465417bef3d9
+    trigger:
+      - platform: template
+        value_template: >-
+          {{ states('input_select.home_status') in
+             ['Away', 'Vacation', 'Secure', 'Service Expected', 'Guest Expected']}}
+    condition: []
+    action:
+      - alias: "run lock deadbolts script"
+        service: script.lock_deadbolts_if_doors_shut
+
+  - alias: Unlock front door when returned
+    id: 438ce7ed-e354-423f-81cd-7872d12fdba5d
+    trigger:
+      - platform: template
+        value_template: >-
+          {{ states('input_select.home_status') in
+             ['Normal', 'Guest', 'Service']}}
+    condition:
+      - alias: "Front door is locked"
+        condition: state
+        entity_id: lock.touchscreen_electronic_deadbolt
+        state: "locked"
+    action:
+      - alias: "Unlock front door"
+        service: lock.unlock
+        target:
+          entity_id: lock.touchscreen_electronic_deadbolt
+
 script:
   lock_deadbolts_if_doors_shut:
     alias: "Lock locks or notify if open"
