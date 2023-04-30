@@ -1,18 +1,18 @@
 input_boolean:
-  guest_mode:
-    name: Guest Mode
-    icon: mdi:ferry
+  service_mode:
+    name: Service Mode
+    icon: mdi:broom
 
 automations:
-  - id: 31acd602-6a65-4d19-bdab-29a5f3e19e45
-    alias: Guest mode set home status
+  - id: 42222902-9b85-45fc-b0fd-1106768424c1
+    alias: Service mode set home status
     trigger:
       - platform: template
         template_value: >-
           {{ states('input_select.home_status') in
-             ['Away', 'Vacation', 'Guest', 'Guest Expected'] }}
+             ['Away', 'Vacation', 'Service', 'Service Expected'] }}
       - platform: state
-        entity_id: input_boolean.guest_mode
+        entity_id: input_boolean.service_mode
     condition:
       condition:
         - alias: "Verify that this automation didn't trigger"
@@ -27,23 +27,23 @@ automations:
         - conditions: >-
             {{ trigger.entity_id == 'input_select.home_status' }}
           sequence:
-            - alias: "Set guest mode on home status"
+            - alias: "Set service mode on home status"
               service: >-
-                {% if states("input_select.home_status") in ['Guest', 'Guest Expected'] -%}
+                {% if states("input_select.home_status") in ['Service', 'Service Expected'] -%}
                   input_boolean.turn_on
                 {%- else -%}
                   input_boolean.turn_off
                 {%- endif %}
               target:
-                entity_id: input_boolean.guest_mode
+                entity_id: input_boolean.service_mode
         default:
-          - alias: "Set home status on guest mode"
+          - alias: "Set home status on service mode"
             choose:
             - conditions:
                 - "{{ states('input_select.home_status') != 'Alert' }}"
-                - alias: "Guest mode on"
+                - alias: "Service mode on"
                   condition: state
-                  entity_id: input_boolean.guest_mode
+                  entity_id: input_boolean.service_mode
                   state: "on"
               sequence:
                 - alias: "Set home status"
@@ -52,14 +52,14 @@ automations:
                     entity_id: input_select.home_status
                   data:
                     option: >-
-                      {% if states("input_select.home_status") in ['Normal', 'Guest'] -%}
-                        Guest
+                      {% if states("input_select.home_status") in ['Normal', 'Service'] -%}
+                        Service
                       {%- else -%}
-                        Guest Expected
+                        Service Expected
                       {%- endif %}
             - conditions:
-                - "{{ states('input_select.home_status') in ['Guest', 'Guest Expected'] }}"
-                - alias: "Guest mode off"
+                - "{{ states('input_select.home_status') in ['Service', 'Service Expected'] }}"
+                - alias: "Service mode off"
                   condition: state
                   entity_id: input_boolean.guest_mode
                   state: "off"
@@ -70,40 +70,8 @@ automations:
                     entity_id: input_select.home_status
                   data:
                     option: >-
-                      {% if states("input_select.home_status") == "Guest" -%}
+                      {% if states("input_select.home_status") == "Service" -%}
                         Normal
                       {%- else -%}
                         Away
                       {%- endif %}
-
-script:
-  guest_lights_on:
-    alias: Guest Lights On
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: group.guest_lights
-          brightness: 255
-      - service: homeassistant.turn_on
-        data:
-          entity_id: switch.zooz_zen06_switch
-  guest_lights_off:
-    alias: Guest Lights Off
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: group.guest_lights
-          brightness: 64
-      - service: homeassistant.turn_off
-        data:
-          entity_id: group.guest_lights
-      - service: homeassistant.turn_off
-        data:
-          entity_id: switch.zooz_zen06_switch
-  guest_lights_dim:
-    alias: Dim The Guest Lights
-    sequence:
-      - service: homeassistant.turn_on
-        data:
-          entity_id: group.guest_lights
-          brightness: 64
