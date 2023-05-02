@@ -102,6 +102,8 @@ automation:
                       option: >-
                         {%- if is_state("input_select.home_status", "Guest Expected") -%}
                           Guest
+                        {%- elif now() > today_at("22:00") -%}
+                          Sleep
                         {%- else -%}
                           Secure
                         {%- endif -%}
@@ -124,7 +126,7 @@ automation:
       - alias: "Home status is sleep"
         condition: state
         entity_id: input_select.home_status
-        state: "sleep"
+        state: "Sleep"
     action:
       - alias: "Set home status to normal"
         service: input_select.set_options

@@ -61,7 +61,7 @@ automation:
                 - "{{ states('input_select.home_status') in ['Service', 'Service Expected'] }}"
                 - alias: "Service mode off"
                   condition: state
-                  entity_id: input_boolean.guest_mode
+                  entity_id: input_boolean.service_mode
                   state: "off"
               sequence:
                 - alias: "Set home status"
