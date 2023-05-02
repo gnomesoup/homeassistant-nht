@@ -26,10 +26,15 @@ automation:
   - alias: Office set to sleep
     id: 9e30d00c-345b-4436-b1a4-4b22795ec828
     trigger:
-      - platform: template
-        template_value: >-
-          {{ states('input_select.home_status') in
-             ['Sleep', 'Away', 'Vacation'] }}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Sleep"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Away"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Vacation"
     condition: []
     action:
       - alias: "Turn things off in office"
