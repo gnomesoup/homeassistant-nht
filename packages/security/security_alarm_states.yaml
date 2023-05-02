@@ -140,9 +140,9 @@ automation:
     trigger:
       - platform: time
         at: 
-          - "00:30:00"
-          - "01:30:00"
-          - "02:30:00"
+          - input_datetime.house_sleep_time
+          - "{{states('input_datetime.house_sleep_time')|as_timedelta + timedelta(hours=1) }}"
+          - "{{states('input_datetime.house_sleep_time')|as_timedelta + timedelta(hours=2) }}"
     condition:
       - alias: "Someone is home"
         condition: state
