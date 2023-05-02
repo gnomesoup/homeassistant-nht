@@ -40,10 +40,10 @@ automation:
   - alias: Office wake up
     id: 87210600-25a1-4594-8307-803577a5671a
     trigger:
-      - platform: template
-        template_value: >-
-          {{ states('input_select.home_status') in
-             ['Normal', 'Guest'] }}
+      - platform: state
+        entity_id: input_select.home_status
+        from: "Sleep"
+        to: "Normal"
     condition: []
     action:
       - alias: "Turn things on in office"

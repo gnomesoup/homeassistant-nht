@@ -182,6 +182,7 @@ automation:
           {{ states('input_select.home_status') in
              ['Normal', 'Guest', 'Service']}}
     condition:
+      - "{{ trigger.from_state.state != 'Sleep' }}"
       - alias: "Front door is locked"
         condition: state
         entity_id: lock.touchscreen_electronic_deadbolt
