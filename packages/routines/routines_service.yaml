@@ -7,10 +7,18 @@ automation:
   - id: 42222902-9b85-45fc-b0fd-1106768424c1
     alias: Service mode set home status
     trigger:
-      - platform: template
-        template_value: >-
-          {{ states('input_select.home_status') in
-             ['Away', 'Vacation', 'Service', 'Service Expected'] }}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Away"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Vacation"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Service"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Service Expected"
       - platform: state
         entity_id: input_boolean.service_mode
     condition:
