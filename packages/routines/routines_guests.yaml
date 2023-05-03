@@ -7,10 +7,18 @@ automation:
   - id: 31acd602-6a65-4d19-bdab-29a5f3e19e45
     alias: Guest mode set home status
     trigger:
-      - platform: template
-        template_value: >-
-          {{ states('input_select.home_status') in
-             ['Away', 'Vacation', 'Guest', 'Guest Expected'] }}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Away"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Vacation"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Guest"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Guest Expected"
       - platform: state
         entity_id: input_boolean.guest_mode
     condition:
