@@ -102,7 +102,7 @@ automation:
                       option: >-
                         {%- if is_state("input_select.home_status", "Guest Expected") -%}
                           Guest
-                        {%- elif now() > today_at("22:00") -%}
+                        {%- elif (now() > today_at("22:00") or now() < states('input_datetime.house_wakeup_time')|today_at) -%}
                           Sleep
                         {%- else -%}
                           Secure
