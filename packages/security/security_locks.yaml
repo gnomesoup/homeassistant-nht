@@ -177,10 +177,15 @@ automation:
   - alias: Unlock front door when returned
     id: 438ce7ed-e354-423f-81cd-7872d12fdba5d
     trigger:
-      - platform: template
-        value_template: >-
-          {{ states('input_select.home_status') in
-             ['Normal', 'Guest', 'Service']}}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Normal"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Guest"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Service"
     condition:
       - "{{ trigger.from_state.state != 'Sleep' }}"
       - alias: "Front door is locked"

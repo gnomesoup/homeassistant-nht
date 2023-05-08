@@ -9,10 +9,15 @@ automation:
   - alias: Living room put to sleep
     id: e9e84eeb-06ee-4244-b077-d857cd189d75
     trigger:
-      - platform: template
-        value_template: >-
-          {{ states('input_select.home_status') in 
-             ['Sleep', 'Away', 'Vacation']}}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Sleep"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Away"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Vacation"
     condition: []
     action:
       - alias: "Turn things off"
@@ -24,10 +29,12 @@ automation:
   - alias: Living room wake up
     id: f4bcf8ed-40c4-4f58-bd81-c24be8dd39e7
     trigger:
-      - platform: template
-        value_template: >-
-          {{ states('input_select.home_status') in 
-             ['Normal', 'Guest']}}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Normal"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Guest"
     condition: []
     action:
       - alias: "Turn things on"

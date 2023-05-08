@@ -47,9 +47,11 @@ automation:
     trigger:
       - platform: state
         entity_id: input_select.home_status
-        from: "Sleep"
         to: "Normal"
-    condition: []
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Service"
+    condition:
     action:
       - alias: "Turn things on in office"
         service: homeassistant.turn_on
