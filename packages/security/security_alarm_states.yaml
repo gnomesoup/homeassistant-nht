@@ -141,8 +141,12 @@ automation:
       - platform: time
         at: 
           - input_datetime.house_sleep_time
-          # - "{{states('input_datetime.house_sleep_time')|as_timedelta + timedelta(hours=1) }}"
-          # - "{{states('input_datetime.house_sleep_time')|as_timedelta + timedelta(hours=2) }}"
+          - >-
+            {{(states('input_datetime.house_sleep_time')|
+              as_timedelta + timedelta(hours=1)|today_at).strftime('%H:%M:%S')}}
+          - >-
+            {{(states('input_datetime.house_sleep_time')|
+              as_timedelta + timedelta(hours=2)|today_at).strftime('%H:%M:%S') }}
     condition:
       - alias: "Someone is home"
         condition: state
