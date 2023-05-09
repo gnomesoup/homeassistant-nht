@@ -261,10 +261,9 @@ automation:
   - alias: Thermostat away mode on vacation
     id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
     trigger:
-      - platform: template
-        template_value: >-
-          {{ states('input_select.home_status') in
-             ['Vacation'] }}
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Vaction"
     condition: []
     action:
       - alias: "Set thermostat to away mode"
@@ -275,15 +274,15 @@ automation:
   - alias: Thermostat away mode off on status change
     id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
     trigger:
-      - platform: template
-        template_value: >-
-          {{ states('input_select.home_status') not in
-             ['Vacation', 'Alert'] }}
+      - platform: state
+        entity_id: input_select.home_status
+        from: "Vaction"
     condition:
       - alias: "Home in away mode"
         condition: state
         entity_id: input_boolean.thermostat_away
         state: "on"
+      - "{{ states('input_select.home_status' != 'Alert')}}"
     action:
       - alias: "Set thermostat to home mode"
         service: input_boolean.turn_off
