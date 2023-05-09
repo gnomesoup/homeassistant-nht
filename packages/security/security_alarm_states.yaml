@@ -144,11 +144,11 @@ automation:
       - platform: template
         value_template: >-
           {{ now() == today_at(states('input_datetime.house_sleep_time')|
-            as_timedelta + timedelta(hours=1))} }
+            as_timedelta + timedelta(hours=1)) }}
       - platform: template
         value_template: >-
           {{ now() == today_at(states('input_datetime.house_sleep_time')|
-            as_timedelta + timedelta(hours=2))} }
+            as_timedelta + timedelta(hours=2)) }}
     condition:
       - alias: "Someone is home"
         condition: state
