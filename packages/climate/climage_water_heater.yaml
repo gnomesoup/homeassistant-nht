@@ -1,0 +1,78 @@
+input_datetime:
+  water_heater_time_high_demand:
+    name: Water Heater High Deamand
+    has_date: false
+    has_time: true
+  water_heater_time_low_demand:
+    name: Water Heater Low Deamand
+    has_date: false
+    has_time: true
+
+input_select:
+  water_heater_target_state:
+    name: Water Heater Target State
+    options:
+      - "off"
+      - eco
+      - heat_pump
+      - high_demand
+
+automation:
+  - alias: Water heater set target state
+    id: 840d5bb4-1b62-4094-b5b7-aeda547ac864
+    trigger:
+      - platform: time
+        at: input_datetime.water_heater_time_high_demand
+      - platform: time
+        at: input_datetime.water_heater_time_low_demand
+    condition: []
+    action:
+      - alias: "Set water heater target based on trigger"
+        service: input_select.select_option
+        target:
+          entity_id: input_select.water_heater_target_state
+        data:
+          option: >-
+            {{"eco" if trigger.entity_id == "input_datetime.water_heater_time_low_demand" else "high_demand"}}
+
+  - id: 039c5f4b-0600-4c42-903c-6901625e2972
+    alias: Water heater mode on home status
+    trigger:
+      - platform: state
+        entity_id: input_select.home_status
+    condition:
+      - alias: "Check if state actually changed"
+        condition: template
+        value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
+    action:
+      - alias: "Set water heater dyanmically"
+        service: water_heater.set_operation_mode
+        target:
+          entity_id: water_heater.heat_pump_water_heater
+        data:
+          option: >-
+            {% if states(trigger.to_state) in ["Guest", "Guest Expected"] %}
+              high_demand
+            {% elif states(trigger.to_state) in ["Normal"] %}
+              {{states("input_select.water_heater_target_state")}}
+            {% else %}
+               eco
+            {% endif %}
+
+  - id: 8465dfa4-0d7b-489c-b28d-f781de3aa972
+    alias: Water heater mode on to target state
+    trigger:
+      - platform: state
+        entity_id: input_select.water_heater_target_state
+    condition:
+      - alias: "Check if home status is normal"
+        condition: template
+        value_template: "{{ states('input_select.home_status') in ['Normal'] }}"
+    action:
+      - alias: "Set water heater to target state"
+        service: water_heater.set_operation_mode
+        target:
+          entity_id: water_heater.heat_pump_water_heater
+        data:
+          option: >-
+            {{states("input_select.water_heater_target_state")}}
