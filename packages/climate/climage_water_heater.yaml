@@ -50,7 +50,7 @@ automation:
         target:
           entity_id: water_heater.heat_pump_water_heater
         data:
-          option: >-
+          operation_mode: >-
             {% if states(trigger.to_state) in ["Guest", "Guest Expected"] %}
               high_demand
             {% elif states(trigger.to_state) in ["Normal"] %}
@@ -74,5 +74,5 @@ automation:
         target:
           entity_id: water_heater.heat_pump_water_heater
         data:
-          option: >-
+          operation_mode: >-
             {{states("input_select.water_heater_target_state")}}
