@@ -97,10 +97,10 @@ automation:
         condition: time
         after: "23:00:00"
         before: "05:00:00"
-      - alias: "Not in guest mode"
-        condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
+      - alias: "In correct home states"
+        condition: template
+        value_template: >-
+          {{ states('input_select.home_status') in ['Normal', 'Secure', 'Sleep'] }}
       - alias: "All locks not locked"
         condition: state
         entity_id: lock.all_locks

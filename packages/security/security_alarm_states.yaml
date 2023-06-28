@@ -19,13 +19,15 @@ automation:
           - input_select.home_status
           - alarm_control_panel.simplisafe
     condition:
-      condition:
-        - alias: "Verify that this automation didn't trigger"
-          condition: template
-          value_template: >-
-            {{ trigger.to_state.context.parent_id == None or 
-               (trigger.to_state.context.id != this.context.id and 
-               trigger.to_state.context.parent_id != this.context.id) }}
+      - alias: "Verify that this automation didn't trigger itself"
+        condition: template
+        value_template: >-
+          {{ trigger.to_state.context.parent_id == None or 
+              (trigger.to_state.context.id != this.context.id and 
+              trigger.to_state.context.parent_id != this.context.id) }}
+      - alias: "Verify that the trigger value changed"
+        condition: template
+        value_template: "{{trigger.to_state.state != trigger.from_state.state}}"
     action:
       - alias: "Pick action based on trigger"
         choose:

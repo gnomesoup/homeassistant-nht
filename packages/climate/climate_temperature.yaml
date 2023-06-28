@@ -187,10 +187,10 @@ automation:
         entity_id: input_boolean.thermostat_away
         for: "00:00:05"
     condition:
-      - alias: "Not in guest mode"
-        condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
+      - alias: "In correct home states"
+        condition: template
+        value_template: >-
+          {{ states('input_select.home_status') in ['Normal', 'Secure', 'Sleep'] }}
     action:
       - alias: "Set fan mode and temp variables"
         variables:

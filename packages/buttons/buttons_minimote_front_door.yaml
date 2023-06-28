@@ -35,8 +35,8 @@ automation:
           node_id: 16 
     condition:
       - condition: state
-        entity_id: input_boolean.guest_mode
-        state: "off"
+        entity_id: input_select.home_status
+        state: "Guest"
     action:
       - service: homeassistant.toggle
         data_template:
@@ -60,8 +60,8 @@ automation:
           node_id: 16 
     condition:
       - condition: state
-        entity_id: input_boolean.guest_mode
-        state: "on"
+        entity_id: input_select.home_status
+        state: "Guest"
     action:
       - service: homeassistant.toggle
         data_template:
