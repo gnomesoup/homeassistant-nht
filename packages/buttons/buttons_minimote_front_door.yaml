@@ -33,35 +33,7 @@ automation:
         event_type: zwave_js_value_notification
         event_data:
           node_id: 16 
-    condition:
-      - condition: state
-        entity_id: input_select.home_status
-        state: "Guest"
-    action:
-      - service: homeassistant.toggle
-        data_template:
-          entity_id: >
-            {% set map = {1: "input_boolean.minimote_front_door_1",
-                          2: "input_boolean.minimote_front_door_2",
-                          3: "input_boolean.minimote_front_door_3",
-                          4: "input_boolean.minimote_front_door_4",
-                          5: "input_boolean.minimote_front_door_5",
-                          6: "input_boolean.minimote_front_door_6",
-                          7: "input_boolean.minimote_front_door_7",
-                          8: "input_boolean.minimote_front_door_8"} %}
-            {{ map[trigger.event.data.value|int] }}
-
-  - alias: Minimote Front Door Guest Mode
-    id: 3f3090b5-6fe8-4a30-9b0e-bd6a37226587
-    trigger:
-      - platform: event
-        event_type: zwave_js_value_notification
-        event_data:
-          node_id: 16 
-    condition:
-      - condition: state
-        entity_id: input_select.home_status
-        state: "Guest"
+    condition: []
     action:
       - service: homeassistant.toggle
         data_template:
