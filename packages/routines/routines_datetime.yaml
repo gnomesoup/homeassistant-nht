@@ -13,6 +13,3 @@ sensor:
           {{ currentTime.strftime("%A") }}
         icon_template: "mdi:calendar"
 
-binary_sensor:
-  - platform: workday
-    country: US
