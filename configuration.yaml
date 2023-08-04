@@ -11,11 +11,6 @@ homeassistant:
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
-# Discover some devices automatically
-discovery:
-  ignore:
-    - google_cast
-
 # Text to speech
 tts:
   - platform: google_translate

@@ -1,10 +1,10 @@
 input_datetime:
   water_heater_time_high_demand:
-    name: Water Heater High Deamand
+    name: Water Heater High Demand
     has_date: false
     has_time: true
   water_heater_time_low_demand:
-    name: Water Heater Low Deamand
+    name: Water Heater Low Demand
     has_date: false
     has_time: true
 
@@ -35,8 +35,8 @@ automation:
           option: >-
             {{"eco" if trigger.entity_id == "input_datetime.water_heater_time_low_demand" else "high_demand"}}
 
-  - id: 039c5f4b-0600-4c42-903c-6901625e2972
-    alias: Water heater mode on home status
+  - alias: Water heater mode on home status
+    id: 039c5f4b-0600-4c42-903c-6901625e2972
     trigger:
       - platform: state
         entity_id: input_select.home_status
