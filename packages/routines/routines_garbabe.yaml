@@ -1,0 +1,35 @@
+input_boolean:
+  garbage_notification_enabled:
+    name: Garbage Notification On
+    icon: mdi:delete
+  recycle_notification_enabled:
+    name: Recycle Notification On
+    icon: mdi:recycle
+
+automation:
+  - alias: Garbage Recycle Alerts
+    id: dc5118df-3efb-45e8-8c9c-e1514a99431c
+    trigger:
+      - platform: calendar
+        entity_id: calendar.taliluna_michael_pfammatter
+        event: start
+      - platform: calendar
+        entity_id: calendar.taliluna_michael_pfammatter
+        event: end
+    condition: []
+    variables:
+      service_type: >-
+        {{ "homeassistant.turn_on" if trigger.event == 'start' else "homeassistant.turn_off"}}
+    action:
+      - if: "{{trigger.calendar_event.summary == 'Garbage'}}"
+        then:
+          - alias: "Turn on garbage notification input boolean"
+            service: "{{service_type}}"
+            target:
+              entity_id: input_boolean.garbage_notification_enabled
+      - if: "{{trigger.calendar_event.summary == 'Recycle'}}"
+        then:
+          - alias: "Turn on recycle notification input boolean"
+            service: "{{service_type}}"
+            target:
+              entity_id: input_boolean.recycle_notification_enabled
