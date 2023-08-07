@@ -60,7 +60,9 @@ automation:
       trash_type: >-
         {{'Garbage' if trigger.entity_id == input_boolean.garbage_notification_enabled else 'Recycle'}}
     action:
-      data:
-        title: Taliluna Alert
-        message: "Take out the {{trash_type}}"
-        alert_level: Info
+      - alias: "Send out the notification"
+        service: script.notify_parents
+        data:
+          title: Taliluna Alert
+          message: "Take out the {{trash_type}}"
+          alert_level: Info
