@@ -14,10 +14,10 @@ automation:
           - conditions:
             - "{{trigger.event.data.value|int == 3}}"
             sequence:
-            - service: homeassistant.toggle
-              target:
-                entity_id:
-                  - lock.garage_door
+              - alias: "Unlock Garage Door"
+                service: homeassistant.turn_on
+                target:
+                  entity_id: switch.multirelay_2
           - conditions:
             - "{{trigger.event.data.value|int == 4}}"
             sequence:
