@@ -1,6 +1,6 @@
 # Node 14
 automation:
-  - alias: Minimote Master Bedroom
+  - alias: Minimote Car
     id: "8264c12f-69dc-412d-9ce8-f745a13f6ad6"
     trigger:
       - platform: event
@@ -12,6 +12,21 @@ automation:
       - alias: "Action on button pressed"
         choose:
           - conditions:
+            - "{{trigger.event.data.value|int == 2}}"
+            sequence:
+              - if: >-
+                  {{states("input_select.home_status") == "Normal"}}
+                then:
+                  - alias: "set the alarm away"
+                    service: alarm_control_panel.alarm_arm_away
+                    target:
+                      entity_id: alarm_control_panel.simplisafe
+                else:
+                  - alias: "disarm the alarm"
+                    service: alarm_control_panel.alarm_disarm
+                    target:
+                      entity_id: alarm_control_panel.simplisafe
+          - conditions:
             - "{{trigger.event.data.value|int == 3}}"
             sequence:
               - alias: "Unlock Garage Door"
@@ -22,7 +37,7 @@ automation:
             - "{{trigger.event.data.value|int == 4}}"
             sequence:
               - if: >-
-                  {{input_select.homestatus == "Normal"}}
+                  {{states("input_select.home_status") == "Normal"}}
                 then:
                   - alias: "close the garage"
                     service: lock.lock
