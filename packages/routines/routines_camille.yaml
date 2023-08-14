@@ -37,6 +37,10 @@ input_datetime:
     name: "Camille wake-up offset from school start"
     has_date: false
     has_time: true
+  camille_school_leave_house:
+    name: "Camille leaving house for school"
+    has_date: false
+    has_time: true
 
 input_text:
   camille_meds_notification:
@@ -327,3 +331,31 @@ automation:
           title: Camille Medications
           message: Not yet taken
           alert_level: Info
+
+  - id: c1c0a30f-2a82-4be1-8df5-cb489e5a5ce6
+    alias: Camille Leaving house alert
+    trigger:
+      - platform: time
+        at: input_datetime.camille_school_start_offset
+    condition:
+      - alias: "Is a school day"
+        condition: state
+        entity_id: input_boolean.camille_is_school_day
+        state: "on"
+      - alias: "Camille is home"
+        condition: state
+        entity_id: person.camille
+        state: "home"
+    variables:
+      west_day_type: "{{states('input_select.camille_west_day_type')}}"
+    action:
+      - alias: "Notify on camille's speakers"
+        service: script.notify_camille_with_sound
+        data:
+          message: >-
+            Head out in 5 minutes. Grab the {{west_day_type}} binder.
+      - alias: "Notification to camille mobile"
+        service: notify.mobile_app_sm_a326u
+        data:
+          message: >-
+            Today is a {{west_day_type}}
