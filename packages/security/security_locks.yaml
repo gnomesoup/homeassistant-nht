@@ -168,7 +168,7 @@ automation:
       - platform: template
         value_template: >-
           {{ states('input_select.home_status') in
-             ['Away', 'Vacation', 'Secure', 'Service Expected', 'Guest Expected']}}
+             ['Away', 'Vacation', 'Secure', 'Sleep', 'Service Expected', 'Guest Expected']}}
     condition: []
     action:
       - alias: "run lock deadbolts script"
