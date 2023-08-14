@@ -53,7 +53,7 @@ automation:
           operation_mode: >-
             {% if states(trigger.to_state) in ["Guest", "Guest Expected"] %}
               high_demand
-            {% elif states(trigger.to_state) in ["Normal"] %}
+            {% elif states(trigger.to_state) == "Normal" %}
               {{states("input_select.water_heater_target_state")}}
             {% else %}
                eco
