@@ -342,7 +342,7 @@ automation:
     alias: Camille Leaving house alert
     trigger:
       - platform: time
-        at: input_datetime.camille_school_start_offset
+        at: input_datetime.camille_school_leave_house
     condition:
       - alias: "Is a school day"
         condition: state
@@ -359,7 +359,7 @@ automation:
         service: script.notify_camille_with_sound
         data:
           message: >-
-            Head out in 5 minutes. Grab the {{west_day_type}} binder.
+            Almost time to go. Grab the {{west_day_type}} binder.
       - alias: "Notification to camille mobile"
         service: notify.mobile_app_sm_a326u
         data:
