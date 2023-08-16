@@ -92,7 +92,7 @@ script:
         timeout:
           minutes: 10
       - if: 
-        - "{{wait.trigger is None}}"
+        - "{{not wait.trigger}}"
         then:
           - alias: "Set thermostat back depending on mode"
             choose:
