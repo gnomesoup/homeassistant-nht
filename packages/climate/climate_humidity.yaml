@@ -19,3 +19,98 @@ sensor:
             {% set humidity.count = 1 %}
           {% endif %}
           {{ (humidity.sum / humidity.count)|round(1) }}
+
+automation:
+  - alias: automation alias (name)
+    id: 982c767a-929c-40d3-a648-b7da87f2aa4a
+    trigger:
+      - platform: state
+        entity_id: climate.node_34
+        attribute: hvac_action
+        from: "cooling"
+        to: "idle"
+        for:
+          minutes: 30
+    condition:
+      - alias: "Humidity is high"
+        condition: numeric_state
+        entity_id: sensor.node_34_humidity
+        above: 60
+    action:
+      - alias: "Run humidity lower script"
+        service: script.humidity_lower_with_ac
+
+script:
+  humidity_lower_with_ac:
+    alias: "Humidity Lower with AC"
+    variables:
+      ac_setpoint: >-
+        {{state_attr('climate.node_34', 'temperature') or state_attr('climate.node_34', 'target_temp_high')}}
+      current_temp: "{{state_attr('climate.node_34', 'current_temperature')}}"
+      new_setpoint: "{{ current_temp|int - 1 if ac_setup|int == current_temp|int else current_temp|int}}"
+    sequence:
+      - if:
+          - "{{ac_setpoint|int > current_temp|int}}"
+        then:
+          - stop: "Temperature is already lower than setpoint"
+      - alias: "Set thermostat to current temp or below"
+        choose:
+        - conditions:
+            - "{{states('climate.node_34') == 'heat_cool'}}"
+          sequence:
+            - alias: "Set thermostat back to original temperature"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                target_temp_high: "{{new_setpoint}}"
+        - conditions:
+            - "{{states('climate.node_34') == 'cool'}}"
+          sequence:
+            - alias: "Set thermostat back to original temperature"
+              service: climate.set_temperature
+              target:
+                entity_id: climate.node_34
+              data:
+                temperature: "{{new_setpoint}}"
+      - alias: "Wait 10 minutes or until the thermostat is adjusted elsewhere"
+        wait_for_trigger:
+          - platform: state
+            entity_id: climate.node_34
+            to: "heat"
+          - platform: state
+            entity_id: climate.node_34
+            to: "off"
+          - platform: state
+            entity_id: climate.node_34
+            attribute: temperature
+            for: "00:00:05"
+          - platform: state
+            entity_id: climate.node_34
+            attribute: target_temp_high
+            for: "00:00:05"
+        timeout:
+          minutes: 10
+      - if: 
+        - "{{wait.completed}}"
+        then:
+          - alias: "Set thermostat back depending on mode"
+            choose:
+            - conditions:
+                - "{{states('climate.node_34') == 'heat_cool'}}"
+              sequence:
+                - alias: "Set thermostat back to original temperature"
+                  service: climate.set_temperature
+                  target:
+                    entity_id: climate.node_34
+                  data:
+                    target_temp_high: "{{ac_setpoint}}"
+            - conditions:
+                - "{{states('climate.node_34') == 'cool'}}"
+              sequence:
+                - alias: "Set thermostat back to original temperature"
+                  service: climate.set_temperature
+                  target:
+                    entity_id: climate.node_34
+                  data:
+                    temperature: "{{ac_setpoint}}"
