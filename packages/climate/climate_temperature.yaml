@@ -186,12 +186,15 @@ automation:
       - platform: state
         entity_id: input_boolean.thermostat_away
         for: "00:00:05"
-      - platform: time
-        at: input_datetime.thermostat_time_day
-      - platform: time
-        at: input_datetime.thermostat_time_weekend_day
-      - platform: time
-        at: input_datetime.thermostat_time_night
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Normal"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Secure"
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Sleep"
     condition:
       - alias: "In correct home states"
         condition: template
