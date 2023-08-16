@@ -21,7 +21,7 @@ sensor:
           {{ (humidity.sum / humidity.count)|round(1) }}
 
 automation:
-  - alias: automation alias (name)
+  - alias: Thermostat Lower Humidity
     id: 982c767a-929c-40d3-a648-b7da87f2aa4a
     trigger:
       - platform: state
@@ -30,7 +30,7 @@ automation:
         from: "cooling"
         to: "idle"
         for:
-          minutes: 30
+          minutes: 50
     condition:
       - alias: "Humidity is high"
         condition: numeric_state
