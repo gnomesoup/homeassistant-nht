@@ -25,10 +25,10 @@ automation:
     id: 982c767a-929c-40d3-a648-b7da87f2aa4a
     trigger:
       - platform: state
-        entity_id: climate.node_34
+        entity_id: binary_sensor.hvac_cooling
         attribute: hvac_action
-        from: "cooling"
-        to: "idle"
+        from: "off"
+        to: "on"
         for:
           minutes: 50
     condition:
@@ -39,6 +39,26 @@ automation:
     action:
       - alias: "Run humidity lower script"
         service: script.humidity_lower_with_ac
+    
+  - alias: Dehumidifier not running
+    id: 6961b571-902f-408e-8641-8e1c96e6dad9
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.smart_energy_switch_power_2
+        below: 50
+        for: "00:30:00"
+    condition:
+      - alias: "Crawl space humidity is high"
+        condition: numeric_state
+        entity_id: sensor.temperature_humidity_xs_sensor_humidity_2
+        above: 50
+    action:
+      - alias: "Notify michael"
+        service: script.notify_michael
+        data:
+          title: Taliluna Alert
+          message: "Check dehumidifer. Power is {{states('sensor.smart_energy_switch_power_2')}} W"
+          alert_level: Debug|Info|Warn
 
 script:
   humidity_lower_with_ac:
