@@ -70,7 +70,7 @@ script:
       new_setpoint: "{{ current_temp|int - 1 if ac_setpoint|int == current_temp|int else current_temp|int}}"
     sequence:
       - if:
-          - "{{ac_setpoint|int > current_temp|int}}"
+          - "{{ac_setpoint|int < current_temp|int}}"
         then:
           - stop: "Temperature is already lower than setpoint"
       - alias: "Set thermostat to current temp or below"
