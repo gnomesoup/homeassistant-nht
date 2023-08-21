@@ -24,14 +24,15 @@ automation:
   - alias: Thermostat Lower Humidity
     id: 982c767a-929c-40d3-a648-b7da87f2aa4a
     trigger:
-      - platform: state
-        entity_id: binary_sensor.hvac_cooling
-        attribute: hvac_action
-        from: "on"
-        to: "off"
-        for:
-          minutes: 30
+      - platform: time_pattern
+        minutes: "/5"
     condition:
+      - alias: "Cooling has not been on"
+        condition: state
+        entity_id: binary_sensor.hvac_cooling
+        state: "off"
+        for:
+          minutes: 26
       - alias: "Humidity is high"
         condition: numeric_state
         entity_id: sensor.node_34_humidity
