@@ -27,10 +27,10 @@ automation:
       - platform: state
         entity_id: binary_sensor.hvac_cooling
         attribute: hvac_action
-        from: "off"
-        to: "on"
+        from: "on"
+        to: "off"
         for:
-          minutes: 50
+          minutes: 30
     condition:
       - alias: "Humidity is high"
         condition: numeric_state
