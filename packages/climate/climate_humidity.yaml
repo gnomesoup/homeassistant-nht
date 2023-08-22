@@ -68,7 +68,7 @@ script:
       ac_setpoint: >-
         {{state_attr('climate.node_34', 'temperature') or state_attr('climate.node_34', 'target_temp_high')}}
       current_temp: "{{state_attr('climate.node_34', 'current_temperature')}}"
-      new_setpoint: "{{ current_temp|int - 1 if ac_setpoint|int == current_temp|int else current_temp|int}}"
+      new_setpoint: "{{ current_temp|int - 1}}"
     sequence:
       - if:
           - "{{ac_setpoint|int < current_temp|int}}"
