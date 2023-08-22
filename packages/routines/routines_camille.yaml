@@ -254,14 +254,12 @@ automation:
         entity_id: input_boolean.camille_med_notification_enabled
         state: "on"
     action:
-      - alias: "Actionable notification to camille"
-        service: notify.mobile_app_sm_a326u
+      - alias: "Mobile notification to camille"
+        service: script.notify_camille
         data:
-          message: "Time for meds"
-          data: 
-            actions:
-              - action: "CAMILLE_MED_TAKEN"
-                title: "Taken"
+          message: "{{ states('input_text.camille_meds_notification') }}"
+          title: "Medication"
+          alert_level: "Warn"
       - alias: "Audible notify if home"
         choose:
         - conditions:
@@ -274,21 +272,6 @@ automation:
               service: script.notify_camille_with_sound
               data:
                 message: "{{ states('input_text.camille_meds_notification') }}"
-      - alias: "Wait for response"
-        wait_for_trigger:
-          - platform: event
-            event_type: mobile_app_notification_action
-            event_data:
-              action: "CAMILLE_MED_TAKEN"
-        timeout:
-          minutes: 6
-      - if:
-          - "{{ not wait.completed }}"
-        then:
-          - alias: "Turn off med notification input"
-            service: input_boolean.turn_off
-            target:
-              entity_id: input_boolean.camille_med_notification_enabled
 
   - alias: Camille medication turn off with button
     id: 9541eb9c-0f70-421b-9f07-a31aaac016d5
@@ -361,7 +344,9 @@ automation:
           message: >-
             Almost time to go. Grab the {{west_day_type}} binder.
       - alias: "Notification to camille mobile"
-        service: notify.mobile_app_sm_a326u
+        service: script.notify_camille
         data:
+          title: "School Alert"
           message: >-
             Today is a {{west_day_type}}
+          alert_level: "Warn"
