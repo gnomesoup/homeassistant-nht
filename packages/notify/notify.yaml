@@ -17,6 +17,15 @@ input_select:
       - None
     icon: mdi:bell-ring
 
+  notify_level_camille:
+    name: Notify Level Camille
+    options:
+      - Debug
+      - Info
+      - Warn
+      - None
+    icon: mdi:bell-ring
+
 script:
   notify_camille_dnd_off:
     alias: "Set camille's phone DND to off"
@@ -45,6 +54,41 @@ script:
           message: "command_dnd"
           data:
             command: "total_silence"
+
+  notify_camille:
+    alias: "Notifications for Camille"
+    fields:
+      title:
+        description: Notification Title
+        example: Taliluna Alert
+      message:
+        description: Notification Message Body
+        example: Motion on front camera
+      alert_level: 
+        description: 'Level of alertness'
+        example: '[Debug|Info|Warn]'
+        default: Warn
+    variables:
+      set_alert_level: '{{ states("input_select.notify_level_camille")}}'
+      alert_group: >-
+        {% if alert_level == 'Debug' %}
+          {{ ('Debug') }}
+        {% elif alert_level == 'Info' %}
+          {{ ('Debug', 'Info') }}
+        {% else %}
+          {{ ('Debug', 'Info', 'Warn') }}
+        {% endif %}
+    sequence:
+      - alias: "Check if we should send notification"
+        choose:
+        - conditions: '{{ set_alert_level in alert_group }}'
+          sequence:
+            - alias: "Send the notification to mobile"
+              service: notify.mobile_app_iphone
+              data:
+                title:  "{{ title }}"
+                message: "{{ message }}"
+
   notify_camille_with_sound:
     alias: "Notify Camille with sound"
     variables:
