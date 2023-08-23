@@ -102,6 +102,7 @@ input_select:
       - Guest Expected
       - Guest
       - Sleep
+      - Late Night
       - Away
       - Vacation
       - Alert

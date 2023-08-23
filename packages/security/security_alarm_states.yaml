@@ -51,7 +51,7 @@ automation:
                     target:
                       entity_id: alarm_control_panel.simplisafe
               - conditions: >-
-                  {{ trigger.to_state.state in ["Normal", "Service", "Guest"]}}
+                  {{ trigger.to_state.state in ["Normal", "Service", "Guest", "Late Night"]}}
                 sequence:
                   - alias: "Set alarm home"
                     service: alarm_control_panel.alarm_disarm
@@ -74,6 +74,8 @@ automation:
                           Service
                         {%- elif is_state("input_select.home_status", "Guest Expected") -%}
                           Guest
+                        {%- elif is_state("input_select.home_status", "Sleep") -%}
+                          Late Night
                         {%- else -%}
                           Normal
                         {%- endif -%}
@@ -213,7 +215,7 @@ script:
         timeout:
           minutes: 5
       - if:
-          - "{{ wait.completed }}"
+          - "{{ not wait.trigger }}"
         then:
           - alias: "Secure home"
             service: input_select.select_option
