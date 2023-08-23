@@ -1,0 +1,89 @@
+automation:
+  - id: bbc82e4a-968e-4a36-9f52-6c7396d5f38e
+    alias: iOS Action Disarm Arm Taliluna
+    trigger:
+      - platform: event
+        event_type: ios.action_fired
+        event_data:
+          # source may be one of:
+          # - appShortcut
+          # - preview
+          # - siriShortcut
+          # - urlHandler
+          # - watch
+          # - widget
+          actionID: AFFFBF35-4801-4773-A8AC-D05B8DEE940B
+          actionName: Disarm Taliluna
+          sourceDeviceID: kashyyyk
+          sourceDeviceName: Kashyyyk
+          sourceDevicePermanentID: 36125E58-99DF-40EA-B840-76BD83C4133D
+          # triggerSource: preview
+    condition: []
+    action:
+      - if: >-
+          {{states("input_select.home_status") == "Normal"}}
+        then:
+          - alias: "set the alarm away"
+            service: alarm_control_panel.alarm_arm_away
+            target:
+              entity_id: alarm_control_panel.simplisafe
+        else:
+          - alias: "disarm the alarm"
+            service: alarm_control_panel.alarm_disarm
+            target:
+              entity_id: alarm_control_panel.simplisafe
+  
+  - id: 9aa64cee-dfe2-40b4-b0f7-01c2e8b36f82
+    alias: iOS Action Open Close Garage
+    trigger:
+      - platform: event
+        event_type: ios.action_fired
+        event_data:
+          # source may be one of:
+          # - appShortcut
+          # - preview
+          # - siriShortcut
+          # - urlHandler
+          # - watch
+          # - widget
+          actionID: 7CACFF34-0540-4E6A-8BBE-FC107E30F7BA
+          actionName: Open Close Garage
+          sourceDeviceID: kashyyyk
+          sourceDeviceName: Kashyyyk
+          sourceDevicePermanentID: 36125E58-99DF-40EA-B840-76BD83C4133D
+          # triggerSource: preview
+    condition: []
+    action:
+      - alias: "Unlock Garage Door"
+        service: homeassistant.turn_on
+        target:
+          entity_id: switch.multirelay_2
+
+  - id: 414e4642-1cf8-4af7-97bc-01fe7fcb09b6
+    alias: iOS Actions Set home to sleep
+    trigger:
+      - platform: event
+        event_type: ios.action_fired
+        event_data:
+          # source may be one of:
+          # - appShortcut
+          # - preview
+          # - siriShortcut
+          # - urlHandler
+          # - watch
+          # - widget
+          actionID: 5A73688F-29DA-46A2-999D-27083A8C660E
+          actionName: Set Home To Sleep
+          sourceDeviceID: kashyyyk
+          sourceDeviceName: Kashyyyk
+          sourceDevicePermanentID: 36125E58-99DF-40EA-B840-76BD83C4133D
+          # triggerSource: preview
+    condition: 
+      - "{{ not states(input_select.home_status) in ['Guest', 'Sleep']}}"
+    action:
+      - alias: "Set home status to sleep"
+        service: input_select.select_option
+        target:
+          entity_id: input_select.home_status
+        data:
+          option: "Sleep"
