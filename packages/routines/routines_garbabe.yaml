@@ -58,7 +58,7 @@ automation:
             state: "Secure"
     variables:
       trash_type: >-
-        {{'Garbage' if trigger.entity_id == input_boolean.garbage_notification_enabled else 'Recycle'}}
+        {{'Garbage' if trigger.entity_id == 'input_boolean.garbage_notification_enabled' else 'Recycle'}}
     action:
       - alias: "Send out the notification"
         service: script.notify_parents
