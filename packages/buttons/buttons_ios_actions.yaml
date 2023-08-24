@@ -79,7 +79,7 @@ automation:
           sourceDevicePermanentID: 36125E58-99DF-40EA-B840-76BD83C4133D
           # triggerSource: preview
     condition: 
-      - "{{ not states(input_select.home_status) in ['Guest', 'Sleep']}}"
+      - "{{ not states('input_select.home_status') in ['Guest', 'Sleep']}}"
     action:
       - alias: "Set home status to sleep"
         service: input_select.select_option
