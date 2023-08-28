@@ -40,12 +40,18 @@ automation:
       - platform: time_pattern
         minutes: "/15"
     condition:
-      - alias: "Garbage or Recycle Notify Toggled"
-        condition: state
-        entity_id:
-          - input_boolean.garbage_notification_enabled
-          - input_boolean.recycle_notification_enabled
-        state: "on"
+      - condition: or
+        conditions:
+          - alias: "Garbage Notify Toggled"
+            condition: state
+            entity_id:
+              - input_boolean.garbage_notification_enabled
+            state: "on"
+          - alias: "Recycle Notify Toggled"
+            condition: state
+            entity_id:
+              - input_boolean.recycle_notification_enabled
+            state: "on"
       - condition: or
         conditions:
           - alias: "Home status is normal"
