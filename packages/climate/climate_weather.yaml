@@ -1,8 +1,7 @@
 sensor:
   - platform: template
     sensors:
-      sunrise: 
-        unique_id: "wind_bearing_description"
+      wind_bearing_description: 
         friendly_name: "Wind Bearing Description"
         icon_template: >-
           {% set iconMap = {
