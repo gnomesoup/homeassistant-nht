@@ -2,7 +2,23 @@ sensor:
   - platform: template
     sensors:
       sunrise: 
+        unique_id: "wind_bearing_description"
         friendly_name: "Wind Bearing Description"
+        icon_template: >-
+          {% set iconMap = {
+              0: 'mdi:arrow-up',
+              1: 'mdi:arrow-top-right',
+              2: 'mdi:arrow-right',
+              3: 'mdi:arrow-bottom-right',
+              4: 'mdi:arrow-down',
+              5: 'mdi:arrow-bottom-left',
+              6: 'mdi:arrow-right',
+              7: 'mdi:arrow-top-left',
+            }
+          %}
+          {{ directionMap[
+            (((state_attr('weather.ktys_daynight', 'wind_bearing') / 45) + 0.5) % 8) | int
+            ] }}
         value_template: >-
           {% set directionMap = {
               0: 'N',
