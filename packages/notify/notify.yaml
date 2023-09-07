@@ -190,7 +190,7 @@ script:
         - conditions: '{{ set_alert_level in alert_group }}'
           sequence:
             - alias: "Send the notification to mobile"
-              service: notify.mobile_app_iphone_58
+              service: notify.mobile_app_iphone_61
               data:
                 title:  "{{ title }}"
                 message: "{{ message }}"

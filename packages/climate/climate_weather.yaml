@@ -5,17 +5,17 @@ sensor:
         friendly_name: "Wind Bearing Description"
         icon_template: >-
           {% set iconMap = {
-              0: 'mdi:arrow-up',
-              1: 'mdi:arrow-top-right',
-              2: 'mdi:arrow-right',
-              3: 'mdi:arrow-bottom-right',
-              4: 'mdi:arrow-down',
-              5: 'mdi:arrow-bottom-left',
+              0: 'mdi:arrow-down',
+              1: 'mdi:arrow-bottom-left',
+              2: 'mdi:arrow-left',
+              3: 'mdi:arrow-top-left',
+              4: 'mdi:arrow-up',
+              5: 'mdi:arrow-top-right',
               6: 'mdi:arrow-right',
-              7: 'mdi:arrow-top-left',
+              7: 'mdi:arrow-bottom-right',
             }
           %}
-          {{ directionMap[
+          {{ iconMap[
             (((state_attr('weather.ktys_daynight', 'wind_bearing') / 45) + 0.5) % 8) | int
             ] }}
         value_template: >-
