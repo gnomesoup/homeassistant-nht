@@ -20,6 +20,13 @@ sensor:
           {% endif %}
           {{ (humidity.sum / humidity.count)|round(1) }}
 
+input_number:
+  humidity_target:
+    name: Humidity Target
+    min: 0
+    max: 100
+    step: 1
+
 automation:
   - alias: Thermostat Lower Humidity
     id: 982c767a-929c-40d3-a648-b7da87f2aa4a
@@ -36,7 +43,7 @@ automation:
       - alias: "Humidity is high"
         condition: numeric_state
         entity_id: sensor.node_34_humidity
-        above: 60
+        above: input_number.humidity_target
     action:
       - alias: "Run humidity lower script"
         service: script.humidity_lower_with_ac
