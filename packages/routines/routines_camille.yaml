@@ -72,7 +72,7 @@ automation:
     id: 015584f8-1258-44d0-9c98-f9aa97483546
     trigger:
       - platform: time_pattern
-        hours: "1"
+        hours: "2"
         minutes: "/15"
     action:
       - alias: "Check if it is a school day"
@@ -102,7 +102,7 @@ automation:
       - platform: state
         entity_id: input_boolean.camille_is_school_day
     action:
-      - alias: "Get calendar evetns"
+      - alias: "Get calendar events"
         service: calendar.list_events
         target:
           entity_id: calendar.west_high_school_michael_pfammatter
