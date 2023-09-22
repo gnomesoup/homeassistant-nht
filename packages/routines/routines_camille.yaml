@@ -99,8 +99,8 @@ automation:
   - alias: Camille Set West Day Type
     id: 40c765da-01e6-47b7-8965-5765a7dd25dc
     trigger:
-      - platform: state
-        entity_id: input_boolean.camille_is_school_day
+      - platform: time
+        at: "03:15:00"
     action:
       - alias: "Get calendar events"
         service: calendar.list_events
