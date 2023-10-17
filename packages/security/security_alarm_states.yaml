@@ -74,7 +74,8 @@ automation:
                           Service
                         {%- elif is_state("input_select.home_status", "Guest Expected") -%}
                           Guest
-                        {%- elif is_state("input_select.home_status", "Sleep") -%}
+                        {%- elif is_state("input_select.home_status", "Sleep") and 
+                            now().strftime("%H:%M:00") < states('input_datetime.house_wakeup_time') -%}
                           Late Night
                         {%- else -%}
                           Normal
@@ -127,10 +128,15 @@ automation:
       - platform: time
         at: input_datetime.house_wakeup_time
     condition:
-      - alias: "Home status is sleep"
-        condition: state
-        entity_id: input_select.home_status
-        state: "Sleep"
+      - or:
+        - alias: "Home status is sleep"
+          condition: state
+          entity_id: input_select.home_status
+          state: "Sleep"
+        - alias: "Home status is late night"
+          condition: state
+          entity_id: input_select.home_status
+          state: "Late Night"
     action:
       - alias: "Set home status to normal"
         service: input_select.select_option
