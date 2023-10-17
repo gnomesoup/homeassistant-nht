@@ -4,6 +4,27 @@ input_boolean:
     icon: mdi:lightbulb
 
 automation:
+  - alias: Porch lights evening on
+    id: 522b5aed-7204-40a3-9aa0-c04abd04eb12
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "00:00:00"
+    condition: []
+    action:
+      - alias: "Turn porch lights on"
+        service: light.turn_on
+        target:
+          entity_id:
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+            - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+        data:
+          brightness: 128
+      - alias: "Turn default state on"
+        service: input_boolean.turn_on
+        target:
+          entity_id:
+            - input_boolean.porch_lights_default
 
   - alias: Porch lights evening off
     id: 82cdd372-c606-43ba-8e17-97e354234cdb
