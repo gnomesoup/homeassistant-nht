@@ -49,6 +49,7 @@ input_text:
 timer:
   camille_meds_notify_snooze:
     name: "Camille Medication Snooze"
+    duration: "02:00:00"
     restore: true
 
 automation:
@@ -257,6 +258,11 @@ automation:
         condition: state
         entity_id: input_boolean.camille_med_notification_enabled
         state: "on"
+      - not:
+        - alias: "Snooze timer is idle"
+          condition: state
+          entity_id: timer.camille_meds_notify_snooze
+          state: "idle"
     action:
       - alias: "Mobile notification to camille"
         service: script.notify_camille
@@ -324,9 +330,46 @@ automation:
           title: Camille Medications
           message: Not yet taken
           alert_level: Info
+  
+  - id: f6ff6141-7225-4691-af30-29e75683d9dd
+    alias: Camille medication notify if snoozed
+    trigger:
+      - platform: state
+        entity_id: timer.camille_meds_notify_snooze
+        to: "active"
+    condition:
+      - alias: "Med notify on"
+        condition: state
+        entity_id: input_boolean.camille_med_notification_enabled
+        state: "on"
+    action:
+      - alias: "Notify parents"
+        service: script.notify_parents
+        data:
+          title: Camille Medications
+          message: Snoozed
+          alert_level: Info
 
-  - id: c1c0a30f-2a82-4be1-8df5-cb489e5a5ce6
-    alias: Camille Leaving house alert
+
+  - alias: Camille medication disable snooze if returned home
+    id: 1322e072-dfae-46ba-8599-e80afda2acce
+    trigger:
+      - platform: state
+        entity_id: person.camille
+        to: "home"
+    condition:
+      - alias: "timer is running"
+        condition: state
+        entity_id: timer.camille_meds_notify_snooze
+        state: "active"
+    action:
+      - alias: "stop timer"
+        service: timer.cancel
+        target:
+          entity_id: timer.camille_meds_notify_snooze
+
+  - alias: Camille Leaving house alert
+    id: c1c0a30f-2a82-4be1-8df5-cb489e5a5ce6
     trigger:
       - platform: time
         at: input_datetime.camille_school_leave_house
