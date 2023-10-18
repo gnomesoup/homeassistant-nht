@@ -46,8 +46,12 @@ input_text:
   camille_meds_notification:
     name: "Camille Medication Notification"
 
-automation:
+timer:
+  camille_meds_notify_snooze:
+    name: "Camille Medication Snooze"
+    restore: true
 
+automation:
   - alias: Camille school phone to DND
     id: 87ef214b-46c6-409a-bfcd-9ced215431a2
     trigger:
