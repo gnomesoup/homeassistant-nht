@@ -262,7 +262,7 @@ automation:
         - alias: "Snooze timer is idle"
           condition: state
           entity_id: timer.camille_meds_notify_snooze
-          state: "idle"
+          state: "active"
     action:
       - alias: "Mobile notification to camille"
         service: script.notify_camille
@@ -331,8 +331,8 @@ automation:
           message: Not yet taken
           alert_level: Info
   
-  - id: f6ff6141-7225-4691-af30-29e75683d9dd
-    alias: Camille medication notify if snoozed
+  - alias: Camille medication notify if snoozed
+    id: f6ff6141-7225-4691-af30-29e75683d9dd
     trigger:
       - platform: state
         entity_id: timer.camille_meds_notify_snooze
@@ -349,7 +349,6 @@ automation:
           title: Camille Medications
           message: Snoozed
           alert_level: Info
-
 
   - alias: Camille medication disable snooze if returned home
     id: 1322e072-dfae-46ba-8599-e80afda2acce
