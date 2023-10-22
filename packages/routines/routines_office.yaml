@@ -6,6 +6,14 @@ group:
   office_lights_on:
     entities:
       - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_989e43fe_level_light_color_on_off
+  office_switches_on:
+    entities:
+      - switch.z_wave_plus_power_strip_ver_2_0_2
+      - switch.z_wave_plus_power_strip_ver_2_0_4
+  office_switches_off:
+    entities:
+      - switch.z_wave_plus_power_strip_ver_2_0_2
+      - switch.z_wave_plus_power_strip_ver_2_0_4
 
 automation:
   - alias: Office closet off when closed
@@ -40,7 +48,9 @@ automation:
       - alias: "Turn things off in office"
         service: homeassistant.turn_off
         target:
-          entity_id: group.office_lights_off
+          entity_id: 
+            - group.office_lights_off
+            - group.office_switches_off
 
   - alias: Office wake up
     id: 87210600-25a1-4594-8307-803577a5671a
@@ -51,12 +61,18 @@ automation:
       - platform: state
         entity_id: input_select.home_status
         to: "Service"
-    condition:
+      - platform: state
+        entity_id: input_select.home_status
+        to: "Guest"
+    condition: []
     action:
       - alias: "Turn things on in office"
         service: homeassistant.turn_on
         target:
-          entity_id: group.office_lights_on
+          entity_id: 
+            - group.office_lights_on
+            - group.office_switches_on
+
 
   - alias: G7 Play unplugged to background
     id: fc57badf-c359-4360-89d9-e13b3b02a646
