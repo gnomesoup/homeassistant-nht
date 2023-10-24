@@ -221,8 +221,9 @@ automation:
         data:
           filename: "{{ snapshot_path }}"
       - alias: "Notify Michael"
-        service: notify.mobile_app_kashyyyk
+        service: script.notify_michael
         data:
+          alert_level: Info
           title: Taliluna Security
           message: "Front camera {{ alert_type }}"
           data:
@@ -260,8 +261,9 @@ automation:
         data:
           filename: "{{ snapshot_path }}"
       - alias: "Notify Michael"
-        service: notify.mobile_app_kashyyyk
+        service: script.notify_michael
         data:
+          alert_level: Info
           title: Taliluna Security
           message: 'Back camera {{ alert_type }}'
           data:

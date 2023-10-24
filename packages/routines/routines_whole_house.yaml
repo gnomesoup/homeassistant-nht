@@ -116,6 +116,6 @@ automation:
         entity_id: input_select.home_status
     action:
       - alias: "Update apple watch"
-        service: notify.mobile_app_kashyyyk
+        service: notify.mobile_app_scarif
         data:
           message: update_complications

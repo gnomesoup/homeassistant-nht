@@ -204,8 +204,9 @@ script:
         example: Away
     sequence:
       - alias: "Notify Michael"
-        service: notify.mobile_app_kashyyyk
+        service: script.notify_michael
         data:
+          alert_level: Info
           title: "Taliluna Alert"
           message: "Home set to {{ status_option }} in 5 minutes"
           data:

@@ -48,7 +48,7 @@ automation:
       - alias: "Turn things off in office"
         service: homeassistant.turn_off
         target:
-          entity_id: 
+          entity_id:
             - group.office_lights_off
             - group.office_switches_off
 
@@ -69,10 +69,9 @@ automation:
       - alias: "Turn things on in office"
         service: homeassistant.turn_on
         target:
-          entity_id: 
+          entity_id:
             - group.office_lights_on
             - group.office_switches_on
-
 
   - alias: G7 Play unplugged to background
     id: fc57badf-c359-4360-89d9-e13b3b02a646
@@ -87,7 +86,7 @@ automation:
         service: button.press
         target:
           entity_id: button.moto_g_7_play_send_to_background
-  
+
   - alias: G7 Play plugged to foreground
     id: 44b8a034-6906-47c5-b9d5-8277fb11df4f
     trigger:
