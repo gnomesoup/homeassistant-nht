@@ -108,7 +108,7 @@ automation:
         at: "03:15:00"
     action:
       - alias: "Get calendar events"
-        service: calendar.list_events
+        service: calendar.get_events
         target:
           entity_id: calendar.west_high_school_michael_pfammatter
         data:
