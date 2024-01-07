@@ -1,17 +1,3 @@
-sensor:
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: "/"
-      - type: disk_free
-        arg: "/"
-      - type: memory_use_percent
-      - type: memory_free
-      - type: load_1m
-      - type: load_5m
-      - type: load_15m
-      - type: last_boot
-
 automation:
   - id: 5f63716e-d11e-4aec-b8f7-5a9545496d27
     alias: Notify when server disk if full
