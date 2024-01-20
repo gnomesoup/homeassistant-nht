@@ -18,28 +18,3 @@ input_datetime:
     icon: mdi:dog
     has_date: true
     has_time: true
-
-
-automation:
-
-  - alias: Daisy time to feed
-    id: f90b531b-b423-47ee-8722-2068d9338c3f
-    # Send a notification that Daisy needs dinner
-    trigger: 
-      - platform: time
-        at: "17:00:00"
-    condition:
-      - condition: template
-        value_template: >-
-          {{ states.input_select.daisy_state != "Away" }}
-    action:
-      - service: tts.google_translate_say
-        data:
-          entity_id:
-            - media_player.kitchen_display
-          message: "Time to feed Daisy"
-      - service: script.notify_parents
-        data:
-          title: "Time to feed Daisy"
-          message: "Click to fill log"
-          alert_level: Info

@@ -1,0 +1,2309 @@
+- id: '1673928838577'
+  alias: Thermostat heat test
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.z_wave_plus_thermostat_air_temperature
+  condition: []
+  action:
+  - service: script.notify_michael
+    data:
+      title: Taliluna Test
+      message: heat!!
+      alert_level: Warn
+  mode: single
+
+- id: '1681739214063'
+  alias: Link On/Off State of Multiple Devices
+  description: ''
+  use_blueprint:
+    path: aderusha/link_multiple_devices.yaml
+    input:
+      linked_entities:
+      - switch.smart_switch_6
+      - switch.smart_plug_with_2_usb_ports
+      - id: '1705588928870'
+      alias: Temperature alert garage
+      description: ''
+      trigger:
+      - platform: numeric_state
+        entity_id:
+        - sensor.pir_motion_detector_air_temperature
+        below: 35
+        for:
+          hours: 0
+          minutes: 15
+          seconds: 0
+          milliseconds: 0
+      condition: []
+      action:
+      - alias: Notify parents
+        service: script.notify_parents
+        data:
+          title: Taliluna Alert
+          message: Garage Temperature Low
+          alert_level: Warn
+      mode: single
+
+- id: '1705671591277'
+  alias: Climate | Thermostat Lost Power
+  description: ''
+  trigger:
+  - type: not_plugged_in
+    platform: device
+    device_id: 3c4e40ceba2e1906ae6d20cfcb9b5848
+    entity_id: e27d554bc76e4b106bcc703fd6c38063
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition: []
+  action:
+  - service: script.notify_parents
+    metadata: {}
+    data:
+      message: Thermostat lost Power
+      title: Taliluna Alert
+      alert_level: warn
+  mode: single
+
+- id: '1705715352853'
+  alias: Frigate Notifications Front Camera
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.front
+      notify_device: 4e183d2d483e186b04339b901d1bcbce
+      base_url: https://taliluna.mmjo.com
+      title: Taliluna Alert
+      alert_once: true
+      message: A {{label}} was detected on the {{camera_name}}.
+      labels:
+      - person
+      - car
+
+- alias: Minimote Car
+  id: "8264c12f-69dc-412d-9ce8-f745a13f6ad6"
+  trigger:
+    - platform: event
+      event_type: zwave_js_value_notification
+      event_data:
+        node_id: 14
+        home_id: 3996165589
+  action:
+    - alias: "Action on button pressed"
+      choose:
+        - conditions:
+          - "{{trigger.event.data.value|int == 2}}"
+          sequence:
+            - if: >-
+                {{states("input_select.home_status") == "Normal"}}
+              then:
+                - alias: "set the alarm away"
+                  service: alarm_control_panel.alarm_arm_away
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+              else:
+                - alias: "disarm the alarm"
+                  service: alarm_control_panel.alarm_disarm
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+        - conditions:
+          - "{{trigger.event.data.value|int == 3}}"
+          sequence:
+            - alias: "Unlock Garage Door"
+              service: homeassistant.turn_on
+              target:
+                entity_id: switch.multirelay_2
+        - conditions:
+          - "{{trigger.event.data.value|int == 4}}"
+          sequence:
+            - if: >-
+                {{states("input_select.home_status") == "Normal"}}
+              then:
+                - alias: "close the garage"
+                  service: lock.lock
+                  target:
+                    entity_id: lock.garage_door
+                - alias: "set the home for away"
+                  service: alarm_control_panel.alarm_arm_away
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+              else:
+                - alias: "disable alarm"
+                  service: alarm_control_panel.alarm_disarm
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+                - alias: "Wait for alarm to disarm"
+                  wait_for_trigger:
+                    - platform: state
+                      entity_id: alarm_control_panel.simplisafe
+                      to: "disarmed"
+                  timeout:
+                    seconds: 20
+                - if: '{{wait.trigger == None}}'
+                  then:
+                    - alias: "open the garage"
+                      service: lock.unlock
+                      target:
+                        entity_id: lock.garage_door
+                  else:
+                    - alias: "notify alarm didn't disarm"
+                      service: script.notify_parents
+                      data:
+                        title: Taliluna Alert
+                        message: Could not disarm alarm
+                        alert_level: Warn
+
+- id: bbc82e4a-968e-4a36-9f52-6c7396d5f38e
+  alias: iOS Action Disarm Taliluna
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        # source may be one of:
+        # - appShortcut
+        # - preview
+        # - siriShortcut
+        # - urlHandler
+        # - watch
+        # - widget
+        actionID: 8A95C27F-C66B-42BD-8EBF-7C46F65C79AE
+        actionName: Alarm Disarm
+        sourceDeviceID: scarif
+        sourceDeviceName: Scarif
+        sourceDevicePermanentID: AC0F3FB2-95FB-4864-923E-0C6E514FF4D9
+        # triggerSource: preview
+  condition: []
+  action:
+    - if: >-
+        {{states("alarm_control_panel.simplisafe") != "disarmed"}}
+      then:
+        - alias: "disarm the alarm"
+          service: alarm_control_panel.alarm_disarm
+          target:
+            entity_id: alarm_control_panel.simplisafe
+
+- id: 244addbe-5c89-4cf2-8a8b-2fc948c1a79f
+  alias: iOS Action Arm Taliluna
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        # source may be one of:
+        # - appShortcut
+        # - preview
+        # - siriShortcut
+        # - urlHandler
+        # - watch
+        # - widget
+        actionID: BDE1ABD9-79F1-42BA-9451-0A0A994CBADB
+        actionName: Arm Alarm
+        sourceDeviceID: scarif
+        sourceDeviceName: Scarif
+        sourceDevicePermanentID: AC0F3FB2-95FB-4864-923E-0C6E514FF4D9
+        # triggerSource: preview
+  condition: []
+  action:
+    - if: >-
+        {{states("alarm_control_panel.simplisafe") == "disarmed"}}
+      then:
+        - alias: "arm the alarm"
+          service: alarm_control_panel.alarm_arm_away
+          target:
+            entity_id: alarm_control_panel.simplisafe
+
+- id: 9aa64cee-dfe2-40b4-b0f7-01c2e8b36f82
+  alias: iOS Action Open Close Garage
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        # source may be one of:
+        # - appShortcut
+        # - preview
+        # - siriShortcut
+        # - urlHandler
+        # - watch
+        # - widget
+        actionID: 45730500-9304-4F78-9E57-DFC254F061F7
+        actionName: Tali Garage
+        sourceDeviceID: scarif
+        sourceDeviceName: Scarif
+        sourceDevicePermanentID: AC0F3FB2-95FB-4864-923E-0C6E514FF4D9
+        # triggerSource: preview
+  condition: []
+  action:
+    - alias: "Unlock Garage Door"
+      service: homeassistant.turn_on
+      target:
+        entity_id: switch.multirelay_2
+
+- id: 414e4642-1cf8-4af7-97bc-01fe7fcb09b6
+  alias: iOS Actions Set home to sleep
+  trigger:
+    - platform: event
+      event_type: ios.action_fired
+      event_data:
+        # source may be one of:
+        # - appShortcut
+        # - preview
+        # - siriShortcut
+        # - urlHandler
+        # - watch
+        # - widget
+        actionID: 46560507-AC10-49C3-9333-876A432C37AE
+        actionName: Tali Sleep
+        sourceDeviceID: scarif
+        sourceDeviceName: Scarif
+        sourceDevicePermanentID: AC0F3FB2-95FB-4864-923E-0C6E514FF4D9
+        # triggerSource: preview
+  condition: 
+    - "{{ not states('input_select.home_status') in ['Guest', 'Sleep']}}"
+  action:
+    - alias: "Set home status to sleep"
+      service: input_select.select_option
+      target:
+        entity_id: input_select.home_status
+      data:
+        option: "Sleep"
+
+- alias: Minimote Front Door
+  id: a094cac8-9ac3-4161-929e-a904c8ba2ff0
+  trigger:
+    - platform: event
+      event_type: zwave_js_value_notification
+      event_data:
+        node_id: 16 
+  condition: []
+  action:
+    - service: homeassistant.toggle
+      data_template:
+        entity_id: >
+          {% set map = {1: "input_boolean.minimote_front_door_1",
+                        2: "input_boolean.minimote_front_door_2",
+                        3: "input_boolean.minimote_front_door_3",
+                        4: "input_boolean.minimote_front_door_4",
+                        5: "input_boolean.minimote_front_door_5",
+                        6: "input_boolean.minimote_front_door_6",
+                        7: "input_boolean.minimote_front_door_7",
+                        8: "input_boolean.minimote_front_door_8"} %}
+          {{ map[trigger.event.data.value|int] }}
+
+- id: 4aed69da-1d4b-4650-81b4-30a4f60e63ee
+  alias: Minimote Garage Door Open Close
+  trigger:
+    - platform: state
+      entity_id: input_boolean.minimote_front_door_3
+  condition: []
+  action:
+    - alias: "Unlock Garage Door"
+      service: homeassistant.turn_on
+      target:
+        entity_id: switch.multirelay_2
+
+- alias: Minimote Porch Lights Toggle
+  id: 264ef33e-e6eb-418d-8f85-df77455010de
+  trigger:
+    - platform: state
+      entity_id: input_boolean.minimote_front_door_5
+  condition: []
+  action:
+    - alias: "Toggle Porch Lights"
+      service: homeassistant.toggle
+      target:
+        entity_id:
+          - light.ikea_tradfri_bulb_e26_fe5b90
+          - light.tradfri_bulb_e26_ws_opal_1000lm_light
+
+- alias: Minimote Porch Lights Dim
+  id: 9a2144ea-d2f7-40ac-8d40-83658f9c19d1
+  trigger:
+    - platform: state
+      entity_id: input_boolean.minimote_front_door_6
+  condition: []
+  action:
+    - alias: "If porch lights are bright, dim them"
+      choose:
+      - conditions:
+          - alias: "Porch light brightness is high"
+            condition: numeric_state
+            entity_id: light.ikea_tradfri_bulb_e26_fe5b90
+            above: 200
+        sequence:
+          - alias: "Dim light to 50%"
+            service: light.turn_on
+            target:
+              entity_id:
+                - light.ikea_tradfri_bulb_e26_fe5b90
+                - light.tradfri_bulb_e26_ws_opal_1000lm_light
+            data:
+              brightness: 128
+      - conditions:
+          - alias: "Porch light brightness is low"
+            condition: numeric_state
+            entity_id: light.ikea_tradfri_bulb_e26_fe5b90
+            below: 128
+        sequence:
+          - alias: "Dim light to 100%"
+            service: light.turn_on
+            target:
+              entity_id:
+                - light.ikea_tradfri_bulb_e26_fe5b90
+                - light.tradfri_bulb_e26_ws_opal_1000lm_light
+            data:
+              brightness: 255
+      default:
+          - alias: "Dim light to 50%"
+            service: light.turn_on
+            target:
+              entity_id:
+                - light.ikea_tradfri_bulb_e26_fe5b90
+                - light.tradfri_bulb_e26_ws_opal_1000lm_light
+            data:
+              brightness: 128
+
+- alias: Water heater set target state
+  id: 840d5bb4-1b62-4094-b5b7-aeda547ac864
+  trigger:
+    - platform: time
+      at: input_datetime.water_heater_time_high_demand
+    - platform: time
+      at: input_datetime.water_heater_time_low_demand
+  condition: []
+  action:
+    - alias: "Set water heater target based on trigger"
+      service: input_select.select_option
+      target:
+        entity_id: input_select.water_heater_target_state
+      data:
+        option: >-
+          {{"eco" if trigger.entity_id == "input_datetime.water_heater_time_low_demand" else "high_demand"}}
+
+- alias: Water heater mode on home status
+  id: 039c5f4b-0600-4c42-903c-6901625e2972
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+  condition:
+    - alias: "Check if state actually changed"
+      condition: template
+      value_template: "{{ trigger.to_state.state != trigger.from_state.state }}"
+  action:
+    - alias: "Set water heater dyanmically"
+      service: water_heater.set_operation_mode
+      target:
+        entity_id: water_heater.heat_pump_water_heater
+      data:
+        operation_mode: >-
+          {% if trigger.to_state.state in ["Guest", "Guest Expected"] %}
+            high_demand
+          {% elif trigger.to_state.state == "Normal" %}
+            {{states("input_select.water_heater_target_state")}}
+          {% else %}
+              eco
+          {% endif %}
+
+- id: 8465dfa4-0d7b-489c-b28d-f781de3aa972
+  alias: Water heater mode on to target state
+  trigger:
+    - platform: state
+      entity_id: input_select.water_heater_target_state
+  condition:
+    - alias: "Check if home status is normal"
+      condition: template
+      value_template: "{{ states('input_select.home_status') in ['Normal'] }}"
+  action:
+    - alias: "Set water heater to target state"
+      service: water_heater.set_operation_mode
+      target:
+        entity_id: water_heater.heat_pump_water_heater
+      data:
+        operation_mode: >-
+          {{states("input_select.water_heater_target_state")}}
+
+- alias: Thermostat Lower Humidity
+  id: 982c767a-929c-40d3-a648-b7da87f2aa4a
+  trigger:
+    - platform: time_pattern
+      minutes: "/5"
+  condition:
+    - alias: "Cooling has not been on"
+      condition: state
+      entity_id: binary_sensor.hvac_cooling
+      state: "off"
+      for:
+        minutes: 26
+    - alias: "Humidity is high"
+      condition: numeric_state
+      entity_id: sensor.node_34_humidity
+      above: input_number.humidity_target
+    - alias: "Not too cold"
+      condition: template
+      value_template: >-
+        {% set temp = state_attr('climate.node_34', 'temperature')|int
+          if state_attr('climate.node_34', 'temperature')
+          else state_attr('climate.node_34', 'target_temp_high')|int %}
+        {{states('sensor.temperature_whole_house')|int > temp - 4}}
+  action:
+    - alias: "Run humidity lower script"
+      service: script.humidity_lower_with_ac
+
+- alias: Dehumidifier not running
+  id: 6961b571-902f-408e-8641-8e1c96e6dad9
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.smart_energy_switch_power_2
+      below: 50
+      for: "00:30:00"
+  condition:
+    - alias: "Crawl space humidity is high"
+      condition: numeric_state
+      entity_id: sensor.temperature_humidity_xs_sensor_humidity_2
+      above: 50
+  action:
+    - alias: "Notify michael"
+      service: script.notify_michael
+      data:
+        title: Taliluna Alert
+        message: "Check dehumidifer. Power is {{states('sensor.smart_energy_switch_power_2')}} W"
+        alert_level: Debug|Info|Warn
+
+- alias: Set thermostat to target temperature
+  id: ff3a6f1c-8d81-44d9-a074-514f99aaaf0e
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: 
+        - input_number.thermostat_target_home_low
+        - input_number.thermostat_target_home_high
+        - input_number.thermostat_target_away_low
+        - input_number.thermostat_target_away_high
+      for: "00:00:05"
+    - platform: state
+      entity_id: input_boolean.thermostat_away
+      for: "00:00:05"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Normal"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Secure"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Sleep"
+  condition:
+    - alias: "In correct home states"
+      condition: template
+      value_template: >-
+        {{ states('input_select.home_status') in ['Normal', 'Secure', 'Sleep'] }}
+  action:
+    - alias: "Set fan mode and temp variables"
+      variables:
+        fan_mode: >-
+          {% if states("input_boolean.thermostat_fan_on") == "on" -%}
+            Low
+          {%- else -%}
+            Auto low
+          {%- endif %}
+        temperature_low: >-
+          {% if states("input_boolean.thermostat_away") == "on" -%}
+            {{ states("input_number.thermostat_target_away_low") }}
+          {%- else -%}
+            {{ states("input_number.thermostat_target_home_low") }}
+          {%- endif %}
+        temperature_high: >-
+          {% if states("input_boolean.thermostat_away") == "on" -%}
+            {{ states("input_number.thermostat_target_away_high") }}
+          {%- else -%}
+            {{ states("input_number.thermostat_target_home_high") }}
+          {%- endif %}
+    - alias: "Set temps based on mode"
+      choose:
+      - conditions:
+          - alias: "Thermostat set to heat/cool"
+            condition: state
+            entity_id: climate.node_34
+            state: "heat_cool"
+        sequence:
+          - alias: "Set thremostat setpoint"
+            service: script.thermostat_set_if_not_equal
+            data:
+              temperature: 0
+              temperature_low: "{{ temperature_low | int }}"
+              temperature_high: "{{ temperature_high | int }}"
+      - conditions:
+          - alias: "Thermostat set to heat"
+            condition: state
+            entity_id: climate.node_34
+            state: "heat"
+        sequence:
+          - alias: "Set thremostat setpoint"
+            service: script.thermostat_set_if_not_equal
+            data:
+              temperature: "{{ temperature_low | int }}"
+              temperature_low: 0
+              temperature_high: 0
+      - conditions:
+          - alias: "Thermostat set to cool"
+            condition: state
+            entity_id: climate.node_34
+            state: "cool"
+        sequence:
+          - alias: "Set thremostat setpoint"
+            service: script.thermostat_set_if_not_equal
+            data:
+              temperature: "{{ temperature_high | int }}"
+              temperature_low: 0
+              temperature_high: 0
+    - alias: "Set fan"
+      service: climate.set_fan_mode
+      target:
+        entity_id: climate.node_34
+      data:
+        fan_mode: "{{ fan_mode }}"
+    - delay: "00:00:10"
+
+- alias: Thermostat away mode on vacation
+  id: a5d567e6-7f55-4a8e-bec5-4942dfe8395b
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Vaction"
+  condition: []
+  action:
+    - alias: "Set thermostat to away mode"
+      service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.thermostat_away
+
+- alias: Thermostat away mode off on status change
+  id: 62904373-0f1e-4b0f-aa18-a829b81f30fa
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+      from: "Vaction"
+  condition:
+    - alias: "Home in away mode"
+      condition: state
+      entity_id: input_boolean.thermostat_away
+      state: "on"
+    - "{{ states('input_select.home_status' != 'Alert')}}"
+  action:
+    - alias: "Set thermostat to home mode"
+      service: input_boolean.turn_off
+      target:
+        entity_id: input_boolean.thermostat_away
+
+- alias: Thermostat Set Target Night
+  id: eac65317-2910-4553-811a-92795aaa6cc7
+  trigger:
+    - platform: time
+      at: input_datetime.thermostat_time_night
+  condition: []
+  action:
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_low
+      data:
+        value: "{{ states('input_number.thermostat_setpoint_heat_night')}}"
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_high
+      data:
+        value: "{{ states('input_number.thermostat_setpoint_cool_night')}}"
+
+- alias: Thermostat Set Target Workday
+  id: 1dd4b108-62d8-4a37-bc79-db7401a53565
+  trigger:
+    - platform: time
+      at: input_datetime.thermostat_time_day
+    - platform: state
+      entity_id: sensor.location_michael_home_alone
+      from: "True"
+      to: "False"
+  condition:
+    - alias: "Is a workday"
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: "on"
+    - alias: "Not in night routine"
+      condition: time
+      after: input_datetime.thermostat_time_day
+      before: input_datetime.thermostat_time_night
+  action:
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_low
+      data:
+        value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_high
+      data:
+        value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+
+- alias: Thermostat Set Target Non Workday
+  id: f4b02269-3f4b-48df-9748-f5dc3399fd46
+  trigger:
+    - platform: time
+      at: input_datetime.thermostat_time_weekend_day
+    - platform: state
+      entity_id: sensor.location_michael_home_alone
+      from: "True"
+      to: "False"
+  condition:
+    - alias: "Is a workday"
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: "off"
+    - alias: "Not in night routine"
+      condition: time
+      after: input_datetime.thermostat_time_weekend_day
+      before: input_datetime.thermostat_time_night
+  action:
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_low
+      data:
+        value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_high
+      data:
+        value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+
+- alias: Thermostat Set Target Michael Only
+  id: 72d7cd8e-59bc-4afa-af29-24e30e8b7f9e
+  trigger:
+    - platform: state
+      entity_id: sensor.location_michael_home_alone
+      from: "False"
+      to: "True"
+  condition:
+    - alias: "Is a workday"
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: "off"
+    - alias: "Not in night routine"
+      condition: time
+      after: input_datetime.thermostat_time_day
+      before: input_datetime.thermostat_time_night
+  action:
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_low
+      data:
+        value: "{{ states('input_number.thermostat_setpoint_heat_day')}}"
+    - alias: "Set thremostat target"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_home_high
+      data:
+        value: "{{states('input_number.thermostat_setpoint_cool_day')}}"
+
+- alias: Thermostat Set Target Away
+  id: 70c40727-cc53-4093-a344-e3bad64c212b
+  trigger:
+    - platform: state
+      entity_id: input_boolean.thermostat_away
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - alias: "Set thremostat target away"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_away_low
+      data:
+        value: "{{ states('input_number.thermostat_setpoint_heat_away')}}"
+    - alias: "Set thremostat target away"
+      service: input_number.set_value
+      target:
+        entity_id: input_number.thermostat_target_away_high
+      data:
+        value: "{{states('input_number.thermostat_setpoint_cool_away')}}"
+
+- alias: Temperature alert garage
+  id: eafd6b87-9319-4640-b3c8-befea8eaebea
+  trigger:
+    - platform: numeric_state
+      entity_id: 
+        - sensor.pir_motion_detector_air_temperature
+      below: 45
+      for: "00:15:00"
+  action:
+    - alias: "Notify parents"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Garage Temperature Low
+        alert_level: Warn
+
+- alias: Thermostat heat vent check
+  id: 95e3f418-ed53-4377-a9de-7c1bcb92bf09
+  trigger:
+    - platform: state
+      entity_id: climate.node_34
+      attribute: hvac_action
+      from: idle
+      to: heating
+      for: "00:05:00"
+    - platform: numeric_state
+      entity_id: sensor.vent_temperature
+      below: 90
+      for: "00:00:15"
+  condition:
+    - alias: "Thermostat is heating"
+      condition: state
+      entity_id: climate.node_34
+      attribute: hvac_action
+      state: "heating"
+    - alias: "Vent check is not hot enough"
+      condition: numeric_state
+      entity_id: sensor.vent_temperature
+      below: 90
+  action:
+    - alias: "turn heat off"
+      service: climate.set_hvac_mode
+      target:
+        entity_id: climate.node_34
+      data:
+        hvac_mode: "off"
+    - alias: "turn heat on"
+      service: climate.set_hvac_mode
+      target:
+        entity_id: climate.node_34
+      data:
+        hvac_mode: heat
+    - alias: "Warn adults"
+      service: script.notify_michael
+      data:
+        title: Taliluna Alert
+        message: Vent Check Heat Reset
+        alert_level: Warn
+
+- alias: Thermostat not heating alert
+  id: 7244608a-f75d-4976-9ea5-6b33b9509d19
+  trigger:
+    - platform: state
+      entity_id: sensor.node_34_air_temperature
+  condition:
+    - alias: "Thermostat set to heating"
+      condition: state
+      entity_id: climate.node_34
+      attribute: hvac_action
+      state: "heating"
+      for: "00:02:00"
+    - alias: "check if temp is lower than before"
+      condition: template
+      value_template: >-
+        {{ trigger.to_state.state < trigger.from_state.state }}
+  action:
+    - alias: "Warn adults"
+      service: script.notify_michael
+      data:
+        title: Taliluna Alert
+        message: Temperature drop while heating
+        alert_level: Warn
+
+- alias: Thermostat not cooling alert
+  id: 1f2150d2-1a4e-4208-b41d-f64015978299
+  trigger:
+    - platform: state
+      entity_id: sensor.node_34_air_temperature
+  condition: 
+    - alias: "Thermostat set to cooling"
+      condition: state
+      entity_id: climate.node_34
+      attribute: hvac_action
+      state: "cooling"
+      for: "00:02:00"
+    - alias: "check if temp is higher than before"
+      condition: template
+      value_template: >-
+        {{ trigger.to_state.state > trigger.from_state.state }}
+  action:
+    - alias: "Warn adults"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Temperature drop while heating
+        alert_level: Warn
+- alias: Camille school phone to DND
+  id: 87ef214b-46c6-409a-bfcd-9ced215431a2
+  trigger:
+    - platform: calendar
+      entity_id: calendar.west_high_school_michael_pfammatter
+      event: start
+  action:
+    - alias: "Turn on dnd"
+      service: script.notify_camille_dnd_total_silence
+
+- alias: Camille school phone DND off
+  id: 1fc9e9d0-7689-41a6-8bdb-4deb13a5f66c
+  trigger:
+    - platform: calendar
+      entity_id: calendar.west_high_school_michael_pfammatter
+      event: end
+  action:
+    - alias: "Turn off dnd"
+      service: script.notify_camille_dnd_off
+
+- alias: Camille mark if school day
+  id: 015584f8-1258-44d0-9c98-f9aa97483546
+  trigger:
+    - platform: time_pattern
+      hours: "2"
+      minutes: "/15"
+  action:
+    - alias: "Check if it is a school day"
+      choose:
+      - conditions:
+          - alias: "Calendar event date is today"
+            condition: template
+            value_template: >-
+              {% set today =  now().replace(hour=0, minute=0, second=0, microsecond=0) %}
+              {% set event =  (state_attr('calendar.west_high_school_michael_pfammatter', 'start_time') | as_datetime) %}
+              {{ today.year == event.year and today.month == event.month
+                  and today.day == event.day}}
+        sequence:
+          - alias: "Turn on school day boolean"
+            service: homeassistant.turn_on
+            target:
+              entity_id: input_boolean.camille_is_school_day
+      default:
+        - alias: "Turn off school day boolean"
+          service: homeassistant.turn_off
+          target:
+            entity_id: input_boolean.camille_is_school_day
+
+- alias: Camille Set West Day Type
+  id: 40c765da-01e6-47b7-8965-5765a7dd25dc
+  trigger:
+    - platform: time
+      at: "03:15:00"
+  action:
+    - alias: "Get calendar events"
+      service: calendar.get_events
+      target:
+        entity_id: calendar.west_high_school_michael_pfammatter
+      data:
+        duration:
+          hours: 24
+      response_variable: agenda
+    - alias: "School day is on"
+      choose:
+      - conditions:
+          - alias: "Is a school day"
+            condition: state
+            entity_id: input_boolean.camille_is_school_day
+            state: "on"
+        sequence:
+          - alias: "Set west day type"
+            service: input_select.select_option
+            target:
+              entity_id: input_select.camille_west_day_type
+            data:
+              option: "{{ (agenda.events)[0].summary }}"
+      default:
+        - alias: "Set west day type to None"
+          service: input_select.select_option
+          target:
+            entity_id: input_select.camille_west_day_type
+          data:
+            option: "No School"
+
+- alias: Camille wakeup before school
+  id: 423b7759-8b43-47b1-9cbb-a3940df04a93
+  trigger:
+    - platform: calendar
+      entity_id: calendar.west_high_school_michael_pfammatter
+      event: start
+      offset: "-01:45:00"
+    - platform: calendar
+      entity_id: calendar.west_high_school_michael_pfammatter
+      event: start
+      offset: "-01:30:00"
+  condition:
+    - alias: "Camille is home"
+      condition: state
+      entity_id: person.camille
+      state: "home"
+    - alias: "Is a school day"
+      condition: state
+      entity_id: input_boolean.camille_is_school_day
+      state: "on"
+  action:
+    - alias: "Notify on camille's speaker"
+      service: script.notify_camille_with_sound
+      data:
+        message: >-
+          Good morning, Camille. Today is a {{ trigger.calendar_event.summary }}.
+
+- alias: "Minimote Camille Push 1"
+  id: 17963bb0-262e-439d-873a-a6b148fd8f84
+  trigger:
+    - platform: state
+      entity_id: input_boolean.minimote_camille_1
+  action:
+    - service: homeassistant.toggle
+      data:
+        entity_id:
+          - switch.z_wave_plus_power_strip_ver_2_0_5
+
+- alias: "Minimote Camille Hold"
+  id: 5203c99e-ae5c-411e-a031-58b29f231d2d
+  trigger:
+    - platform: state
+      entity_id:
+        - input_boolean.minimote_camille_2
+        - input_boolean.minimote_camille_4
+        - input_boolean.minimote_camille_6
+        - input_boolean.minimote_camille_8
+  action:
+    - service: homeassistant.toggle
+      data_template:
+        entity_id: >-
+          {% if is_state("input_select.camille_status", "Asleep") %}
+            {% set runScript = "script.goodmorning_camille" %}
+          {% elif is_state("input_select.camille_status", "Home") %}
+            {% set runScript = "script.goodnight_camille" %}
+          {% else %}
+            {% set runScript = "automation.lights_camille_on" %}
+          {% endif %}
+          {{ runScript }}
+
+- alias: "Minimote Camille Push 2"
+  id: d03bc5e4-ce23-43e7-9da2-5d5196165e1d
+  trigger:
+    - platform: state
+      entity_id: input_boolean.minimote_camille_3
+  action:
+    - service: homeassistant.toggle
+      data:
+        entity_id:
+          - light.philips_lwb006_097e3010_level_on_off
+
+- alias: "Minimote Camille Push 3"
+  id: 963391e8-09e0-477d-80bd-717c2c0cd7fc
+  trigger:
+    - platform: state
+      entity_id: input_boolean.minimote_camille_5
+  action:
+    - service: homeassistant.toggle
+      data:
+        entity_id:
+          - light.ge_appliances_zll_light_1b550600_level_on_off
+
+- alias: Camille Medication Notifications On Morning
+  id: a7e85b57-53c2-4aee-94d6-6fa856a4089e
+  trigger:
+    - platform: time
+      at: input_datetime.camille_meds_morning 
+  condition:
+    - alias: "Is a school day"
+      condition: state
+      entity_id: input_boolean.camille_is_school_day
+      state: "on"
+  action:
+    - alias: "Turn on med notifications"
+      service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.camille_med_notification_enabled
+
+- alias: Camille Medication Notifications On Evening
+  id: a1a8617e-9f47-488f-b475-b933aac643b8
+  trigger:
+    - platform: time
+      at: input_datetime.camille_meds_evening 
+  condition: []
+  action:
+    - alias: "Turn on med notifications"
+      service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.camille_med_notification_enabled
+
+- alias: Camille medication notify camille
+  id: fb06daa2-4eef-4aa6-817d-be5e7452131c
+  mode: restart
+  trigger:
+    - platform: time_pattern
+      minutes: "/5"
+  condition:
+    - alias: "Med notification enabled"
+      condition: state
+      entity_id: input_boolean.camille_med_notification_enabled
+      state: "on"
+    - not:
+      - alias: "Snooze timer is idle"
+        condition: state
+        entity_id: timer.camille_meds_notify_snooze
+        state: "active"
+  action:
+    - alias: "Mobile notification to camille"
+      service: script.notify_camille
+      data:
+        message: "{{ states('input_text.camille_meds_notification') }}"
+        title: "Medication"
+        alert_level: "Warn"
+    - alias: "Audible notify if home"
+      choose:
+      - conditions:
+          - alias: "Check if Camille is home"
+            condition: state
+            entity_id: person.camille
+            state: "home"
+        sequence:
+          - alias: "Notify with sound"
+            service: script.notify_camille_with_sound
+            data:
+              message: "{{ states('input_text.camille_meds_notification') }}"
+
+- alias: Camille medication turn off with button
+  id: 9541eb9c-0f70-421b-9f07-a31aaac016d5
+  trigger:
+    - platform: state
+      entity_id: input_boolean.aqara_button_1_single
+  condition:
+    - alias: "Meds notification on"
+      condition: state
+      entity_id: input_boolean.camille_med_notification_enabled
+      state: "on"
+  action:
+    - alias: "Turn off med notification"
+      service: homeassistant.turn_off
+      target:
+        entity_id: input_boolean.camille_med_notification_enabled
+
+- alias: Camille medication turned off actions
+  id: e1fb28a8-e855-43d1-a955-f9894df2584b
+  trigger:
+    - platform: state
+      entity_id: input_boolean.camille_med_notification_enabled
+      from: "on"
+      to: "off"
+  action:
+    - alias: "Notify parents"
+      service: script.notify_parents
+      data:
+        title: Camille Medications
+        message: Meds taken
+        alert_level: Info
+
+- alias: Camille medication notify parents if not taken
+  id: 49fefe38-bc08-4756-bf7a-33004736691f
+  trigger:
+    - platform: state
+      entity_id: input_boolean.camille_med_notification_enabled
+      from: "off"
+      to: "on"
+      for:
+        minutes: 20
+  action:
+    - alias: "Notify parents"
+      service: script.notify_parents
+      data:
+        title: Camille Medications
+        message: Not yet taken
+        alert_level: Info
+
+- alias: Camille medication notify if snoozed
+  id: f6ff6141-7225-4691-af30-29e75683d9dd
+  trigger:
+    - platform: state
+      entity_id: timer.camille_meds_notify_snooze
+      to: "active"
+  condition:
+    - alias: "Med notify on"
+      condition: state
+      entity_id: input_boolean.camille_med_notification_enabled
+      state: "on"
+  action:
+    - alias: "Notify parents"
+      service: script.notify_parents
+      data:
+        title: Camille Medications
+        message: Snoozed
+        alert_level: Info
+
+- alias: Camille medication disable snooze if returned home
+  id: 1322e072-dfae-46ba-8599-e80afda2acce
+  trigger:
+    - platform: state
+      entity_id: person.camille
+      to: "home"
+  condition:
+    - alias: "timer is running"
+      condition: state
+      entity_id: timer.camille_meds_notify_snooze
+      state: "active"
+  action:
+    - alias: "stop timer"
+      service: timer.cancel
+      target:
+        entity_id: timer.camille_meds_notify_snooze
+
+- alias: Camille Leaving house alert
+  id: c1c0a30f-2a82-4be1-8df5-cb489e5a5ce6
+  trigger:
+    - platform: time
+      at: input_datetime.camille_school_leave_house
+  condition:
+    - alias: "Is a school day"
+      condition: state
+      entity_id: input_boolean.camille_is_school_day
+      state: "on"
+    - alias: "Camille is home"
+      condition: state
+      entity_id: person.camille
+      state: "home"
+  variables:
+    west_day_type: "{{states('input_select.camille_west_day_type')}}"
+  action:
+    - alias: "Notify on camille's speakers"
+      service: script.notify_camille_with_sound
+      data:
+        message: >-
+          Almost time to go. Grab the {{west_day_type}} binder.
+    - alias: "Notification to camille mobile"
+      service: script.notify_camille
+      data:
+        title: "School Alert"
+        message: >-
+          Today is a {{west_day_type}}
+        alert_level: "Warn"
+
+- alias: Christmas lights on at 6am
+  id: 52f48e82-b5f6-431e-a0fe-d8d1bc064db6
+  trigger:
+    - platform: time
+      at: "06:00:00"
+  condition: []
+  action:
+    - alias: "Turn on all christmas lights"
+      service: homeassistant.turn_on
+      target:
+        entity_id: 
+          - group.christmas_lights_indoor
+          - group.christmas_lights_outdoor
+
+- alias: Christmas lights off at sunrise
+  id: 19b18d7d-12f8-4aef-9706-75918e56a608
+  trigger:
+    - platform: sun
+      event: sunrise
+      offset: "00:10:00"
+  condition: []
+  action:
+    - service: homeassistant.turn_off
+      target:
+        entity_id:
+          - group.christmas_lights_outdoor
+
+- alias: Christmas lights on at dusk
+  id: 98e83c3e-6ea1-4d46-ad0c-c30e73ca1371
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-00:30:00"
+  action:
+    - service: homeassistant.turn_on
+      entity_id:
+          - group.christmas_lights_indoor
+          - group.christmas_lights_outdoor
+
+- alias: Christmas lights off at 1am
+  id: 5d5e4682-3732-455d-a5fc-7bedfd7f414e
+  trigger:
+    - platform: time
+      at: "01:00:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id:
+          - group.christmas_lights_indoor
+          - group.christmas_lights_outdoor
+
+- alias: Daisy time to feed
+  id: f90b531b-b423-47ee-8722-2068d9338c3f
+  trigger: 
+    - platform: time
+      at: "17:00:00"
+  condition:
+    - condition: template
+      value_template: >-
+        {{ states.input_select.daisy_state != "Away" }}
+  action:
+    - service: tts.google_translate_say
+      data:
+        entity_id:
+          - media_player.kitchen_display
+        message: "Time to feed Daisy"
+    - service: script.notify_parents
+      data:
+        title: "Time to feed Daisy"
+        message: "Click to fill log"
+        alert_level: Info
+
+- alias: Garage lights on motion camera
+  id: dbd64077-7afc-4460-9427-e0f53a503c6d
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.nvr_camera_7_motion
+      from: "off"
+      to: "on"
+  condition:
+    - alias: "Light has been off for a while"
+      condition: state
+      entity_id: light.master_bath_1_level_light_color_on_off
+      state: "off"
+      for:
+        seconds: 30
+  action:
+    - alias: "Turn on garage lights"
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.master_bath_1_level_light_color_on_off
+          - light.master_bath_4_level_light_color_on_off
+
+- alias: Garage lights on motion general
+  id: 2d5cea66-1940-4de9-8c3e-cda17b98fae2
+  trigger:
+    - platform: state
+      entity_id: 
+        - binary_sensor.pir_motion_detector_any
+        - binary_sensor.laundry_door_entry
+      from: "off"
+      to: "on"
+    - platform: state
+      entity_id: 
+        - lock.garage_door
+        - lock.touchscreen_electronic_deadbolt_3
+      from: "locked"
+      to: "unlocked"
+  action:
+    - alias: "Turn on garage lights"
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.master_bath_1_level_light_color_on_off
+          - light.master_bath_4_level_light_color_on_off
+
+- alias: Garage lights motion off
+  id: a80a19b7-c91f-43cb-960c-f04a18b6ab75
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pir_motion_detector_any
+      from: "on"
+      to: "off"
+      for:
+        minutes: 5
+    - platform: time_pattern
+      minutes: "/30"
+  condition:
+    - alias: "Motion off for 10 minutes"
+      condition: state
+      entity_id: binary_sensor.nvr_camera_7_motion
+      state: "off"
+      for:
+        minutes: 5
+  action:
+    - alias: "Turn off garage lights"
+      service: light.turn_off
+      target:
+        entity_id:
+          - light.master_bath_1_level_light_color_on_off
+          - light.master_bath_4_level_light_color_on_off
+
+- alias: Garbage Recycle Alerts On
+  id: dc5118df-3efb-45e8-8c9c-e1514a99431c
+  trigger:
+    - platform: calendar
+      entity_id: calendar.taliluna_michael_pfammatter
+      event: start
+    - platform: calendar
+      entity_id: calendar.taliluna_michael_pfammatter
+      event: end
+  condition: []
+  variables:
+    service_type: >-
+      {{ "homeassistant.turn_on" if trigger.event == 'start' else "homeassistant.turn_off"}}
+  action:
+    - if: "{{trigger.calendar_event.summary == 'Garbage'}}"
+      then:
+        - alias: "Turn on garbage notification input boolean"
+          service: "{{service_type}}"
+          target:
+            entity_id: input_boolean.garbage_notification_enabled
+    - if: "{{trigger.calendar_event.summary == 'Recycle'}}"
+      then:
+        - alias: "Turn on recycle notification input boolean"
+          service: "{{service_type}}"
+          target:
+            entity_id: input_boolean.recycle_notification_enabled
+
+- id: d1fff5bf-c9b4-4c1b-a470-f8f63b032c70
+  alias: Garbage Recycle Notification
+  trigger:
+    - platform: time_pattern
+      minutes: "/15"
+  condition:
+    - condition: or
+      conditions:
+        - alias: "Garbage Notify Toggled"
+          condition: state
+          entity_id:
+            - input_boolean.garbage_notification_enabled
+          state: "on"
+        - alias: "Recycle Notify Toggled"
+          condition: state
+          entity_id:
+            - input_boolean.recycle_notification_enabled
+          state: "on"
+    - condition: or
+      conditions:
+        - alias: "Home status is normal"
+          condition: state
+          entity_id: input_select.home_status
+          state: "Normal"
+        - alias: "Home status is normal"
+          condition: state
+          entity_id: input_select.home_status
+          state: "Secure"
+  variables:
+    trash_type: >-
+      {{'Garbage' if states('input_boolean.garbage_notification_enabled') == 'on' else 'Recycle'}}
+  action:
+    - alias: "Send out the notification"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: "Take out the {{trash_type}}"
+        alert_level: Info
+
+- id: 31acd602-6a65-4d19-bdab-29a5f3e19e45
+  alias: Guest mode set home status
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+    - platform: state
+      entity_id: input_boolean.guest_mode
+  condition:
+    - alias: "Verify that this automation didn't trigger"
+      condition: template
+      value_template: >-
+        {{ trigger.to_state.context.parent_id == None or 
+            (trigger.to_state.context.id != this.context.id and 
+            trigger.to_state.context.parent_id != this.context.id) }}
+  action:
+    - alias: "Vary response on what triggered"
+      choose:
+      - conditions: >-
+          {{ trigger.entity_id == 'input_select.home_status' }}
+        sequence:
+          - alias: "Set guest mode on home status"
+            service: >-
+              {% if states("input_select.home_status") in ['Guest', 'Guest Expected'] -%}
+                input_boolean.turn_on
+              {%- else -%}
+                input_boolean.turn_off
+              {%- endif %}
+            target:
+              entity_id: input_boolean.guest_mode
+      default:
+        - alias: "Set home status on guest mode"
+          choose:
+          - conditions:
+              - "{{ states('input_select.home_status') != 'Alert' }}"
+              - alias: "Guest mode on"
+                condition: state
+                entity_id: input_boolean.guest_mode
+                state: "on"
+            sequence:
+              - alias: "Set home status"
+                service: input_select.set_options
+                target:
+                  entity_id: input_select.home_status
+                data:
+                  option: >-
+                    {% if states("input_select.home_status") in ['Normal', 'Guest'] -%}
+                      Guest
+                    {%- else -%}
+                      Guest Expected
+                    {%- endif %}
+          - conditions:
+              - "{{ states('input_select.home_status') in ['Guest', 'Guest Expected'] }}"
+              - alias: "Guest mode off"
+                condition: state
+                entity_id: input_boolean.guest_mode
+                state: "off"
+            sequence:
+              - alias: "Set home status"
+                service: input_select.set_options
+                target:
+                  entity_id: input_select.home_status
+                data:
+                  option: >-
+                    {% if states("input_select.home_status") == "Guest" -%}
+                      Normal
+                    {%- else -%}
+                      Away
+                    {%- endif %}
+
+- alias: Laundry Counter Lights on Motion
+  id: d2da8e8f-c726-45af-9ead-e38fb27aa479
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pir_motion_detector_any_2
+      from: "off"
+      to: "on"
+  condition: []
+  action:
+    - alias: "Turn on laundry counter light"
+      service: homeassistant.turn_on
+      target:
+        entity_id: switch.smart_switch_6_2
+
+- alias: Laundry Counter Lights Off
+  id: de59dfb7-7e8a-4e5c-bac3-a876e4a09758
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pir_motion_detector_any_2
+      from: "on"
+      to: "off"
+      for: "00:30:00"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Away"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Sleep"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Vacation"
+  condition: []
+  action:
+    - alias: "Turn on laundry counter light"
+      service: homeassistant.turn_off
+      target:
+        entity_id: switch.smart_switch_6_2
+
+- alias: Front Door Open Too Long
+  id: ade1de77-60e2-468d-96e8-15d146f3e7ff
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_entry
+      to: "on"
+      for:
+        minutes: 5
+  action:
+    - alias: "Notify house"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Front door is open
+        alert_level: Warn
+
+- alias: Office closet off when closed
+  id: 2c09bb16-0859-4b83-bbbf-3b4aa98db6d1
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.door_windows_sensor_any_3
+  condition: []
+  action:
+    - alias: "Turn on if sensor is open"
+      service: >-
+        {{ 'homeassistant.turn_on'
+            if states('binary_sensor.door_windows_sensor_any_3') == 'on'
+            else 'homeassistant.turn_off' }}
+      target:
+        entity_id: light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_50db9afe_level_light_color_on_off
+
+- alias: Office set to sleep
+  id: 9e30d00c-345b-4436-b1a4-4b22795ec828
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Sleep"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Away"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Vacation"
+  condition: []
+  action:
+    - alias: "Turn things off in office"
+      service: homeassistant.turn_off
+      target:
+        entity_id:
+          - group.office_lights_off
+          - group.office_switches_off
+
+- alias: Office wake up
+  id: 87210600-25a1-4594-8307-803577a5671a
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Normal"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Service"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Guest"
+  condition: []
+  action:
+    - alias: "Turn things on in office"
+      service: homeassistant.turn_on
+      target:
+        entity_id:
+          - group.office_lights_on
+          - group.office_switches_on
+
+- alias: G7 Play unplugged to background
+  id: fc57badf-c359-4360-89d9-e13b3b02a646
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.moto_g_7_play_plugged_in
+      from: "on"
+      to: "off"
+  condition: []
+  action:
+    - alias: "Send kiosk to background"
+      service: button.press
+      target:
+        entity_id: button.moto_g_7_play_send_to_background
+
+- alias: G7 Play plugged to foreground
+  id: 44b8a034-6906-47c5-b9d5-8277fb11df4f
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.moto_g_7_play_plugged_in
+      from: "on"
+      to: "off"
+  condition: []
+  action:
+    - alias: "Send kiosk to foreground"
+      service: button.press
+      target:
+        entity_id: button.moto_g_7_play_bring_to_foreground
+    - alias: "Send kiosk to home url"
+      service: button.press
+      target:
+        entity_id: button.moto_g_7_play_load_start_url
+
+- alias: Porch lights evening on
+  id: 522b5aed-7204-40a3-9aa0-c04abd04eb12
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "00:00:00"
+  condition: []
+  action:
+    - alias: "Turn porch lights on"
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+      data:
+        brightness: 128
+    - alias: "Turn default state on"
+      service: input_boolean.turn_on
+      target:
+        entity_id:
+          - input_boolean.porch_lights_default
+
+- alias: Porch lights evening off
+  id: 82cdd372-c606-43ba-8e17-97e354234cdb
+  trigger:
+    - platform: time
+      at: "22:45:00"
+  condition: []
+  action:
+    - delay:
+        minutes: '{{ range(0, 30) | random | int}}'
+    - alias: "Turn porch lights off"
+      service: light.turn_off
+      target:
+        entity_id:
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+    - alias: "Turn default state off"
+      service: input_boolean.turn_off
+      target:
+        entity_id:
+          - input_boolean.porch_lights_default
+
+- alias: Porch lights morning on
+  id: a1721b70-85e9-4eb5-893b-e5ec144a3b53
+  trigger:
+    - platform: time
+      at: "06:15:00"
+  condition:
+    - alias: "Sun is not up"
+      condition: state
+      entity_id: sun.sun
+      state: "below_horizon"
+  action:
+    - delay:
+        minutes: '{{ range(0, 30) | random | int}}'
+    - if:
+        - alias: "Sun is not up"
+          condition: state
+          entity_id: sun.sun
+          state: "below_horizon"
+      then:
+        - alias: "Turn porch lights on"
+          service: light.turn_on
+          target:
+            entity_id:
+              - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+              - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+          data:
+            brightness: 128
+        - alias: "Turn default state on"
+          service: input_boolean.turn_on
+          target:
+            entity_id:
+              - input_boolean.porch_lights_default
+        
+- alias: Porch lights morning off
+  id: bc2615ec-d0ac-46d8-b70a-3b4f77cb262c
+  trigger:
+    - platform: sun
+      event: sunrise
+      offset: "00:15:00"
+  condition: []
+  action:
+    - alias: "Turn porch lights off"
+      service: light.turn_off
+      target:
+        entity_id:
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+    - alias: "Turn default state on"
+      service: input_boolean.turn_off
+      target:
+        entity_id:
+          - input_boolean.porch_lights_default
+        
+- alias: Porch lights on motion
+  id: 901e682a-cdf7-4f31-8026-4b03b9c2b8be
+  mode: single
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.nvr_camera_1_crossline
+      from: "off"
+      to: "on"
+    - platform: state
+      entity_id: lock.touchscreen_electronic_deadbolt
+      from: "locked"
+      to: "unlocked"
+    - platform: state
+      entity_id: lock.garage_door
+      from: "locked"
+      to: "unlocked"
+  condition:
+    - alias: "Sun is down"
+      condition: state
+      entity_id: sun.sun
+      state: "below_horizon"
+  action:
+    - alias: "Turn porch lights on"
+      service: light.turn_on
+      target:
+        entity_id:
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+          - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+      data:
+        brightness: 255
+    - wait_for_trigger:
+      - platform: state
+        entity_id: binary_sensor.nvr_camera_1_crossline
+        from: "on"
+        to: "off"
+        for: 
+          minutes: 8
+    - alias: "Turn off or dim"
+      choose:
+      - conditions:
+          - alias: "Porch light defaults to on"
+            condition: state
+            entity_id: input_boolean.porch_lights_default
+            state: "on"
+        sequence:
+          - alias: "Dim porch light"
+            service: light.turn_on
+            target:
+              entity_id:
+                - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+                - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+            data:
+              brightness: 128
+      default:
+          - alias: "Turn off porch lights"
+            service: light.turn_off
+            target:
+              entity_id:
+                - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light_2
+                - light.ikea_of_sweden_tradfri_bulb_e26_ws_opal_1000lm_light
+
+- id: 42222902-9b85-45fc-b0fd-1106768424c1
+  alias: Service mode set home status
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Away"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Vacation"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Service"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Service Expected"
+    - platform: state
+      entity_id: input_boolean.service_mode
+  condition:
+    - alias: "Verify that this automation didn't trigger"
+      condition: template
+      value_template: >-
+        {{ trigger.to_state.context.parent_id == None or 
+            (trigger.to_state.context.id != this.context.id and 
+            trigger.to_state.context.parent_id != this.context.id) }}
+  action:
+    - alias: "Vary response on what triggered"
+      choose:
+      - conditions: >-
+          {{ trigger.entity_id == 'input_select.home_status' }}
+        sequence:
+          - alias: "Set service mode on home status"
+            service: >-
+              {% if states("input_select.home_status") in ['Service', 'Service Expected'] -%}
+                input_boolean.turn_on
+              {%- else -%}
+                input_boolean.turn_off
+              {%- endif %}
+            target:
+              entity_id: input_boolean.service_mode
+      default:
+        - alias: "Set home status on service mode"
+          choose:
+          - conditions:
+              - "{{ states('input_select.home_status') != 'Alert' }}"
+              - alias: "Service mode on"
+                condition: state
+                entity_id: input_boolean.service_mode
+                state: "on"
+            sequence:
+              - alias: "Set home status"
+                service: input_select.set_options
+                target:
+                  entity_id: input_select.home_status
+                data:
+                  option: >-
+                    {% if states("input_select.home_status") in ['Normal', 'Service'] -%}
+                      Service
+                    {%- else -%}
+                      Service Expected
+                    {%- endif %}
+          - conditions:
+              - "{{ states('input_select.home_status') in ['Service', 'Service Expected'] }}"
+              - alias: "Service mode off"
+                condition: state
+                entity_id: input_boolean.service_mode
+                state: "off"
+            sequence:
+              - alias: "Set home status"
+                service: input_select.set_options
+                target:
+                  entity_id: input_select.home_status
+                data:
+                  option: >-
+                    {% if states("input_select.home_status") == "Service" -%}
+                      Normal
+                    {%- else -%}
+                      Away
+                    {%- endif %}
+
+- alias: Update Michael's apple watch on home status update
+  id: d69c2597-15a3-4cf6-9625-75caf8b66540
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+  action:
+    - alias: "Update apple watch"
+      service: notify.mobile_app_scarif
+      data:
+        message: update_complications
+
+- alias: Alarm sync to home status
+  id: 3c0ba6b0-9a4c-4367-890c-79b3a173a104
+  mode: queued
+  max_exceeded: silent
+  trigger:
+    - platform: state
+      entity_id: 
+        - input_select.home_status
+        - alarm_control_panel.simplisafe
+  condition:
+    - alias: "Verify that this automation didn't trigger itself"
+      condition: template
+      value_template: >-
+        {{ trigger.to_state.context.parent_id == None or 
+            (trigger.to_state.context.id != this.context.id and 
+            trigger.to_state.context.parent_id != this.context.id) }}
+    - alias: "Verify that the trigger value changed"
+      condition: template
+      value_template: "{{trigger.to_state.state != trigger.from_state.state}}"
+  action:
+    - alias: "Pick action based on trigger"
+      choose:
+      - conditions: >-
+          {{ trigger.entity_id == "input_select.home_status" }}
+        sequence:
+          - alias: "Set alarm based on home status"
+            choose:
+            - conditions: >-
+                {{ trigger.to_state.state == "Away"}}
+              sequence:
+                - alias: "Set alarm away"
+                  service: alarm_control_panel.alarm_arm_away
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+            - conditions: >-
+                {{ trigger.to_state.state in ["Secure", "Sleep"]}}
+              sequence:
+                - alias: "Set alarm home"
+                  service: alarm_control_panel.alarm_arm_home
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+            - conditions: >-
+                {{ trigger.to_state.state in ["Normal", "Service", "Guest", "Late Night"]}}
+              sequence:
+                - alias: "Set alarm home"
+                  service: alarm_control_panel.alarm_disarm
+                  target:
+                    entity_id: alarm_control_panel.simplisafe
+      default:
+          - alias: "Set home status based on alarm"
+            choose:
+            - conditions:
+                - "{{ trigger.to_state.state == 'disarmed' }}"
+                - "{{ states('input_select.home_status') not in ['Guest', 'Alert'] }}"
+              sequence:
+                - alias: "set home status in disarmed state"
+                  service: input_select.select_option
+                  target:
+                    entity_id: input_select.home_status
+                  data:
+                    option: >-
+                      {%- if is_state("input_select.home_status", "Service Expected") -%}
+                        Service
+                      {%- elif is_state("input_select.home_status", "Guest Expected") -%}
+                        Guest
+                      {%- elif is_state("input_select.home_status", "Sleep") and 
+                          now().strftime("%H:%M:00") < states('input_datetime.house_wakeup_time') -%}
+                        Late Night
+                      {%- else -%}
+                        Normal
+                      {%- endif -%}
+            - conditions:
+                - "{{ trigger.to_state.state == 'armed_away' }}"
+                - "{{ states('input_select.home_status') not in ['Guest Expected', 'Service Expected', 'Alert'] }}"
+              sequence:
+                - alias: "set home status in armed_away state"
+                  service: input_select.select_option
+                  target:
+                    entity_id: input_select.home_status
+                  data:
+                    option: >-
+                      {%- if is_state("input_select.home_status", "Guest") -%}
+                        Guest Expected
+                      {%- else -%}
+                        Away
+                      {%- endif -%}
+            - conditions:
+                - "{{ trigger.to_state.state == 'armed_home' }}"
+                - "{{ states('input_select.home_status') not in ['Alert', 'Guest', 'Sleep'] }}"
+              sequence:
+                - alias: "set home status in armed_home state"
+                  service: input_select.select_option
+                  target:
+                    entity_id: input_select.home_status
+                  data:
+                    option: >-
+                      {%- if is_state("input_select.home_status", "Guest Expected") -%}
+                        Guest
+                      {%- elif (now() > today_at("22:00") or now() < states('input_datetime.house_wakeup_time')|today_at) -%}
+                        Sleep
+                      {%- else -%}
+                        Secure
+                      {%- endif -%}
+            - conditions:
+                - "{{ trigger.to_state.state == 'triggered' }}"
+              sequence:
+                - alias: "set home status in triggered state"
+                  service: input_select.select_option
+                  target:
+                    entity_id: input_select.home_status
+                  data:
+                    option: Alert
+
+- alias: "Alarm disarm home in morning"
+  id: c07fa84f-0615-40d0-8f54-f2871f1993c0 
+  trigger:
+    - platform: time
+      at: input_datetime.house_wakeup_time
+  condition:
+    - or:
+      - alias: "Home status is sleep"
+        condition: state
+        entity_id: input_select.home_status
+        state: "Sleep"
+      - alias: "Home status is late night"
+        condition: state
+        entity_id: input_select.home_status
+        state: "Late Night"
+  action:
+    - alias: "Set home status to normal"
+      service: input_select.select_option
+      target:
+        entity_id: input_select.home_status
+      data:
+        option: Normal
+
+- alias: Alarm set mode to sleep
+  id: 277d896a-aa62-4d17-a62b-f78e179e1592
+  trigger:
+    - platform: time
+      at: 
+        - input_datetime.house_sleep_time
+    - platform: template
+      value_template: >-
+        {{ now() == today_at(states('input_datetime.house_sleep_time')|
+          as_timedelta + timedelta(hours=1)) }}
+    - platform: template
+      value_template: >-
+        {{ now() == today_at(states('input_datetime.house_sleep_time')|
+          as_timedelta + timedelta(hours=2)) }}
+  condition:
+    - alias: "Someone is home"
+      condition: state
+      entity_id: binary_sensor.location_someone_home
+      state: "on"
+    - alias: "Home status is normal or secure"
+      condition: template
+      value_template: >-
+          {{ states('input_select.home_status') in 
+            ['Normal', 'Secure']}}
+  action:
+    - alias: "Call alarm set after notify script"
+      service: script.alarm_set_after_notify
+      data:
+        status_option: Normal
+
+- alias: Alarm set mode to away
+  id: 51884c97-27ca-4634-885f-27478a6b30b6
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.location_someone_home
+      from: "on"
+      to: "off"
+      for: "00:15:00"
+  condition:
+    - alias: "Home status not secure"
+      condition: template
+      value_template: >-
+        {{ states('input_select.home_status') in 
+            ['Normal', 'Secure']}}
+  action:
+    - alias: "Call alarm set after notify script"
+      service: script.alarm_set_after_notify
+      data:
+        status_option: Away
+
+- alias: Lock locks when it's late
+  id: 74ffe94e-c2e3-43c3-9eef-395ae0e81a38
+  trigger:
+    - platform: time_pattern
+      minutes: "0"
+  condition:
+    - alias: "Only when it's late"
+      condition: time
+      after: "23:00:00"
+      before: "05:00:00"
+    - alias: "In correct home states"
+      condition: template
+      value_template: >-
+        {{ states('input_select.home_status') in ['Normal', 'Secure', 'Sleep'] }}
+    - alias: "All locks not locked"
+      condition: state
+      entity_id: lock.all_locks
+      state: "unlocked"
+  action:
+    - alias: "Run lock deadbolts scrips"
+      service: script.lock_deadbolts_if_doors_shut
+
+- alias: Lock Status Report
+  id: b237632a-cd0b-42b5-9d35-de1104b7e526
+  trigger:
+    - platform: event
+      event_type: zwave_js_notification
+      event_data:
+        label: Access Control
+  action:
+    - alias: "notify test"
+      service: script.notify_michael
+      data:
+        title: Taliluna Debug
+        message: >-
+          {{ trigger.event.data.node_id }}: {{ trigger.event.data.event_label }}
+        alert_level: Debug
+    - alias: "Set access label"
+      service: input_select.select_option
+      target:
+        entity_id: "input_select.node_{{trigger.event.data.node_id}}_access_label"
+      data:
+        option: "{{trigger.event.data.event_label}}"
+    - alias: "Set user code"
+      service: input_number.set_value
+      target:
+        entity_id: "input_number.node_{{trigger.event.data.node_id}}_user_code"
+      data:
+        value: >-
+          {% if "userId" in trigger.event.data.parameters -%}
+          {{ trigger.event.data.parameters.userId}}
+          {%- else -%}
+          0
+          {%- endif %}
+      # event_type: zwave_js_notification
+      # data:
+      #   domain: zwave_js
+      #   node_id: 20
+      #   home_id: 3996165589
+      #   device_id: 78ef68f06b91d579cf2e9c55119ffe5d
+      #   command_class: 113
+      #   command_class_name: Notification
+      #   label: Access Control
+      #   type: 6
+      #   event: 6
+      #   event_label: Keypad unlock operation
+      #   parameters:
+      #     userId: 1
+      # origin: LOCAL
+      # time_fired: "2023-02-25T14:52:17.621607+00:00"
+      # context:
+      #   id: 01GT4GYXTN94SX7ZXZA5ENFHAH
+      #   parent_id: null
+      #   user_id: null
+
+- alias: Lock all locks when away
+  id: 34ca7909-e859-4786-b6b3-465417bef3d9
+  trigger:
+    - platform: template
+      value_template: >-
+        {{ states('input_select.home_status') in
+            ['Away', 'Vacation', 'Secure', 'Sleep', 'Service Expected', 'Guest Expected']}}
+  condition: []
+  action:
+    - alias: "run lock deadbolts script"
+      service: script.lock_deadbolts_if_doors_shut
+
+- alias: Unlock front door when returned
+  id: 438ce7ed-e354-423f-81cd-7872d12fdba5d
+  trigger:
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Normal"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Guest"
+    - platform: state
+      entity_id: input_select.home_status
+      to: "Service"
+  condition:
+    - "{{ trigger.from_state.state != 'Sleep' }}"
+    - alias: "Front door is locked"
+      condition: state
+      entity_id: lock.touchscreen_electronic_deadbolt
+      state: "locked"
+  action:
+    - alias: "Unlock front door"
+      service: lock.unlock
+      target:
+        entity_id: lock.touchscreen_electronic_deadbolt
+
+- alias: Water Leak Alert
+  id: 6de6cef3-2d81-4ce1-a555-4e800c9c3867
+  trigger:
+    - platform: state
+      entity_id: group.moisture_sensors
+      from: "off"
+      to: "on"
+    - platform: time_pattern
+      minutes: "/10"
+  condition:
+    - alias: "Water leak detected"
+      condition: state
+      entity_id: group.moisture_sensors
+      state: "on"
+  action: 
+    - variables:
+        entities: >-
+          {% for sensor in expand("group.moisture_sensors") if sensor.state == "on" -%}
+            {{ state_attr(sensor.entity_id, "friendly_name") }}
+            {%- if not loop.last %}, {% endif -%}
+          {%- endfor %}
+    - alias: "Send low battery notification"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Water detected on {{ entities }}
+        alert_level: Warn
+
+- id: c24f8ba3-24f3-4299-b2ae-d49f57c8cd50
+  alias: Notify about smoke/co
+  trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected
+        - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected
+        - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected_2
+        - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected_2
+        - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life_2
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test_2
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced_2
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_detected_3
+        - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_carbon_monoxide_detected_3
+        - binary_sensor.zcombo_g_smoke_co_alarm_co_alarm_replacement_required_end_of_life_3
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_smoke_alarm_test_3
+        - binary_sensor.zcombo_g_smoke_co_alarm_smoke_alarm_alarm_silenced_3
+      from: "off"
+      to: "on"
+  action:
+    - alias: "Notify parents"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: "{{ state_attr(trigger.entity_id, 'friendly_name') }}"
+        alert_level: Warn
+
+- alias: Battery Low Notification
+  id: 70ff7438-1eb9-47b0-8121-9cd607cb4a99
+  trigger:
+    - platform: state
+      entity_id: person.michael
+      to: "home"
+      for:
+        minutes: 16
+    - platform: state
+      entity_id: group.low_battery
+      from: "off"
+      to: "on"
+  condition:
+    - alias: "There is a low battery"
+      condition: state
+      entity_id: group.low_battery
+      state: "on"
+    - alias: "Michael is home"
+      condition: state
+      entity_id: person.michael
+      state: "home"
+  action:
+    - variables:
+        entities: >-
+          {% for sensor in expand("group.low_battery") if sensor.state == "on" -%}
+            {{ state_attr(sensor.entity_id, "friendly_name") }}
+            {%- if not loop.last %}, {% endif -%}
+          {%- endfor %}
+    - alias: "Send low battery notification"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Low battery detected on {{ entities }}
+        alert_level: Info
+
+- alias: Yeti Battery Low
+  id: f8cdf062-1b0c-416f-8b56-a348d51fffcd
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.yeti_state_of_charge_percent
+      below: 70
+      for: "00:05:00"
+    - platform: numeric_state
+      entity_id: sensor.yeti_state_of_charge_percent
+      below: 50
+      for: "00:05:00"
+    - platform: numeric_state
+      entity_id: sensor.yeti_state_of_charge_percent
+      below: 25
+      for: "00:05:00"
+    - platform: numeric_state
+      entity_id: sensor.yeti_state_of_charge_percent
+      below: 15
+      for: "00:05:00"
+  condition: []
+  action:
+    - alias: "Notify adults"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Yeti Battery Low
+        alert_level: Warn
+
+- alias: Taliluna Lab UPS Alert
+  id: 0767aa78-3c36-40f1-9ce0-32c7431e7e17
+  trigger:
+    - platform: state
+      entity_id: sensor.talilunalab_status
+  condition: []
+  action:
+    - alias: "Notify michael"
+      service: script.notify_parents
+      data:
+        alert_level: Info
+        titile: Taliluna Alert
+        message: >-
+          UPS state: {{ states("sensor.talilunalab_status")}}
+
+- id: 5f63716e-d11e-4aec-b8f7-5a9545496d27
+  alias: Notify when server disk if full
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.disk_use_percent
+      above: 90
+      for: "00:15:00"
+    - platform: state
+      entity_id: person.michael
+      to: "home"
+      for: "00:15:00"
+  condition:
+    - alias: "Server disk is full"
+      condition: numeric_state
+      entity_id: sensor.disk_use_percent
+      above: 90
+  action:
+    - alias: "Notify"
+      service: script.notify_parents
+      data:
+        title: Taliluna Alert
+        message: Server disk is full

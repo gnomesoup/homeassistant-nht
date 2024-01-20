@@ -7,14 +7,3 @@ input_select:
       - Away
       - Asleep
     icon: mdi:account
-    # icon: >-
-    #   {% if states("input_select.michael_status") == "Home" %}
-    #   mdi:home
-    #   {% elif states("input_select.michael_status") == "Work" %}
-    #   mdi:account-badge-horizontal
-    #   {% elif states("input_select.michael_status") == "Asleep" %}
-    #   mdi:hotel
-    #   {% else %}
-    #   mdi:logout
-    #   {% endif %}
-

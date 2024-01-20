@@ -107,15 +107,3 @@ input_select:
       - Vacation
       - Alert
     icon: mdi:home
-
-automation:
-  - alias: Update Michael's apple watch on home status update
-    id: d69c2597-15a3-4cf6-9625-75caf8b66540
-    trigger:
-      - platform: state
-        entity_id: input_select.home_status
-    action:
-      - alias: "Update apple watch"
-        service: notify.mobile_app_scarif
-        data:
-          message: update_complications
