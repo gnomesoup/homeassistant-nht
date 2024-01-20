@@ -4,7 +4,7 @@ http:
     - !secret tinc_ip
 
 homeassistant:
-  # packages: !include_dir_named packages/
+  packages: !include_dir_named packages/
   media_dirs:
     media: /config/media
 
